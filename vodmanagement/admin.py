@@ -1,6 +1,6 @@
 from django.contrib import admin
 # Register your models here.
-from .models import Vod
+from .models import *
 
 
 class VodModelAdmin(admin.ModelAdmin):
@@ -15,4 +15,12 @@ class VodModelAdmin(admin.ModelAdmin):
         model = Vod
 
 
+class VideoCategoryTypeModelAdmin(admin.ModelAdmin):
+    list_display = ("category_description")
+
+    class Meta:
+        model = VideoCategoryType
+
+admin.site.register(VideoCategoryType)
+admin.site.register(VideoCategory)
 admin.site.register(Vod, VodModelAdmin)

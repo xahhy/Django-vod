@@ -3,6 +3,8 @@ from django.utils import timezone
 from filer.fields.image import FilerImageField
 from filer.fields.file import FilerFileField
 from django.utils.safestring import mark_safe
+from django.contrib import admin
+
 
 class VodManager(models.Manager):
 
@@ -73,5 +75,22 @@ class Vod(models.Model):
     def image_tag(self):
         if self.image is not None:
             return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
+
+
+# Two selections only:common,Special purpose
+class VideoCategoryType(models.Model):
+    name = models.CharField("My Category Type",max_length=128)
+    def __str__(self):
+        return self.name
+
+class VideoCategory(models.Model):
+    name = models.CharField(max_length=128)
+    type = models.ForeignKey(VideoCategoryType)
+    isSecret = models.BooleanField(default=False)
+    directory = models.FilePathField(path="/home/xjtu")
+
+    def __str__(self):
+        return self.name
+
 
 
