@@ -4,8 +4,8 @@ from filer.fields.image import FilerImageField
 from filer.fields.file import FilerFileField
 from django.utils.safestring import mark_safe
 from django.contrib import admin
-
-
+from django.conf import settings
+import humanfriendly
 class VodManager(models.Manager):
 
     def active(self, *args, **kwargs):
@@ -36,6 +36,36 @@ def default_description(instance):
     print(default)
     return 'The %s description'%default
 # Create your models here.
+
+
+class FileDirectory(models.Model):
+    path = models.CharField(max_length=512,
+                            default='settings.MEDIA_ROOT')
+
+    def __str__(self):
+        return self.path
+
+
+class VideoCategory(models.Model):
+    name = models.CharField(max_length=128)
+
+    # Two selections only:Common,Special purpose
+    TYPES = (
+        ('Common', 'Common'),
+        ('Special','Special purpose'),
+    )
+    type = models.CharField(max_length=128,choices=TYPES,default='Common')
+    isSecret = models.BooleanField(default=False)
+    directory = models.ForeignKey(FileDirectory)#,default=FileDirectory.objects.first())
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        #Edit Default Model Name
+        verbose_name_plural = """Video Categorys"""
+
+
+
 class Vod(models.Model):
     title = models.CharField(max_length=120)
     # image = models.ImageField(upload_to=upload_location,
@@ -48,6 +78,10 @@ class Vod(models.Model):
     video = FilerFileField(null=True,blank=True,related_name="video_name")
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
+    category = models.ForeignKey(VideoCategory,null=True)
+
+    file_size = models.CharField(max_length=128,default='0B',editable=False)
+
     description = models.TextField(blank=True)
     short_description = models.CharField(max_length=250,blank=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
@@ -61,6 +95,8 @@ class Vod(models.Model):
             self.description = default_description(self)
         # if not "http" in self.url:
         #     self.url = "http://" + self.url
+        if self.video is not None:
+             self.file_size = humanfriendly.format_size(self.video.file.size)
         super(Vod, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -75,22 +111,4 @@ class Vod(models.Model):
     def image_tag(self):
         if self.image is not None:
             return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
-
-
-# Two selections only:common,Special purpose
-class VideoCategoryType(models.Model):
-    name = models.CharField("My Category Type",max_length=128)
-    def __str__(self):
-        return self.name
-
-class VideoCategory(models.Model):
-    name = models.CharField(max_length=128)
-    type = models.ForeignKey(VideoCategoryType)
-    isSecret = models.BooleanField(default=False)
-    directory = models.FilePathField(path="/home/xjtu")
-
-    def __str__(self):
-        return self.name
-
-
-
+    image_tag.short_description='Image'
