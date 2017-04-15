@@ -7,17 +7,17 @@ from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from mysite.settings import STATIC_URL
-from .forms import PostForm
+from .forms import VodForm
 from django.contrib import messages
 from filer.models import Image
-from .models import Post
+from .models import Vod
 from django.core import serializers
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 def gallery(request):
     # if not request.user.is_staff or not request.user.is_superuser:
     #     raise Http404
-    form = PostForm(request.POST or None, request.FILES or None)
+    form = VodForm(request.POST or None, request.FILES or None)
     print('get form ok!')
     if  form.is_valid():
         image_file = form.cleaned_data['image']
@@ -28,13 +28,13 @@ def gallery(request):
         # message success
         messages.success(request, "Successfully Created")
         print('form valid')
-        # return render(request, "vod/gallery.html")
+        # return render(request, "vodmanagement/gallery.html")
     # context = {
     #     "form": form,
     # }
     else:
         print('form is invalid')
-    return render(request, "vod/gallery.html")
+    return render(request, "vodmanagement/gallery.html")
     # if request.method == 'POST' and request.FILES:
         # myfile=request.FILES['name_file']
         # print('file:'+myfile.name)
@@ -45,12 +45,7 @@ def gallery(request):
         #     form.save()
         #     return HttpResponseRedirect('homepage')
 
-    # return render(request,'vod/gallery.html')
-
-
-def image_redirect(request,filename):
-    print('filename:'+filename)
-    return HttpResponseRedirect(STATIC_URL+'images/'+filename)
+    # return render(request,'vodmanagement/gallery.html')
 
 
 def homepage(request):
@@ -62,7 +57,7 @@ def homepage(request):
             'user': user.username,
         }
         print('user:'+user.username)
-    return render(request,'vod/basic.html',content)
+    return render(request,'vodmanagement/basic.html',content)
 
 
 # Create your views here.
@@ -86,7 +81,7 @@ def login(request):
         'user': None
     }
     print('retry')
-    return render(request,'vod/login.html',content)
+    return render(request,'vodmanagement/login.html',content)
 
 
 def logout(request):
@@ -95,7 +90,7 @@ def logout(request):
 
 # divide data into few pages
 def listing(request):
-    video_list = Post.objects.all()
+    video_list = Vod.objects.all()
     video_page = Paginator(video_list,6)
     # print('total pages:'+str(video_page.count))
     page=request.GET.get('page')
@@ -108,9 +103,9 @@ def listing(request):
     content={
         'videos':videos,
     }
-    return render(request,'vod/list.html',content)
+    return render(request,'vodmanagement/list.html',content)
 
 # @login_required
 def ajax_get_data(request):
-       json_data = serializers.serialize("json", Post.objects.all())
+       json_data = serializers.serialize("json", Vod.objects.all())
        return HttpResponse(json_data,content_type="application/json")

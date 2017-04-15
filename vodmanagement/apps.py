@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class VodConfig(AppConfig):
-    name = 'vod'
+    name = 'vodmanagement'

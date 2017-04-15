@@ -1,13 +1,13 @@
 from django import forms
 
 
-from .models import Post
+from .models import Vod
 
 
-class PostForm(forms.ModelForm):
+class VodForm(forms.ModelForm):
 
     class Meta:
-        model = Post
+        model = Vod
         fields = [
             "title",
             # "content",

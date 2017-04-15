@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'vod.apps.VodConfig',
+    'vodmanagement.apps.VodConfig',
 ]
 
 MIDDLEWARE = [
