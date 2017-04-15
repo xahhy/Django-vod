@@ -1,0 +1,19 @@
+{% extends "vod/basic.html" %}
+{% load static %}
+{% block content %}
+<script src="{% static 'ajaxuploader/js/fileuploader.js' %}"></script>
+<script src="{% static 'file_form/file_form.js' %}"></script>
+<link rel="stylesheet" href="{% static 'ajaxuploader/css/fileuploader.css'%}">
+
+<form id="example-form" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+</form>
+
+<script>
+   $(function() {
+       initUploadFields($('#example-form'));
+   });
+</script>
+
+{% endblock %}

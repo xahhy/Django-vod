@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="ThemeBucket">
+    <link rel="shortcut icon" href="#" type="image/png">
+
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" \>
+    <link rel="stylesheet" href="{% static 'css/style-responsive.css' %}" \>
+
+    <script src="{% static 'js/html5shiv.js' %}"></script>
+    <script src="{% static 'js/respond.min.js' %}"></script>
+</head>
+
+<body class="login-body">
+
+<div class="container">
+
+    <form class="form-signin"  method="post">
+        {% csrf_token %}
+        <div class="form-signin-heading text-center">
+            <h1 class="sign-title">Sign In</h1>
+            <img src="{% static 'images/login-logo.png' %}"alt=""/>
+        </div>
+        <div class="login-wrap">
+            <input type="text" class="form-control" placeholder="username" id="username" name="username" autofocus>
+            <input type="password" class="form-control" placeholder="password" id="password" name="password">
+
+            <button class="btn btn-lg btn-login btn-block" type="submit">
+                <i class="fa fa-check"></i>
+            </button>
+
+            <div class="registration">
+                Not a member yet?
+                <a class="" href="registration.html">
+                    Signup
+                </a>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+
+
+<!-- Placed js at the end of the document so the pages load faster -->
+
+<!-- Placed js at the end of the document so the pages load faster -->
+<script src="{% static 'js/jquery-1.10.2.min.js' %}"  ></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/modernizr.min.js' %}"></script>
+
+</body>
+</html>
