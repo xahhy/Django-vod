@@ -1,0 +1,9 @@
+env/*
+!media
+!/static
+media/**
+static/**
+.idea/*
+*.tar.gz
+*/__pycache__/*
+*.pyc
