@@ -10,6 +10,9 @@ from mysite.settings import STATIC_URL
 from .forms import PostForm
 from django.contrib import messages
 from filer.models import Image
+from .models import Post
+from django.core import serializers
+from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
 def gallery(request):
     # if not request.user.is_staff or not request.user.is_superuser:
@@ -89,3 +92,25 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('login'))
+
+# divide data into few pages
+def listing(request):
+    video_list = Post.objects.all()
+    video_page = Paginator(video_list,6)
+    # print('total pages:'+str(video_page.count))
+    page=request.GET.get('page')
+    try:
+        videos = video_page.page(page)
+    except PageNotAnInteger:
+        videos = video_page.page(1)
+    except EmptyPage:
+        videos = video_page.page(video_page.num_pages)
+    content={
+        'videos':videos,
+    }
+    return render(request,'vod/list.html',content)
+
+# @login_required
+def ajax_get_data(request):
+       json_data = serializers.serialize("json", Post.objects.all())
+       return HttpResponse(json_data,content_type="application/json")
