@@ -41,6 +41,7 @@ INSTALLED_APPS = {
 #Django Registration Redux Settings
 ACCOUNT_ACTIVATION_DAYS = 7 #days email is availd
 REGISTRATION_AUTO_LOGIN = True
+LOGIN_REDIRECT_URL='/'
 ```
 >url.py
 ```
