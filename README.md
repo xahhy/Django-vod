@@ -3,8 +3,19 @@ Use Django to create a vod(video on demand) manage system
 Based on Bootstrap3
 
 # Useful 3rd-party app
-1. Django Crispy Forms
+1. Django Crispy Forms \
 `pip install django-crispy-forms`
+>settings.py
+```
+INSTALLED_APPS = {
+...
+'crispy_forms',
+...
+}
+
+#Crispy Form Tags Settings
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+```
 >*.html
 ```
 {% load crispy_forms_tags %}
@@ -15,3 +26,23 @@ Based on Bootstrap3
 </form>
 ```
 2. Django Registration Redux
+`pip install django-registration-redux`
+>settings.py
+```
+INSTALLED_APPS = {
+...
+'django.contrib.auth',
+'django.contrib.sites',
+'crispy_forms', 
+...
+}
+#Django Registration Redux Settings
+ACCOUNT_ACTIVATION_DAYS = 7 #days email is availd
+REGISTRATION_AUTO_LOGIN = True
+```
+>url.py
+```
+url(r'^accounts/',include('registration.backends.default.urls')),
+```
+>templets
+>need to copy templates from official site
