@@ -6,6 +6,9 @@ from django.utils.safestring import mark_safe
 from django.contrib import admin
 from django.conf import settings
 import humanfriendly
+from django.contrib.auth.models import User
+
+
 class VodManager(models.Manager):
 
     def active(self, *args, **kwargs):
@@ -45,23 +48,25 @@ class FileDirectory(models.Model):
     def __str__(self):
         return self.path
 
-
+    # Two selections only:Common,Special purpose
+TYPES = (
+    ('common', 'Common'),
+    ('special','Special purpose'),
+)
 class VideoCategory(models.Model):
     name = models.CharField(max_length=128)
 
-    # Two selections only:Common,Special purpose
-    TYPES = (
-        ('Common', 'Common'),
-        ('Special','Special purpose'),
-    )
-    type = models.CharField(max_length=128,choices=TYPES,default='Common')
+    type = models.CharField(max_length=128,
+                            choices=TYPES,
+                            default='common'
+                            )
     isSecret = models.BooleanField(default=False)
     directory = models.ForeignKey(FileDirectory)#,default=FileDirectory.objects.first())
 
     def __str__(self):
         return self.name
     class Meta:
-        #Edit Default Model Name
+        #Edit Default Model Name for Human read
         verbose_name_plural = """Video Categorys"""
 
 
@@ -79,8 +84,14 @@ class Vod(models.Model):
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
     category = models.ForeignKey(VideoCategory,null=True)
-
+    #type can be LINK or VOD
+    # type = models.CharField(max_length=128,
+    #                         choices=(('link','LINK'),('vod','VOD'),),
+    #                         default='link')
+    status = models.CharField(max_length=128,null=True,blank=True)#show the data status
     file_size = models.CharField(max_length=128,default='0B',editable=False)
+    view_count = models.IntegerField(default=0)
+    creator = models.ForeignKey(User,null=True,blank=False,editable=False)
 
     description = models.TextField(blank=True)
     short_description = models.CharField(max_length=250,blank=True)
