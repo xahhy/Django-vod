@@ -26,6 +26,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 </form>
 ```
 2. Django Registration Redux
+https://django-registration-redux.readthedocs.io/en/latest/quickstart.html
+
 `pip install django-registration-redux`
 >settings.py
 ```
