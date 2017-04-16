@@ -8,5 +8,4 @@ urlpatterns = [
     url(r'^$',views.homepage,name='homepage'),
     url(r'^gallery/$',views.gallery,name='gallery'),
     url(r'^list/$',views.listing,name='list'),
-    # url(r'^(.+)images/(.+)$',views.image_redirect,name='image')
 ]

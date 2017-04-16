@@ -45,13 +45,10 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'filer',
     'mptt',
-
+    # # 'suit',
     "djangocms_admin_style",
     'django.contrib.admin',
     'django.contrib.auth',
-
-    'django.contrib.sites',
-
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -59,14 +56,14 @@ INSTALLED_APPS = [
     'vodmanagement.apps.VodConfig',
 
     # The following apps are required:
+    'django.contrib.sites',
 
-
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # # ... include the providers you want to enable:
-    # 'allauth.socialaccount.providers.github',
-    # 'allauth.socialaccount.providers.weixin',
+    #'allauth',
+    #'allauth.account',
+    #'allauth.socialaccount',
+    # ... include the providers you want to enable:
+    #'allauth.socialaccount.providers.github',
+    #'allauth.socialaccount.providers.weixin',
 
 ]
 
@@ -97,22 +94,15 @@ TEMPLATES = [
         },
     },
 ]
-# AUTHENTICATION_BACKENDS = (
-#
-#     # Needed to login by username in Django admin, regardless of `allauth`
-#     'django.contrib.auth.backends.ModelBackend',
-#
-#     # `allauth` specific authentication methods, such as login by e-mail
-#     'allauth.account.auth_backends.AuthenticationBackend',
-#
-# )
-# SOCIALACCOUNT_PROVIDERS = {
-#     'weixin': {
-#         'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
-#     }
-# }
+AUTHENTICATION_BACKENDS = (
 
-# SITE_ID = 1
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+)
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 
