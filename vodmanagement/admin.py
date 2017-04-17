@@ -46,5 +46,6 @@ class VideoCategoryModelAdmin(admin.ModelAdmin):
 
 
 admin.site.register(FileDirectory)
+admin.site.register(Link)
 admin.site.register(VideoCategory,VideoCategoryModelAdmin)
 admin.site.register(Vod, VodModelAdmin)

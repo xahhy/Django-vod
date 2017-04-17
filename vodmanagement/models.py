@@ -43,7 +43,7 @@ def default_description(instance):
 
 class FileDirectory(models.Model):
     path = models.CharField(max_length=512,
-                            default='settings.MEDIA_ROOT')
+                            default=settings.MEDIA_ROOT)
 
     def __str__(self):
         return self.path
@@ -69,6 +69,14 @@ class VideoCategory(models.Model):
         #Edit Default Model Name for Human read
         verbose_name_plural = """Video Categorys"""
 
+
+class Link(models.Model):
+    name = models.CharField(max_length=512)
+    url = models.CharField(max_length=1024)
+    category = models.ForeignKey(VideoCategory,null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Vod(models.Model):

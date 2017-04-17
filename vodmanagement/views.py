@@ -10,7 +10,7 @@ from mysite.settings import STATIC_URL
 from .forms import VodForm
 from django.contrib import messages
 from filer.models import Image
-from .models import Vod
+from .models import *
 from django.core import serializers
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 
@@ -104,6 +104,22 @@ def listing(request):
         'videos':videos,
     }
     return render(request,'vodmanagement/list.html',content)
+
+def listinglink(request):
+    link_list = Link.objects.all()
+    link_page = Paginator(link_list,6)
+    # print('total pages:'+str(video_page.count))
+    page=request.GET.get('page')
+    try:
+        links = link_page.page(page)
+    except PageNotAnInteger:
+        links = link_page.page(1)
+    except EmptyPage:
+        links = link_page.page(link_page.num_pages)
+    content={
+        'links':links,
+    }
+    return render(request,'vodmanagement/listlink.html',content)
 
 # @login_required
 def ajax_get_data(request):
