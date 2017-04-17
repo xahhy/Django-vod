@@ -25,7 +25,7 @@
     <form class="form-signin"  method="post">
         {% csrf_token %}
         {% if state is not None %}
-            <p style="color:red;">{{ state }}</p>
+            <p style="color:#fffe27;">{{ state }}</p>
         {% endif %}
         <div class="form-signin-heading text-center">
             <h1 class="sign-title">Sign In</h1>
