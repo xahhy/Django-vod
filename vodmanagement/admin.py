@@ -4,10 +4,10 @@ from .models import *
 from django import forms
 
 class VodModelAdmin(admin.ModelAdmin):
-    list_display = ["title","image_tag", "short_description","file_size","creator","timestamp"]
+    list_display = ["title","image_tag", "category","file_size","creator","timestamp"]
     list_display_links = ["image_tag","title"]
-    list_editable = []
-    list_filter = ["timestamp"]
+    list_editable = ["category"]
+    list_filter = ["timestamp","category"]
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
     search_fields = ["title", "content"]
