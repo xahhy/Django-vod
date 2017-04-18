@@ -1,38 +1,49 @@
 {% extends "vodmanagement/basic.html" %}
-{% load static %}
+{% load staticfiles %}
+
+{% block scripts %}
+{#    <script src="{% static 'js/hola_player.js'%}"></script>#}
+{#    <script>#}
+{#        window.hola_player()#}
+{#    </script>#}
+
+{% endblock scripts %}
+
 {% block content %}
 <div class="container">
    <div class="row">
 {% for video in videos %}
-    {# Each "contact" is a Contact model object. #}
-   <div class="col-xs-4">
+   <div class="col-md-6">
        <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3>{{ video.title }}</h3>
             </div>
             <div class="panel-body">
-               <video width="200" height="200" controls>
+               <video class='video-js vjs-default-skin' width="400" height="400" controls
+               poster="{{ video.image.url }}">
                    <source src="{{ video.video.url }}" type="video/mp4">
-                </video>
+               </video>
             </div>
        </div>
     </div>
 {% endfor %}
-   </div>
+    <div class="col-md-12">
+        <div class="pagination">
+            <span class="step-links">
+                {% if videos.has_previous %}
+                    <a href="?page={{ videos.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ videos.number }} of {{ videos.paginator.num_pages }}.
+                </span>
+
+                {% if videos.has_next %}
+                    <a href="?page={{ videos.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
 </div>
-<div class="pagination">
-    <span class="step-links">
-        {% if videos.has_previous %}
-            <a href="?page={{ videos.previous_page_number }}">previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ videos.number }} of {{ videos.paginator.num_pages }}.
-        </span>
-
-        {% if videos.has_next %}
-            <a href="?page={{ videos.next_page_number }}">next</a>
-        {% endif %}
-    </span>
 </div>
 {% endblock %}

@@ -13,9 +13,12 @@
 
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   <link href="{% static 'css/style-responsive.css' %}" rel="stylesheet">
+    {% block scripts %}
 
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!--[if lt IE 9]>
+    {% endblock scripts %}
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+
   <script src="{% static 'js/html5shiv.js' %}"></script>
   <script src="{% static 'js/respond.min.js' %}"></script>
   <![endif]-->
@@ -64,7 +67,7 @@
                 <li><a href="index.html"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
                 <li class="menu-list nav-active"><a href=""><i class="fa fa-laptop"></i> <span>Layouts</span></a>
                     <ul class="sub-menu-list">
-                        <li class="active"><a href="blank_page.html"> Blank Page</a></li>
+                        <li class="active"><a href="{% url 'list' %}"> Blank Page</a></li>
                         <li><a href="boxed_view.html"> Boxed Page</a></li>
                         <li><a href="leftmenu_collapsed_view.html"> Sidebar Collapsed</a></li>
                         <li><a href="horizontal_menu.html"> Horizontal Menu</a></li>
@@ -386,9 +389,9 @@
         <!--body wrapper end-->
 
         <!--footer section start-->
-        <footer class="sticky-footer">
-            2017 &copy; HHY of XJTU
-        </footer>
+{#        <footer class="sticky-footer">#}
+{#            2017 &copy; HHY of XJTU#}
+{#        </footer>#}
         <!--footer section end-->
 
 

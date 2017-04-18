@@ -21,10 +21,10 @@ def gallery(request):
     print('get form ok!')
     if  form.is_valid():
         image_file = form.cleaned_data['image']
-        Image.save()
-        instance = form.save()
+        # Image.save()
+        # instance = form.save()
         # instance = request.user
-        instance.save()
+        # instance.save()
         # message success
         messages.success(request, "Successfully Created")
         print('form valid')
