@@ -19,8 +19,8 @@
                 <h3>{{ video.title }}</h3>
             </div>
             <div class="panel-body">
-               <video class='video-js vjs-default-skin' width="400" height="400" controls
-               poster="{{ video.image.url }}">
+               <video id="video{{ video.pk }}"class='video-js vjs-default-skin' width="400" height="400" controls
+                preload="auto">
                    <source src="{{ video.video.url }}" type="video/mp4">
                </video>
             </div>
@@ -44,6 +44,34 @@
             </span>
         </div>
     </div>
+</div>
+<div class="col-md-12">
+<div id="output"></div>
+<script type="text/javascript">
+(function(){
+var video, output;
+var scale = 0.8;
+var initialize = function() {
+    output = document.getElementById("output");
+    video = document.getElementById("video11");
+    video.addEventListener('loadeddata',captureImage);
+};
+var captureImage = function() {
+    var canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth * scale;
+    canvas.height = video.videoHeight * scale;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    var img = document.createElement("img");
+    img.src = canvas.toDataURL("image/png");
+    img.width = 400;
+    img.height = 300;
+    output.appendChild(img);
+};
+initialize();
+})();
+</script>
+
 </div>
 </div>
 {% endblock %}
