@@ -2,6 +2,11 @@
 Use Django to create a vod(video on demand) manage system
 Based on Bootstrap3
 
+# FAQ
+1. Centos7 no models named '__sqlite3'
+> yum install sqlite-devel
+rebuil python and install
+
 # Useful 3rd-party app
 1. Django Crispy Forms \
 `pip install django-crispy-forms`

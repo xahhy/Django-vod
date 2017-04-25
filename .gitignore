@@ -7,6 +7,7 @@ static/**
 *.pyc
 db.sqlite3
 */migrations/*.py
+another_media/*
 
 !.gitignore
 !__init__.py

@@ -7,7 +7,7 @@ from django.contrib import admin
 from django.conf import settings
 import humanfriendly
 from django.contrib.auth.models import User
-
+import os
 """
 Copy data in XXX model:
 >>> 
@@ -32,7 +32,7 @@ def upload_location(instance, filename):
     VodModel = instance.__class__
     print('save')
     if VodModel.objects.count() is not 0:
-        new_id = VodModel.objects.order_by("id").last().id + 1
+        new_id = VodModel.objects.order_by("id").last().id - 1
     else:
         new_id = 0
     """
@@ -44,6 +44,23 @@ def upload_location(instance, filename):
     """
     print('save image')
     return "%s/%s" % (new_id, filename)
+
+def upload_video_location(instance, filename):
+    VodModel = instance.__class__
+    if VodModel.objects.count() is not 0:
+        new_id = VodModel.objects.order_by("id").last().id +1
+    else:
+        new_id = 0
+    return "%s/videos/%s/%s" %(instance.category.name,new_id,filename)
+
+def upload_image_location(instance, filename):
+    VodModel = instance.__class__
+    print("path="+instance.category.directory.path)
+    if VodModel.objects.count() is not 0:
+        new_id = VodModel.objects.order_by("id").last().id +1
+    else:
+        new_id = 0
+    return "%s/images/%s/%s" %(instance.category.name,new_id,filename)
 
 
 def default_description(instance):
@@ -82,7 +99,6 @@ TYPES = (
 
 class VideoCategory(models.Model):
     name = models.CharField(max_length=128)
-
     type = models.CharField(max_length=128,
                             choices=TYPES,
                             default='common'
@@ -92,6 +108,21 @@ class VideoCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        # print(self.directory)
+        #make a folder self.name in the self.directory  
+        src = self.directory.path+'/'+self.name
+        dst = settings.MEDIA_ROOT+'/'+str(self.name)
+        try:
+            os.makedirs(src)
+        except:
+            pass    
+        try:
+            os.symlink(src,dst)
+        except:
+            pass
+        super(VideoCategory, self).save(*args, **kwargs)
 
     class Meta:
         # Edit Default Model Name for Human read
@@ -111,14 +142,13 @@ class Link(models.Model):
 
 class Vod(models.Model):
     title = models.CharField(max_length=120)
-    # image = models.ImageField(upload_to=upload_location,
-    #         null=True,
-    #         blank=True,
-    #         width_field="width_field",
-    #         height_field="height_field")
-    image = FilerImageField(null=True, blank=True,
-                            related_name="image_name")
-    video = FilerFileField(null=True, blank=True, related_name="video_name")
+    image = models.ImageField(upload_to=upload_image_location,
+            null=True,
+            blank=True)
+    video = models.FileField(upload_to=upload_video_location,null=True,blank=False)
+    # image = FilerImageField(null=True, blank=True,
+    #                         related_name="image_name")
+    # video = FilerFileField(null=True, blank=True, related_name="video_name")
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
     category = models.ForeignKey(VideoCategory, null=True)
@@ -136,6 +166,7 @@ class Vod(models.Model):
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)  # The first time added
     custome_time = models.DateTimeField(default=timezone.now)
+
 
     objects = VodManager()
 
@@ -158,7 +189,19 @@ class Vod(models.Model):
         ordering = ["-timestamp", "-updated"]
 
     def image_tag(self):
-        if self.image is not None:
-            return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
+        if self.image is not None and str(self.image) != "":
+            print("image:"+str(self.image))
+            if os.path.exists(self.image.path):
+                 return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
+            else:
+                return mark_safe('<img src="#" width="150" height="200" />')
 
     image_tag.short_description = 'Image'
+
+
+    """
+from vodmanagement.models import *
+objs = Vod.objects.all()
+obj = objs.first()
+
+    """
