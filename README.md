@@ -2,6 +2,41 @@
 Use Django to create a vod(video on demand) manage system
 Based on Bootstrap3
 
+# Use MySQL db
+reference:
+> www.centoscn.com/mysql/2016/0315/6844.html
+1. 
+#install dependencies
+yum search libaio
+yum install libaio
+
+2. 
+#check mysql was installed or not
+yum list installed | grep mysql
+#if installed then remove them
+yum remove mysql-libs
+
+3.
+#download mysql yum repository
+wget http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
+#mannuly install repository
+yum localinstall mysql-community-release-el7-5.noarch.rpm
+#check if it is successful installed
+yum repolist enabled| grep "mysql*"
+
+4.
+#install mysql server via yum
+yum install mysql-community-server
+#Done!
+
+5.
+#start mysql server
+systemctl start mysqld
+systemctl status mysqld
+
+6.
+#default sql server port:  3306
+
 # FAQ
 1. Centos7 no models named '__sqlite3'
 > yum install sqlite-devel

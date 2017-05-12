@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect,Http404
 from django.contrib import auth
 from django.core.urlresolvers import reverse
@@ -13,7 +13,8 @@ from filer.models import Image
 from .models import *
 from django.core import serializers
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
-
+from django.db.models import Q
+from django.core.cache import cache
 def gallery(request):
     # if not request.user.is_staff or not request.user.is_superuser:
     #     raise Http404
@@ -46,18 +47,27 @@ def gallery(request):
         #     return HttpResponseRedirect('homepage')
 
     # return render(request,'vodmanagement/gallery.html')
+def categorys():
+    categorys = VideoCategory.objects.filter(type='common')
+    return categorys
 
 
 def homepage(request):
     user = request.user
     content = None
-    if request.user.is_authenticated():
-        content = {
-            # 'active_menu': 'homepage',
+    # if request.user.is_authenticated():
+        # content = {
+        #     # 'active_menu': 'homepage',
+        #     'user': user.username,
+        # }
+        # print('user:'+user.username)
+
+    # categorys = VideoCategory.objects.filter(type='common')
+    content = {
+            'categorys': categorys(),
             'user': user.username,
         }
-        print('user:'+user.username)
-    return render(request,'vodmanagement/basic.html',content)
+    return render(request,'vodmanagement/base.html',content)
 
 
 # Create your views here.
@@ -89,9 +99,25 @@ def logout(request):
     return HttpResponseRedirect(reverse('login'))
 
 # divide data into few pages
-def listing(request):
-    video_list = Vod.objects.all()
-    video_page = Paginator(video_list,6)
+def listing(request,slug=None):
+    if slug is None:
+        title = "All Videos"
+        video_list = Vod.objects.all()#filter(category__name=slug)
+    else:
+        title = slug
+        video_list = Vod.objects.filter(category__name=slug)
+
+    #search word
+    query = request.GET.get('search_word')
+    if query:
+        video_list = video_list.filter(
+            Q(title__icontains=query)|
+            Q(category__name__icontains=query)|
+            Q(description__icontains=query)|
+            Q(short_description__icontains=query)
+            ).distinct()
+
+    video_page = Paginator(video_list,4)
     # print('total pages:'+str(video_page.count))
     page=request.GET.get('page')
     try:
@@ -100,8 +126,12 @@ def listing(request):
         videos = video_page.page(1)
     except EmptyPage:
         videos = video_page.page(video_page.num_pages)
+    
+    # categorys = VideoCategory.objects.filter(type='common')
     content={
         'videos':videos,
+        'categorys': categorys(),
+        'title': title,
     }
     return render(request,'vodmanagement/list.html',content)
 
@@ -120,6 +150,19 @@ def listinglink(request):
         'links':links,
     }
     return render(request,'vodmanagement/listlink.html',content)
+
+def vod_detail(request,slug=None):
+    print(slug)
+    instance = get_object_or_404(Vod, slug=slug)
+    instance.view_count += 1
+    # cache.set('key',instance)
+    instance.save()
+    print(instance.view_count )
+    context = {
+        "video":instance,
+        'categorys': categorys(),
+    }
+    return render(request,'vodmanagement/detail.html',context)
 
 # @login_required
 def ajax_get_data(request):

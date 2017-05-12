@@ -7,6 +7,10 @@ from django.contrib import admin
 from django.conf import settings
 import humanfriendly
 from django.contrib.auth.models import User
+from django.db.models.signals import pre_save
+from django.utils.text import slugify
+from django.core.urlresolvers import reverse
+
 import os
 """
 Copy data in XXX model:
@@ -132,7 +136,7 @@ class VideoCategory(models.Model):
 
 class Link(models.Model):
     name = models.CharField(max_length=512)
-    url = models.CharField(max_length=1024)
+    url = models.TextField(max_length=10240)
     category = models.ForeignKey(VideoCategory, null=True)
 
     def __str__(self):
@@ -159,6 +163,7 @@ class Vod(models.Model):
     status = models.CharField(max_length=128, null=True, blank=True)  # show the data status
     file_size = models.CharField(max_length=128, default='0B', editable=False)
     view_count = models.IntegerField(default=0)
+    view_count_temp = 0
     creator = models.ForeignKey(User, null=True, blank=False, editable=False)
 
     description = models.TextField(blank=True)
@@ -166,6 +171,7 @@ class Vod(models.Model):
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)  # The first time added
     custome_time = models.DateTimeField(default=timezone.now)
+    slug = models.SlugField(unique=True,blank=True)
 
 
     objects = VodManager()
@@ -177,6 +183,11 @@ class Vod(models.Model):
         #     self.url = "http://" + self.url
         if self.video is not None:
             self.file_size = humanfriendly.format_size(self.video.file.size)
+        
+        if self.slug is None or self.slug is "" or slug_exists(self.slug):
+            print("save slug")
+            self.slug = create_slug(self)
+
         super(Vod, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -198,10 +209,37 @@ class Vod(models.Model):
 
     image_tag.short_description = 'Image'
 
+    def get_absolute_url(self):
+        return reverse("vod:vod-detail", kwargs={"slug": self.slug})
 
-    """
+    def add_view_count(self):
+        self.view_count_temp += 1
+
+def create_slug(instance, new_slug=None):
+    slug = slugify(instance.title)
+    if new_slug is not None:
+        slug = new_slug
+    qs = Vod.objects.filter(slug=slug).order_by("-id")
+    exists = qs.exists()
+    if exists:
+        new_slug = "%s-%s" %(slug, qs.first().id)
+        return create_slug(instance, new_slug=new_slug)
+    return slug
+
+def slug_exists(slug):
+    qs = Vod.objects.filter(slug=slug).order_by("-id")
+    exists = qs.exists()
+    return exists
+
+def pre_save_post_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = create_slug(instance)
+
+# pre_save.connect(pre_save_post_receiver, sender=Vod)
+
+"""
 from vodmanagement.models import *
 objs = Vod.objects.all()
 obj = objs.first()
 
-    """
+"""

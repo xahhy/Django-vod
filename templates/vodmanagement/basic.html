@@ -32,7 +32,7 @@
 
         <!--logo and iconic logo start-->
         <div class="logo">
-            <a href="index.html"><img src="{% static 'images/logo.png'%}" alt=""></a>
+            <a href="{% url 'vod:homepage' %}"><img src="{% static 'images/logo.png'%}" alt=""></a>
         </div>
 
         <div class="logo-icon text-center">
@@ -58,23 +58,27 @@
                     <li><a href="#"><i class="fa fa-user"></i> <span>Profile</span></a></li>
                     {% comment %}use {% url 'admin:index' %} to represent the admin site{% endcomment %}
                     <li><a href="{% url 'admin:index'%}"><i class="fa fa-cog"></i> <span>Settings</span></a></li>
-                    <li><a href="{% url 'logout'%}"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a></li>
+                    <li><a href="{% url 'vod:logout'%}"><i class="fa fa-sign-out"></i> <span>Sign Out</span></a></li>
                 </ul>
             </div>
 
             <!--sidebar nav start-->
             <ul class="nav nav-pills nav-stacked custom-nav">
-                <li><a href="index.html"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
-                <li class="menu-list nav-active"><a href=""><i class="fa fa-laptop"></i> <span>Layouts</span></a>
+                <li class="" id="all_video"><a href="{% url 'vod:list'  %}"><i class="fa fa-home"></i> <span>All Videos</span></a></li>
+                {% block category_list %}
+                {% for item in categorys %}
+                <li class="" id="video_{{ item.name }}"><a href="{% url 'vod:list-detail' item.name %}"><i class="fa fa-book"></i> <span>{{ item.name }}</span></a>
+                </li>
+                {% endfor %}
+                {% endblock %}
+                <!--<li class="menu-list nav-active"><a href=""><i class="fa fa-laptop"></i> <span>Layouts</span></a>
                     <ul class="sub-menu-list">
-                        <li class="active"><a href="{% url 'list' %}"> Blank Page</a></li>
                         <li><a href="boxed_view.html"> Boxed Page</a></li>
                         <li><a href="leftmenu_collapsed_view.html"> Sidebar Collapsed</a></li>
                         <li><a href="horizontal_menu.html"> Horizontal Menu</a></li>
-
                     </ul>
                 </li>
-                <li class="menu-list"><a href=""><i class="fa fa-book"></i> <span>UI Elements</span></a>
+                 <li class="menu-list"><a href=""><i class="fa fa-book"></i> <span>UI Elements</span></a>
                     <ul class="sub-menu-list">
                         <li><a href="general.html"> General</a></li>
                         <li><a href="buttons.html"> Buttons</a></li>
@@ -87,7 +91,7 @@
                 <li class="menu-list"><a href=""><i class="fa fa-cogs"></i> <span>Components</span></a>
                     <ul class="sub-menu-list">
                         <li><a href="grids.html"> Grids</a></li>
-                        <li><a href="{% url 'gallery' %}"> Media Gallery</a></li>
+                        <li><a href="{% url 'vod:gallery' %}"> Media Gallery</a></li>
                         <li><a href="calendar.html"> Calendar</a></li>
                         <li><a href="tree_view.html"> Tree View</a></li>
                         <li><a href="nestable.html"> Nestable</a></li>
@@ -155,9 +159,9 @@
                         <li><a href="registration.html"> Registration Page</a></li>
                         <li><a href="lock_screen.html"> Lockscreen </a></li>
                     </ul>
-                </li>
+                </li> -->
                 <!--@hhy use \{\% url 'xxx'\%\} to represent the url you wana jump, xxx is the name filed in the urls.py-->
-                <li><a href="{% url 'login' %}"><i class="fa fa-sign-in"></i> <span>Login Page</span></a></li>
+                <li><a href="{% url 'vod:login' %}"><i class="fa fa-sign-in"></i> <span>Login Page</span></a></li>
 
             </ul>
             <!--sidebar nav end-->
@@ -175,13 +179,13 @@
         <!--toggle button start-->
         <a class="toggle-btn"><i class="fa fa-bars"></i></a>
         <!--toggle button end-->
-
+        {% block search_field %}
         <!--search start-->
-        <form class="searchform" action="index.html" method="post">
-            <input type="text" class="form-control" name="keyword" placeholder="Search here..." />
+        <form class="searchform" action="" method="GET">
+            <input type="text" class="form-control" name="search_word" placeholder="Search here..." />
         </form>
         <!--search end-->
-
+        {%endblock%}
         <!--notification menu start -->
         <div class="menu-right">
             <ul class="notification-menu">
@@ -363,7 +367,7 @@
                     <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
                         <li><a href="#"><i class="fa fa-user"></i>  Profile</a></li>
                         <li><a href="{% url 'admin:index'%}"><i class="fa fa-cog"></i>  Settings</a></li>
-                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Log Out</a></li>
+                        <li><a href="{% url 'vod:logout' %}"><i class="fa fa-sign-out"></i> Log Out</a></li>
                     </ul>
                 </li>
 
@@ -375,9 +379,7 @@
         <!-- header section end-->
 
         <!-- page heading start-->
-        <div class="page-heading">
-            Page Tittle goes here
-        </div>
+
         <!-- page heading end-->
 
         <!--body wrapper start-->
