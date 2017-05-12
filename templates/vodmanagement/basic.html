@@ -24,7 +24,7 @@
   <![endif]-->
 </head>
 
-<body class="sticky-header">
+<body class="sticky-header left-side-collapsed">
 
 <section>
     <!-- left side start-->
@@ -36,7 +36,7 @@
         </div>
 
         <div class="logo-icon text-center">
-            <a href="index.html"><img src="{% static 'images/logo_icon.png'%}" alt=""></a>
+            <a href="{% url 'vod:homepage' %}"><img src="{% static 'images/logo_icon.png'%}" alt=""></a>
         </div>
         <!--logo and iconic logo end-->
 
@@ -189,7 +189,7 @@
         <!--notification menu start -->
         <div class="menu-right">
             <ul class="notification-menu">
-                <li>
+               <!--  <li>
                     <a href="#" class="btn btn-default dropdown-toggle info-number" data-toggle="dropdown">
                         <i class="fa fa-tasks"></i>
                         <span class="badge">8</span>
@@ -260,8 +260,8 @@
                             <li class="new"><a href="">See All Pending Task</a></li>
                         </ul>
                     </div>
-                </li>
-                <li>
+                </li> -->
+               <!--  <li>
                     <a href="#" class="btn btn-default dropdown-toggle info-number" data-toggle="dropdown">
                         <i class="fa fa-envelope-o"></i>
                         <span class="badge">5</span>
@@ -317,8 +317,8 @@
                             <li class="new"><a href="">Read All Mails</a></li>
                         </ul>
                     </div>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <a href="#" class="btn btn-default dropdown-toggle info-number" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
                         <span class="badge">4</span>
@@ -357,7 +357,7 @@
                             <li class="new"><a href="">See All Notifications</a></li>
                         </ul>
                     </div>
-                </li>
+                </li> -->
                 <li>
                     <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         <img src="{% static 'images/photos/user-avatar.png'%}" alt="" />

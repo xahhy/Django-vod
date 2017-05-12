@@ -184,9 +184,9 @@ class Vod(models.Model):
         if self.video is not None:
             self.file_size = humanfriendly.format_size(self.video.file.size)
         
-        if self.slug is None or self.slug is "" or slug_exists(self.slug):
-            print("save slug")
-            self.slug = create_slug(self)
+        # if self.slug is None or self.slug is "" or not slug_exists(self.slug):
+        #     print("save slug")
+        #     self.slug = create_slug(self)
 
         super(Vod, self).save(*args, **kwargs)
 
@@ -235,7 +235,7 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
 
-# pre_save.connect(pre_save_post_receiver, sender=Vod)
+pre_save.connect(pre_save_post_receiver, sender=Vod)
 
 """
 from vodmanagement.models import *

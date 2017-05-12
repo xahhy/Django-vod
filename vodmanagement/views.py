@@ -82,7 +82,7 @@ def login(request):
         print(user)
         if user is not None:
             auth.login(request, user)
-            return HttpResponseRedirect(reverse('homepage'))
+            return HttpResponseRedirect(reverse('vod:homepage'))
         else:
             state = 'not_exist_or_password_error'
     content = {
