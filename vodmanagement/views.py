@@ -15,6 +15,17 @@ from django.core import serializers
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.db.models import Q
 from django.core.cache import cache
+from django.views.decorators.http import condition #to use Etag
+from django.db.models import F
+def latest_entry(request, slug):
+    if slug is None:
+        return None
+    else:
+        return Vod.objects.filter(slug=slug).latest("updated").updated
+
+def etag_entry(request,slug):
+    return str(latest_entry(request, slug))
+
 def gallery(request):
     # if not request.user.is_staff or not request.user.is_superuser:
     #     raise Http404
@@ -151,15 +162,17 @@ def listinglink(request):
     }
     return render(request,'vodmanagement/listlink.html',content)
 
+@condition(last_modified_func=latest_entry,etag_func=etag_entry)
 def vod_detail(request,slug=None):
     print(slug)
-    instance = get_object_or_404(Vod, slug=slug)
-    instance.view_count += 1
+    # instance = get_object_or_404(Vod, slug=slug)
+    # instance.view_count += 1
+    instance = Vod.objects.all().filter(slug=slug)
     # cache.set('key',instance)
-    instance.save()
-    print(instance.view_count )
+    instance.update(view_count=F('view_count')+1)
+    # print(instance.view_count )
     context = {
-        "video":instance,
+        "video":instance.first(),
         'categorys': categorys(),
     }
     return render(request,'vodmanagement/detail.html',context)

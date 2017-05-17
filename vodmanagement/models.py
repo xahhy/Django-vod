@@ -132,6 +132,7 @@ class VideoCategory(models.Model):
         # Edit Default Model Name for Human read
         verbose_name_plural = """Video Categorys"""
 
+
 # ---------------------------------------------------------------------
 
 class Link(models.Model):
