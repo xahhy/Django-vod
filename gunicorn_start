@@ -1,8 +1,8 @@
 #!/bin/bash
 
 NAME="mysite_app" # Name of the application
-DJANGODIR=/home/xjtu/Desktop/django_new/mysite3/mysite # Django project directory
-SOCKFILE=/home/xjtu/Desktop/django_new/mysite3/run/gunicorn.sock # we will communicte using this unix socket
+DJANGODIR=/home/xjtu/Django-vod # Django project directory
+SOCKFILE=/home/xjtu/Django-vod/run/gunicorn.sock # we will communicte using this unix socket
 USER=xjtu # the user to run as
 GROUP=xjtu # the group to run as
 NUM_WORKERS=3 # how many worker processes should Gunicorn spawn
