@@ -56,8 +56,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'vodmanagement.apps.VodConfig',
 
+    # user apps
+    'vodmanagement.apps.VodConfig',
+    'epg.apps.EpgConfig',
     # The following apps are required:
 
 
@@ -125,7 +127,7 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'db_mysql',
+        'NAME' : 'tsrtmp',
         'USER' : 'root',
         'PASSWORD': '123',
         'HOST': '',
