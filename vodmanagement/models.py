@@ -107,6 +107,7 @@ class VideoCategory(models.Model):
                             choices=TYPES,
                             default='common'
                             )
+    
     isSecret = models.BooleanField(default=False)
     directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
 
