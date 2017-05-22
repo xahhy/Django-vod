@@ -14,11 +14,20 @@
 
 {% endblock %}
 
+{% block content-header%}
+<section class="content-header">
+  <h1>
+    {{title}} 
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+    <li><a href="{{ title_url }}">{{title}}</a></li>
+  </ol>
+</section>
+{% endblock %}
+
 
 {% block content %}
-<div class="page-heading">
-    {{title}}
-</div>
 
 <div class="container">
    <div class="row">

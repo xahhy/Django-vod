@@ -9,6 +9,7 @@ db.sqlite3
 */migrations/*.py
 another_media/*
 real-media/*
+*.log
 
 !.gitignore
 !__init__.py

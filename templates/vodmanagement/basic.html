@@ -42,12 +42,11 @@
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="{% url 'vod:homepage' %}" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
+    <!--<a href="{% url 'vod:homepage' %}" class="logo">
       <span class="logo-mini"><b>A</b>LT</span>
-      <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>Admin</b>LTE</span>
     </a>
+    -->
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
@@ -140,10 +139,17 @@
 
         {% block category_list %}
         {% for item in categorys %}
-        <li class="" id="video_{{ item.name }}"><a href="{% url 'vod:list-detail' item.name %}"><i class="fa fa-book"></i> <span>{{ item.name }}</span></a>
+        <li class="" id="video_{{ item.name }}">
+        <a href="{% url 'vod:list-detail' item.name %}">
+        <i class="fa fa-book"></i> <span>{{ item.name }}</span>
+        </a>
+        <!--<ul class="treeview-menu">
+            <li><a href=""><i class="fa fa-circle-o"></i>Hello</a></li>
+        </ul>-->
         </li>
         {% endfor %}
         {% endblock %}
+
          <li><a href="{% url 'vod:login' %}"><i class="fa fa-sign-in"></i> <span>Login Page</span></a></li>
       </ul>
     </section>
@@ -155,6 +161,7 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+    {% block content-header%}
     <section class="content-header">
       <h1>
         Blank page
@@ -166,6 +173,7 @@
         <li class="active">Blank page</li>
       </ol>
     </section>
+    {% endblock %}
 
     <!-- Main content -->
     <section class="content">

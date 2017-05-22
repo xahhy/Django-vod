@@ -113,9 +113,11 @@ def logout(request):
 def listing(request,slug=None):
     if slug is None:
         title = "All Videos"
+        title_url = "/list/"
         video_list = Vod.objects.all()#filter(category__name=slug)
     else:
         title = slug
+        title_url = "/list/"+slug
         video_list = Vod.objects.filter(category__name=slug)
 
     #search word
@@ -143,6 +145,7 @@ def listing(request,slug=None):
         'videos':videos,
         'categorys': categorys(),
         'title': title,
+        'title_url': title_url,
     }
     return render(request,'vodmanagement/list.html',content)
 
@@ -168,8 +171,9 @@ def vod_detail(request,slug=None):
     # instance = get_object_or_404(Vod, slug=slug)
     # instance.view_count += 1
     instance = Vod.objects.all().filter(slug=slug)
-    # cache.set('key',instance)
     instance.update(view_count=F('view_count')+1)
+
+    # cache.set('key',instance)
     # print(instance.view_count )
     context = {
         "video":instance.first(),
