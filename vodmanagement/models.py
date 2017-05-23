@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
-
+from django.core.files import File
 import os
 """
 Copy data in XXX model:
@@ -151,7 +151,8 @@ class Vod(models.Model):
     image = models.ImageField(upload_to=upload_image_location,
             null=True,
             blank=True)
-    video = models.FileField(upload_to=upload_video_location,null=True,blank=False)
+    video = models.FileField(upload_to=upload_video_location,null=True,blank=True)
+    local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True)
     # image = FilerImageField(null=True, blank=True,
     #                         related_name="image_name")
     # video = FilerFileField(null=True, blank=True, related_name="video_name")
@@ -179,13 +180,23 @@ class Vod(models.Model):
     objects = VodManager()
 
     def save(self, *args, **kwargs):
+        print("--------------")
         if self.description is None or self.description == "":
             self.description = default_description(self)
         # if not "http" in self.url:
         #     self.url = "http://" + self.url
-        if self.video is not None:
+        # print(dir(self))
+
+        if self.video != None and self.video != '':
+            print(self.video)
             self.file_size = humanfriendly.format_size(self.video.file.size)
-        
+        else:
+            print("video file is None")
+
+        if self.local_video != '' and self.local_video is not None:
+            basename = os.path.basename(self.local_video)
+            self.video.name = settings.LOCAL_MEDIA_URL + basename
+            print("save local_video to filefield done")
         # if self.slug is None or self.slug is "" or not slug_exists(self.slug):
         #     print("save slug")
         #     self.slug = create_slug(self)
