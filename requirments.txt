@@ -18,3 +18,5 @@ requests==2.13.0
 requests-oauthlib==0.8.0
 six==1.10.0
 Unidecode==0.4.20
+markdown==2.6.8
+djangorestframework==3.6.3
