@@ -32,6 +32,9 @@ class VodListAPIView(ListAPIView):
     def get_queryset(self, *args, **kwargs):
         #queryset_list = super(PostListAPIView, self).get_queryset(*args, **kwargs)
         queryset_list = Vod.objects.all() #filter(user=self.request.user)
+        category = self.request.GET.get("category")
+        if category:
+            queryset_list = queryset_list.filter(category__name=category)
         # query = self.request.GET.get("q")
         # if query:
         #     queryset_list = queryset_list.filter(
@@ -40,6 +43,12 @@ class VodListAPIView(ListAPIView):
         #             Q(user__first_name__icontains=query) |
         #             Q(user__last_name__icontains=query)
         #             ).distinct()
+        search = self.request.GET.get("search")
+        if search:
+            queryset_list = queryset_list.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search)
+            )
         return queryset_list
 
 
