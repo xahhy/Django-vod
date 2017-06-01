@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # url(r'^polls/',include('polls.urls')),
     # url(r'^tools/',include('tools.urls')),
+    url(r'^api/',include("vodmanagement.api.urls",namespace='vod-api')),
     url(r'',include('vodmanagement.urls',namespace="vod")),
     # url(r'^filer/',include('filer.urls')),
     # url(r'^accounts/', include('allauth.urls')),

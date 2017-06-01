@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     # user apps
     'vodmanagement.apps.VodConfig',
     'epg.apps.EpgConfig',
+    'rest_framework',
+
     # The following apps are required:
 
 

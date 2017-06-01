@@ -99,7 +99,11 @@ TYPES = (
     ('common', 'Common'),
     ('special', 'Special purpose'),
 )
-
+VIDEO_QUALITY = (
+    ('S','Standard'),
+    ('H','High'),
+    ('S','Super'),
+)
 
 class VideoCategory(models.Model):
     name = models.CharField(max_length=128)
@@ -153,6 +157,7 @@ class Vod(models.Model):
             blank=True)
     video = models.FileField(upload_to=upload_video_location,null=True,blank=True)
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True)
+    definition = models.CharField(max_length=10,choices=VIDEO_QUALITY,blank=False,default='H')
     # image = FilerImageField(null=True, blank=True,
     #                         related_name="image_name")
     # video = FilerFileField(null=True, blank=True, related_name="video_name")
