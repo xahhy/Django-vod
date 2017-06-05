@@ -156,6 +156,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+THUMBNAIL_ALIASES = {
+    '': {
+        'avatar': {'size': (200, 300), 'crop': True},
+    },
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

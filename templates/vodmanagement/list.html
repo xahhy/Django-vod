@@ -1,6 +1,6 @@
 {% extends "vodmanagement/basic.html" %}
 {% load staticfiles %}
-
+{% load thumbnail %}
 {% block own_scrips %}
 {#    <script src="{% static 'js/hola_player.js'%}"></script>#}
 {#    <script>#}
@@ -14,6 +14,31 @@
 
 {% endblock %}
 
+{% block scripts %}
+    <style type="text/css">
+        /*
+ * Row with equal height columns
+ * --------------------------------------------------
+ */
+        .row-eq-height {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .each-item {
+            max-width: 300px;
+        }
+
+        .center {
+            width: auto;
+            display: table;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+{% endblock %}
 {% block content-header%}
 <section class="content-header">
   <h1>
@@ -29,24 +54,22 @@
 
 {% block content %}
 
-<div class="container">
-   <div class="row">
+<div class="container-fluid">
+   <div class="row center">
 {% for video in videos %}
-   <div class="col-md-6">
+   <div class="col-xs-12 col-md-3 col-lg-2 each-item" >
+       <a href='{{ video.get_absolute_url }}'>
        <div class="panel panel-primary">
-            
                 <div class="panel-heading">
                     <h3>{{ video.title }}</h3>
                 </div>
-                <a href='{{ video.get_absolute_url }}'>
-                <div class="panel-body">
-                    <img src="{{video.image.url}}" width="100%" height="100%" />
-                </div>
-                </a>
+                    <img src="{{video.image|thumbnail_url:'avatar'}}"  width="100%" height="auto"/>
        </div>
+       </a>
+
     </div>
 {% endfor %}
-    <div class="col-md-12 text-center clearfix">
+    <div class="col-xs-12 col-md-12 col-lg-12 text-center ">
         <ul class="pagination">
             <!-- <span class="step-links"> -->
                 {% if videos.has_previous %}
@@ -64,33 +87,5 @@
         </ul>
     </div>
 </div>
-<div class="col-md-12">
-<!-- <div id="output"></div>
-<script type="text/javascript">
-(function(){
-var video, output;
-var scale = 0.8;
-var initialize = function() {
-    output = document.getElementById("output");
-    video = document.getElementById("video11");
-    video.addEventListener('loadeddata',captureImage);
-};
-var captureImage = function() {
-    var canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth * scale;
-    canvas.height = video.videoHeight * scale;
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    var img = document.createElement("img");
-    img.src = canvas.toDataURL("image/png");
-    img.width = 400;
-    img.height = 300;
-    output.appendChild(img);
-};
-initialize();
-})();
-</script>
-
-</div> -->
 </div>
 {% endblock %}

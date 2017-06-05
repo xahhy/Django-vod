@@ -126,8 +126,8 @@ def listing(request,slug=None):
         video_list = video_list.filter(
             Q(title__icontains=query)|
             Q(category__name__icontains=query)|
-            Q(description__icontains=query)|
-            Q(short_description__icontains=query)
+            Q(description__icontains=query)
+            # Q(short_description__icontains=query)
             ).distinct()
 
     video_page = Paginator(video_list,12)
