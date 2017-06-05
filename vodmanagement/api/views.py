@@ -12,6 +12,7 @@ from rest_framework.generics import (
     RetrieveAPIView,
     RetrieveUpdateAPIView
     )
+from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.permissions import (
     AllowAny,
@@ -23,11 +24,12 @@ from rest_framework.permissions import (
 from .serializers import *
 
 from vodmanagement.models import *
-
+from .pagination import *
 
 class VodListAPIView(ListAPIView):
     serializer_class = VodListSerializer
     permission_classes = [AllowAny]
+    pagination_class = VodPageNumberPagination #PageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         #queryset_list = super(PostListAPIView, self).get_queryset(*args, **kwargs)

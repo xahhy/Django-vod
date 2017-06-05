@@ -130,7 +130,7 @@ def listing(request,slug=None):
             Q(short_description__icontains=query)
             ).distinct()
 
-    video_page = Paginator(video_list,4)
+    video_page = Paginator(video_list,12)
     # print('total pages:'+str(video_page.count))
     page=request.GET.get('page')
     try:
