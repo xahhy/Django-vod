@@ -2,94 +2,77 @@
 {% load staticfiles %}
 {% load thumbnail %}
 {% block own_scrips %}
-{#    <script src="{% static 'js/hola_player.js'%}"></script>#}
-{#    <script>#}
-{#        window.hola_player()#}
-{#    </script>#}
-<!-- <script type="text/javascript">
-    $(document).ready(function(){
-        $("#all_video").addClass("active")
-    }) 
-</script> -->
+    {#    <script src="{% static 'js/hola_player.js'%}"></script>#}
+    {#    <script>#}
+    {#        window.hola_player()#}
+    {#    </script>#}
+    <!-- <script type="text/javascript">
+        $(document).ready(function(){
+            $("#all_video").addClass("active")
+        })
+    </script> -->
 
 {% endblock %}
 
 {% block scripts %}
-    <style type="text/css">
-        /*
- * Row with equal height columns
- * --------------------------------------------------
- */
-        .row-eq-height {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-        }
 
-        .each-item {
-            max-width: 300px;
-            min-width: 200px;
-        }
-
-        .center {
-            width: auto;
-            display: table;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .text-center{
-            text-align: center;
-        }
-    </style>
 {% endblock %}
-{% block content-header%}
-<section class="content-header">
-  <h1>
-    {{title}} 
-  </h1>
-  <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="{{ title_url }}">{{title}}</a></li>
-  </ol>
-</section>
+{% block content-header %}
+    <section class="content-header">
+        <h1>
+            {{ title }}
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="{{ title_url }}">{{ title }}</a></li>
+        </ol>
+    </section>
 {% endblock %}
 
 
 {% block content %}
 
-<div class="container-fluid">
-   <div class="row">
-{% for video in videos %}
-   <div class="col-xs-12 col-md-3 col-lg-2 each-item" >
-       <a href='{{ video.get_absolute_url }}'>
-       <div class="panel panel-primary">
-                <div class="panel-heading text-center">
-                    <b class="">{{ video.title }}</b>
+    <div class="container-fluid">
+        <div class="row">
+            {% for video in videos %}
+                <div class="col-xs-12 col-md-3 col-lg-2 each-item">
+                    <a href='{{ video.get_absolute_url }}'>
+                        <div class="panel panel-default">
+                            <div class="panel-heading text-center">
+                                <b class="">{{ video.title }}</b>
+                            </div>
+                            <img src="{{ video.image|thumbnail_url:'avatar' }}" width="100%" height="auto"/>
+                            <span class="video-resolution-text">{{ video.definition }}</span>
+                        </div>
+                    </a>
                 </div>
-                    <img src="{{video.image|thumbnail_url:'avatar'}}"  width="100%" height="auto"/>
-       </div>
-       </a>
+            {% endfor %}
+            <div class="col-xs-12 col-md-12 col-lg-12 text-center ">
+                <ul class="pagination">
+                    <!-- <span class="step-links"> -->
+                    {% if videos.has_previous %}
+                        <li><a href="?page={{ videos.previous_page_number }}"><<</a></li>
+                    {% endif %}
 
+{#                    <li>#}
+{#                        <span class="current">#}
+{#                            Page {{ videos.number }} of {{ videos.paginator.num_pages }}.#}
+{#                        </span>#}
+{#                    </li>#}
+                    {% for page in videos.paginator.page_range %}
+                        {% if page == videos.number %}
+                            <li class="active"><a href='?page={{ page }}' >{{ page }}</a></li>
+                        {% else %}
+                            <li><a href='?page={{ page }}'>{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if videos.has_next %}
+                        <li><a href="?page={{ videos.next_page_number }}">>></a></li>
+                    {% endif %}
+                    <!-- </span> -->
+                </ul>
+            </div>
+        </div>
     </div>
-{% endfor %}
-    <div class="col-xs-12 col-md-12 col-lg-12 text-center ">
-        <ul class="pagination">
-            <!-- <span class="step-links"> -->
-                {% if videos.has_previous %}
-                    <li><a href="?page={{ videos.previous_page_number }}"><<</a></li>
-                {% endif %}
-
-                <li><span class="current">
-                    Page {{ videos.number }} of {{ videos.paginator.num_pages }}.
-                </span></li>
-
-                {% if videos.has_next %}
-                    <li><a href="?page={{ videos.next_page_number }}">>></a></li>
-                {% endif %}
-            <!-- </span> -->
-        </ul>
-    </div>
-</div>
-</div>
 {% endblock %}

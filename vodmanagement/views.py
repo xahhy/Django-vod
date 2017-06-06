@@ -135,7 +135,8 @@ def listing(request,slug=None):
             # Q(short_description__icontains=query)
             ).distinct()
 
-    video_page = Paginator(video_list,12)
+    video_page = Paginator(video_list, 12)
+
     # print('total pages:'+str(video_page.count))
     page=request.GET.get('page')
     try:
@@ -146,13 +147,13 @@ def listing(request,slug=None):
         videos = video_page.page(video_page.num_pages)
     
     # categorys = VideoCategory.objects.filter(type='common')
-    content={
-        'videos':videos,
+    content = {
+        'videos': videos,
         'categorys': categorys(),
         'title': title,
         'title_url': title_url,
     }
-    return render(request,'vodmanagement/list.html',content)
+    return render(request, 'vodmanagement/list.html', content)
 
 def listinglink(request):
     link_list = Link.objects.all()

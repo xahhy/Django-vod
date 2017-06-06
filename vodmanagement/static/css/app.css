@@ -1,0 +1,38 @@
+/*
+* Row with equal height columns
+* --------------------------------------------------
+*/
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.each-item {
+    max-width: 300px;
+    min-width: 200px;
+}
+
+.center {
+    width: auto;
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.video-resolution-text {
+    bottom: 20px;
+    position: relative;
+    float: right;
+    background: black;
+    color: white;
+}
+.each-item:hover  div.panel-heading{
+    background-color: #1cd388;
+    color: white;
+}

@@ -233,15 +233,17 @@ class Vod(models.Model):
     def add_view_count(self):
         self.view_count_temp += 1
 
-def create_slug(instance, new_slug=None):
+def create_slug(instance, new_slug=None,new_num=0):
     slug = slugify(instance.title)
+    default_slug = slug
     if new_slug is not None:
         slug = new_slug
     qs = Vod.objects.filter(slug=slug).order_by("-id")
     exists = qs.exists()
     if exists:
-        new_slug = "%s-%s" %(slug, qs.first().id)
-        return create_slug(instance, new_slug=new_slug)
+        new_num += 1
+        new_slug = "%s-%s" %(default_slug, new_num)
+        return create_slug(instance, new_slug=new_slug,new_num=new_num)
     return slug
 
 def slug_exists(slug):
