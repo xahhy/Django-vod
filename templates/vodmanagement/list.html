@@ -29,6 +29,7 @@
 
         .each-item {
             max-width: 300px;
+            min-width: 200px;
         }
 
         .center {
@@ -36,6 +37,9 @@
             display: table;
             margin-left: auto;
             margin-right: auto;
+        }
+        .text-center{
+            text-align: center;
         }
     </style>
 {% endblock %}
@@ -55,13 +59,13 @@
 {% block content %}
 
 <div class="container-fluid">
-   <div class="row center">
+   <div class="row">
 {% for video in videos %}
    <div class="col-xs-12 col-md-3 col-lg-2 each-item" >
        <a href='{{ video.get_absolute_url }}'>
        <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3>{{ video.title }}</h3>
+                <div class="panel-heading text-center">
+                    <b class="">{{ video.title }}</b>
                 </div>
                     <img src="{{video.image|thumbnail_url:'avatar'}}"  width="100%" height="auto"/>
        </div>

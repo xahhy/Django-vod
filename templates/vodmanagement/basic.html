@@ -25,7 +25,20 @@
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->  
+  <![endif]-->
+
+<!-- jQuery 3.1.1 -->
+<script src="{% static 'plugins/jQuery/jquery-3.1.1.min.js'%}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
+<!-- SlimScroll -->
+<script src="{% static 'plugins/slimScroll/jquery.slimscroll.min.js'%}"></script>
+<!-- FastClick -->
+<!-- <script src="../../plugins/fastclick/fastclick.js"></script> -->
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js'%}"></script>
+<!-- AdminLTE for demo purposes -->
+<!-- <script src="../../dist/js/demo.js"></script> -->
     {% block scripts %}
 
     {% endblock scripts %}
@@ -186,18 +199,7 @@
   <!-- /.content-wrapper -->
 
 </div>
-<!-- jQuery 3.1.1 -->
-<script src="{% static 'plugins/jQuery/jquery-3.1.1.min.js'%}"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="{% static 'bootstrap/js/bootstrap.min.js'%}"></script>
-<!-- SlimScroll -->
-<script src="{% static 'plugins/slimScroll/jquery.slimscroll.min.js'%}"></script>
-<!-- FastClick -->
-<!-- <script src="../../plugins/fastclick/fastclick.js"></script> -->
-<!-- AdminLTE App -->
-<script src="{% static 'dist/js/adminlte.min.js'%}"></script>
-<!-- AdminLTE for demo purposes -->
-<!-- <script src="../../dist/js/demo.js"></script> -->
+
 <script>
   $(document).ready(function () {
     $('.sidebar-menu').tree()
