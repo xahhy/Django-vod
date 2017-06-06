@@ -6,14 +6,14 @@ from django.contrib import messages
 
 
 class VodModelAdmin(admin.ModelAdmin):
-    list_display = ["title","image_tag","category","file_size","creator","timestamp","view_count"] #image_tag
+    list_display = ["title","image_tag","category","file_size","creator", "definition","view_count"] #image_tag
     list_display_links = ["image_tag",]#image_tag
-    list_editable = ["category",'title']
+    list_editable = ["category", 'title', "definition"]
     list_filter = ["timestamp","category"]
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
     search_fields = ["title", "content"]
-    actions = ["delete_hard","copy_objects","clear_view_count"]
+    actions = ["delete_hard", "copy_objects", "clear_view_count"]
     # def get_form(self, request, *args, **kwargs):
     #     form = super(VodModelAdmin, self).get_form(request, *args, **kwargs)
     #     form.base_fields['creator'].initial = request.user
@@ -22,7 +22,7 @@ class VodModelAdmin(admin.ModelAdmin):
         obj.creator = request.user
         super(VodModelAdmin, self).save_model(request, obj, form, change)
 
-    def delete_hard(self,request,queryset):
+    def delete_hard(self, request, queryset):
         for obj in queryset:
             try:
                 # print(obj.image.file.)

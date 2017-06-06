@@ -1,3 +1,5 @@
+import json
+from django.http import JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -66,19 +68,22 @@ def categorys():
 def homepage(request):
     user = request.user
     content = None
-    # if request.user.is_authenticated():
-        # content = {
-        #     # 'active_menu': 'homepage',
-        #     'user': user.username,
-        # }
-        # print('user:'+user.username)
+    preview_categorys=[]
+    for category in VideoCategory.objects.all():
+        videos = Vod.objects.filter(category__name=category.name)[:6]
+        preview_categorys.append(
+            {
+                'category': category.name,
+                'videos': videos
+            }
+        )
 
-    # categorys = VideoCategory.objects.filter(type='common')
     content = {
-            'categorys': categorys(),
-            'user': user.username,
+        'pre_categorys': preview_categorys,
+        'categorys': categorys(),
+        'user': user.username,
         }
-    return render(request,'vodmanagement/base.html',content)
+    return render(request, 'vodmanagement/home.html', content)
 
 
 # Create your views here.

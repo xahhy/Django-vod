@@ -1,3 +1,4 @@
+
 # Django-vod
 Use Django to create a vod(video on demand) manage system
 Based on Bootstrap3
@@ -49,12 +50,16 @@ export all_proxy='https://<ip>:<port>'
 ```
 
 # FAQ
-1. Centos7 no models named '__sqlite3'
+1. Centos7 no models named '__sqlite3'?
 > yum install sqlite-devel
 rebuil python and install
-
+2. How to use Choices's description in QuerySet object?
+```html
+video.get_definition_display
+<!--definition is one field in the video-->
+```
 # Useful 3rd-party app
-1. Django Crispy Forms \
+## 1. Django Crispy Forms 
 `pip install django-crispy-forms`
 >settings.py
 ```
@@ -63,22 +68,23 @@ INSTALLED_APPS = {
 'crispy_forms',
 ...
 }
-
-2. Django with Nginx-gunicorn
 ```
+## 2. Django with Nginx-gunicorn
+
+```shell
 pip install gunicorn
 gunicorn hello.wsgi:application --bind example.com:8001 #test gunicorn
-
+```
+```sehll
 #edite file gunicorn_start, django.conf(for nginx)
 ./gunicorn_start
 nginx -s reload
 ```
 
-#Crispy Form Tags Settings
+## Crispy Form Tags Settings
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-```
->*.html
-```
+> *.html
+```html
 {% load crispy_forms_tags %}
 
 <form method='POST' action='' >{%csrf_token%}
@@ -86,7 +92,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 <input class='btn btn-primary' type='submit' value='Sign Up'/>
 </form>
 ```
-2. Django Registration Redux
+## 2. Django Registration Redux
 https://django-registration-redux.readthedocs.io/en/latest/quickstart.html
 
 `pip install django-registration-redux`

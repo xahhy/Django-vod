@@ -1,0 +1,112 @@
+{% extends "vodmanagement/basic.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block own_scrips %}
+
+{% endblock %}
+
+{% block scripts %}
+    <style type="text/css">
+        /*
+ * Row with equal height columns
+ * --------------------------------------------------
+ */
+        .row-eq-height {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .each-item {
+            max-width: 300px;
+            min-width: 200px;
+        }
+
+        .center {
+            width: auto;
+            display: table;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+        .video-resolution-text{
+            bottom: 20px;
+            position: relative;
+            float: right;
+            background: black;
+            color: white;
+        }
+    </style>
+{% endblock %}
+{% block content-header %}
+    <section class="content-header">
+        <h1>
+            Home
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
+        </ol>
+    </section>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container-fluid">
+        <div class="row">
+            {% for category in pre_categorys %}
+                <div class="box box-default collapse-box">
+                    <div class="box-header with-border">
+                        <div class="box-title">
+                            <span class="glyphicon glyphicon-th"></span>
+                            {{ category.category }}
+                        </div>
+                        <div class="box-tools pull-right">
+                            <a href="/list/{{ category.category }}">
+                                <i class="fa fa-clone"></i>
+                            <small>More...</small>
+                            </a>
+                            <button class="btn btn-box-tool" type="button" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            {% for video in category.videos %}
+                                <div class="col-md-2 each-item">
+                                    <div class="panel panel-primary ">
+                                        <div class="panel-heading">{{ video.title }}</div>
+                                         <a href='{{ video.get_absolute_url }}'>
+                                            <img src="{{ video.image|thumbnail_url:'avatar' }}" width="100%"
+                                                 height="auto"/>
+                                             <span class="video-resolution-text">{{ video.definition }}</span>
+                                         </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+            {#{% for video in videos %}#}
+            {#   <div class="col-xs-12 col-md-3 col-lg-2 each-item" >#}
+            {#       <a href='{{ video.get_absolute_url }}'>#}
+            {#       <div class="panel panel-primary">#}
+            {#                <div class="panel-heading text-center">#}
+            {#                    <b class="">{{ video.title }}</b>#}
+            {#                </div>#}
+            {#                    <img src="{{video.image|thumbnail_url:'avatar'}}"  width="100%" height="auto"/>#}
+            {#       </div>#}
+            {#       </a>#}
+            {#    </div>#}
+            {#{% endfor %}#}
+        </div>
+    </div>
+{% endblock %}

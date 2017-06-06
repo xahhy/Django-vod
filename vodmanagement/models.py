@@ -100,9 +100,9 @@ TYPES = (
     ('special', 'Special purpose'),
 )
 VIDEO_QUALITY = (
-    ('S','Standard'),
-    ('H','High'),
-    ('S','Super'),
+    ('SD','Standard Definition'),
+    ('HD','High Definition'),
+    ('FHD','Full HD'),
 )
 
 class VideoCategory(models.Model):
