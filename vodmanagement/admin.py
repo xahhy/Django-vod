@@ -4,16 +4,31 @@ from .models import *
 from django import forms
 from django.contrib import messages
 from uuslug import uuslug
+from django.conf import settings
+from .utils import *
+class VodForm(forms.ModelForm):
+    """docstring for VodForm"""
+    def __init__(self, *args, **kwargs):
+        super(VodForm, self).__init__(*args, **kwargs)
+        self.fields["save_path"] = forms.ChoiceField(choices=save_path_choices())
+        for instance in self.fields["category"].queryset:
+            create_category_path(name=instance.name)
+
+    class Meta:
+        model = Vod       
+        fields = '__all__'
+        
 
 class VodModelAdmin(admin.ModelAdmin):
     list_display = ["title","image_tag","category","file_size","creator", "definition","view_count"] #image_tag
     list_display_links = ["image_tag",]#image_tag
     list_editable = ["category", 'title', "definition"]
-    list_filter = ["timestamp","category"]
+    list_filter = ["year","category"]
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
     search_fields = ["title", "description"]
     actions = ["delete_hard", "copy_objects", "clear_view_count"]
+    form = VodForm
     # def get_form(self, request, *args, **kwargs):
     #     form = super(VodModelAdmin, self).get_form(request, *args, **kwargs)
     #     form.base_fields['creator'].initial = request.user
@@ -50,8 +65,8 @@ class VodModelAdmin(admin.ModelAdmin):
         self.message_user(request,"%s item successfully cleared view count."%queryset.count()
             ,messages.SUCCESS)
 
-    class Meta:
-        model = Vod
+    # class Meta:
+        # model = Vod
 
 
 class MyAdminForm(forms.ModelForm):

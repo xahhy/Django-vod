@@ -13,6 +13,8 @@ from django.core.urlresolvers import reverse
 from django.core.files import File
 from uuslug import uuslug
 import os
+from .utils import *
+import datetime
 """
 Copy data in XXX model:
 >>> 
@@ -56,16 +58,25 @@ def upload_video_location(instance, filename):
         new_id = VodModel.objects.order_by("id").last().id +1
     else:
         new_id = 0
-    return "%s/videos/%s/%s" %(instance.category.name,new_id,filename)
+    folder = instance.save_path
+    if folder == "default":
+        category = instance.category.name
+    else:
+        category = instance.category.name+'_'+folder
+    return "%s/videos/%s/%s" %(category,new_id,filename)
 
 def upload_image_location(instance, filename):
     VodModel = instance.__class__
-    print("path="+instance.category.directory.path)
     if VodModel.objects.count() is not 0:
         new_id = VodModel.objects.order_by("id").last().id +1
     else:
         new_id = 0
-    return "%s/images/%s/%s" %(instance.category.name,new_id,filename)
+    folder = instance.save_path
+    if folder == "default":
+        category = instance.category.name
+    else:
+        category = instance.category.name+'_'+folder
+    return "%s/images/%s/%s" %(category,new_id,filename)
 
 
 def default_description(instance):
@@ -105,6 +116,9 @@ VIDEO_QUALITY = (
     ('HD','High Definition'),
     ('FHD','Full HD'),
 )
+SAVE_PATH=(
+    ('',settings.LOCAL_MEDIA_ROOT),
+    )
 
 class VideoCategory(models.Model):
     name = models.CharField(max_length=128)
@@ -122,16 +136,18 @@ class VideoCategory(models.Model):
     def save(self, *args, **kwargs):
         # print(self.directory)
         #make a folder self.name in the self.directory  
-        src = self.directory.path+'/'+self.name
-        dst = settings.MEDIA_ROOT+'/'+str(self.name)
-        try:
-            os.makedirs(src)
-        except:
-            pass    
-        try:
-            os.symlink(src,dst)
-        except:
-            pass
+        # src = self.directory.path+'/'+self.name
+        # dst = settings.MEDIA_ROOT+'/'+str(self.name)
+        # try:
+        #     os.makedirs(src)
+        # except:
+        #     pass    
+        # try:
+        #     os.symlink(src,dst)
+        # except:
+        #     pass
+
+        create_category_path(name=self.name)
         super(VideoCategory, self).save(*args, **kwargs)
 
     class Meta:
@@ -157,7 +173,7 @@ class Vod(models.Model):
             null=True,
             blank=True)
     video = models.FileField(upload_to=upload_video_location,null=True,blank=True)
-    local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True)
+    # local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True)
     definition = models.CharField(max_length=10,choices=VIDEO_QUALITY,blank=False,default='H')
     # image = FilerImageField(null=True, blank=True,
     #                         related_name="image_name")
@@ -165,23 +181,21 @@ class Vod(models.Model):
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
     category = models.ForeignKey(VideoCategory, null=True)
-    save_path = models.CharField(max_length=128,default=settings.MEDIA_ROOT)  # ,default=FileDirectory.objects.first())
-
+    save_path = models.CharField(max_length=128,blank=False)  # ,default=FileDirectory.objects.first())
+    year = models.CharField(max_length=10,blank=False,null=True,
+        default=datetime.datetime.now().year)
     # type can be LINK or VOD
     # type = models.CharField(max_length=128,
     #                         choices=(('link','LINK'),('vod','VOD'),),
     #                         default='link')
-    status = models.CharField(max_length=128, null=True, blank=True)  # show the data status
     file_size = models.CharField(max_length=128, default='0B', editable=False)
     view_count = models.IntegerField(default=0)
     view_count_temp = 0
     creator = models.ForeignKey(User, null=True, blank=False, editable=False)
 
     description = models.TextField(blank=True)
-    short_description = models.CharField(max_length=250, blank=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)  # The first time added
-    custome_time = models.DateTimeField(default=timezone.now)
     slug = models.SlugField(unique=True,blank=True)
 
 
@@ -201,13 +215,11 @@ class Vod(models.Model):
         else:
             print("video file is None")
 
-        if self.local_video != '' and self.local_video is not None:
-            basename = os.path.basename(self.local_video)
-            self.video.name = settings.LOCAL_MEDIA_URL + basename
-            print("save local_video to filefield done")
-        # if self.slug is None or self.slug is "" or not slug_exists(self.slug):
-        #     print("save slug")
-        #     self.slug = create_slug(self)
+        # if self.local_video != '' and self.local_video is not None:
+        #     basename = os.path.basename(self.local_video)
+        #     self.video.name = settings.LOCAL_MEDIA_URL + basename
+        #     print("save local_video to filefield done")
+
 
         super(Vod, self).save(*args, **kwargs)
 
@@ -261,8 +273,8 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
         # instance.slug = create_slug(instance)
 
 def post_init_receiver(sender, instance, *args, **kwargs):
-    print("pre_init!")
-
+    print("post_init!")
+    
 
 pre_save.connect(pre_save_post_receiver, sender=Vod)
 post_init.connect(post_init_receiver,sender=Vod)
