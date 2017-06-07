@@ -7,7 +7,7 @@ from django.contrib import admin
 from django.conf import settings
 import humanfriendly
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save,post_init
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 from django.core.files import File
@@ -114,7 +114,7 @@ class VideoCategory(models.Model):
                             )
     
     isSecret = models.BooleanField(default=False)
-    directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
+    # directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
 
     def __str__(self):
         return self.name
@@ -165,6 +165,8 @@ class Vod(models.Model):
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
     category = models.ForeignKey(VideoCategory, null=True)
+    save_path = models.CharField(max_length=128,default=settings.MEDIA_ROOT)  # ,default=FileDirectory.objects.first())
+
     # type can be LINK or VOD
     # type = models.CharField(max_length=128,
     #                         choices=(('link','LINK'),('vod','VOD'),),
@@ -258,8 +260,12 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
         instance.slug = uuslug(instance.title,instance=instance)
         # instance.slug = create_slug(instance)
 
-pre_save.connect(pre_save_post_receiver, sender=Vod)
+def post_init_receiver(sender, instance, *args, **kwargs):
+    print("pre_init!")
 
+
+pre_save.connect(pre_save_post_receiver, sender=Vod)
+post_init.connect(post_init_receiver,sender=Vod)
 """
 from vodmanagement.models import *
 objs = Vod.objects.all()

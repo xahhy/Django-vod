@@ -64,7 +64,7 @@ class MyAdminForm(forms.ModelForm):
 
 
 class VideoCategoryModelAdmin(admin.ModelAdmin):
-    list_display = ["category_description","type","directory","isSecret"]
+    list_display = ["category_description","type","isSecret"]
     list_editable = ["isSecret"]
     search_fields = ["name"]
     form = MyAdminForm
