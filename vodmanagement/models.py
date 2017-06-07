@@ -11,6 +11,7 @@ from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 from django.core.files import File
+from uuslug import uuslug
 import os
 """
 Copy data in XXX model:
@@ -228,6 +229,7 @@ class Vod(models.Model):
     image_tag.short_description = 'Image'
 
     def get_absolute_url(self):
+        print("get absolute url:",self.slug)
         return reverse("vod:vod-detail", kwargs={"slug": self.slug})
 
     def add_view_count(self):
@@ -253,7 +255,8 @@ def slug_exists(slug):
 
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
-        instance.slug = create_slug(instance)
+        instance.slug = uuslug(instance.title,instance=instance)
+        # instance.slug = create_slug(instance)
 
 pre_save.connect(pre_save_post_receiver, sender=Vod)
 

@@ -19,6 +19,8 @@ from django.db.models import Q
 from django.core.cache import cache
 from django.views.decorators.http import condition #to use Etag
 from django.db.models import F
+from django.contrib.auth.decorators import login_required
+
 def latest_entry(request, slug):
     if slug is None:
         return None
@@ -86,7 +88,7 @@ def homepage(request):
     return render(request, 'vodmanagement/home.html', content)
 
 
-# Create your views here.
+
 def login(request):
     state = None
     if request.method == 'POST':
@@ -109,13 +111,15 @@ def login(request):
     print('retry')
     return render(request,'vodmanagement/login.html',content)
 
-
+@login_required(login_url='/login/')
 def logout(request):
     auth.logout(request)
+    print("log out")
     return HttpResponseRedirect(reverse('vod:login'))
 
 # divide data into few pages
 def listing(request,slug=None):
+    print("slug:",slug)
     if slug is None:
         title = "All Videos"
         title_url = "/list/"

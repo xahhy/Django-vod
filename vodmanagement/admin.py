@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import *
 from django import forms
 from django.contrib import messages
-
+from uuslug import uuslug
 
 class VodModelAdmin(admin.ModelAdmin):
     list_display = ["title","image_tag","category","file_size","creator", "definition","view_count"] #image_tag
@@ -39,7 +39,8 @@ class VodModelAdmin(admin.ModelAdmin):
         for obj in queryset:
             new_obj = obj
             new_obj.pk = None
-            new_obj.slug = create_slug(new_obj)
+            # new_obj.slug = create_slug(new_obj)
+            new_obj.slug = uuslug(new_obj.title,instance=new_obj)
             new_obj.save()
         self.message_user(request,"%s item successfully copyed."%queryset.count()
             ,messages.SUCCESS)
