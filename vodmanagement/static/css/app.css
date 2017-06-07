@@ -13,7 +13,7 @@
     width: 100% !important;
 }
 
-.each-item {
+.each-video {
     max-width: 300px;
     /*min-width: 200px;*/
 }
@@ -39,7 +39,7 @@
     color: white;
 }
 
-.each-item:hover div.panel-heading {
+.each-video:hover div.panel-heading {
     /*background-color: #1cd388;*/
     background-color: #3c8dbc;
     color: white;

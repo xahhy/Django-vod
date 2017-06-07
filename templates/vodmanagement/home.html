@@ -45,7 +45,7 @@
                     <div class="box-body">
                         <div class="row">
                             {% for video in category.videos %}
-                                <div class="col-xs-4 col-md-2 col-lg-2 each-item">
+                                <div class="col-xs-4 col-md-2 col-lg-2 each-video">
                                     <div class="panel panel-default ">
                                         <div class="panel-heading">{{ video.title }}</div>
                                         <a href='{{ video.get_absolute_url }}'>
@@ -62,7 +62,7 @@
             {% endfor %}
 
             {#{% for video in videos %}#}
-            {#   <div class="col-xs-12 col-md-3 col-lg-2 each-item" >#}
+            {#   <div class="col-xs-12 col-md-3 col-lg-2 each-video" >#}
             {#       <a href='{{ video.get_absolute_url }}'>#}
             {#       <div class="panel panel-primary">#}
             {#                <div class="panel-heading text-center">#}
