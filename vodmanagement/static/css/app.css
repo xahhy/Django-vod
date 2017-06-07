@@ -18,7 +18,7 @@
     /*min-width: 200px;*/
 }
 .panel-heading{
-    padding: 10px 5px;
+    padding: 2px 5px;
 }
 .center {
     width: auto;
@@ -43,4 +43,14 @@
     /*background-color: #1cd388;*/
     background-color: #3c8dbc;
     color: white;
+}
+
+li.title{
+    color: #333;
+    display: block;
+}
+li.duration{
+    color: #999;
+    display: block;
+    
 }

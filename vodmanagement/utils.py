@@ -34,13 +34,14 @@ def get_media_folder():
 
     return folders
 
+# if name="Action", a folder named "USB" in the sys_media_root ,
+# it will create a real folder named "Action_USB" in the USB folder
 def create_category_path(name):
     for folder in get_media_folder():
         print(folder,name)
         new_name = name+'_'+os.path.basename(folder)
         create_symlink(folder, settings.MEDIA_ROOT, new_name)
  
-
 def create_symlink(src,dst,name):
     src += '/'+ name
     dst += '/'+ name
@@ -52,5 +53,16 @@ def create_symlink(src,dst,name):
         os.symlink(src,dst)
     except:
         pass
+
+def time_formate(seconds):
+    hour    = int(seconds/3600)
+    minute  = int((seconds-60*hour)/60) 
+    second  = int(seconds%60)
+
+    hour    = "00"+str(hour)
+    minute    = "00"+str(minute)
+    second    = "00"+str(second)
+    time = "%s:%s:%s"%(hour[-2:],minute[-2:],second[-2:])
+    return time
 
 

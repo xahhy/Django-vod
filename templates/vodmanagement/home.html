@@ -47,11 +47,18 @@
                             {% for video in category.videos %}
                                 <div class="col-xs-4 col-md-2 col-lg-2 each-video">
                                     <div class="panel panel-default ">
-                                        <div class="panel-heading">{{ video.title }}</div>
+                                        
                                         <a href='{{ video.get_absolute_url }}'>
                                             <img src="{{ video.image|thumbnail_url:'avatar' }}" width="100%"
                                                  height="auto"/>
                                             <span class="video-resolution-text">{{ video.definition }}</span>
+                                            <div class="panel-heading">
+                                            <li class="title">{{ video.title }}</li>
+                                            
+                                            <li class="duration">
+                                            Duration:{{ video.duration }}
+                                            </li>
+                                            </div>
                                         </a>
                                     </div>
                                 </div>

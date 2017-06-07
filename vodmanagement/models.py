@@ -15,6 +15,8 @@ from uuslug import uuslug
 import os
 from .utils import *
 import datetime
+from moviepy.editor import VideoFileClip # get video duration
+
 """
 Copy data in XXX model:
 >>> 
@@ -173,6 +175,7 @@ class Vod(models.Model):
             null=True,
             blank=True)
     video = models.FileField(upload_to=upload_video_location,null=True,blank=True)
+    duration = models.CharField(max_length=50,blank=True,null=True)
     # local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True)
     definition = models.CharField(max_length=10,choices=VIDEO_QUALITY,blank=False,default='H')
     # image = FilerImageField(null=True, blank=True,
@@ -210,8 +213,11 @@ class Vod(models.Model):
         # print(dir(self))
 
         if self.video != None and self.video != '':
-            print(self.video)
+            print(self.video.path)
             self.file_size = humanfriendly.format_size(self.video.file.size)
+            duration = VideoFileClip(self.video.path).duration
+            self.duration = time_formate(duration)
+            print(self.duration)
         else:
             print("video file is None")
 

@@ -38,12 +38,16 @@
             {% for video in videos %}
                 <div class="col-xs-3 col-md-3 col-lg-2 each-video">
                     <a href='{{ video.get_absolute_url }}'>
-                        <div class="panel panel-default">
-                            <div class="panel-heading text-center">
-                                <b class="">{{ video.title }}</b>
-                            </div>
+                        <div class="panel panel-default"> 
                             <img src="{{ video.image|thumbnail_url:'avatar' }}" width="100%" height="auto"/>
                             <span class="video-resolution-text">{{ video.definition }}</span>
+                            <div class="panel-heading">
+                                <li class="title">{{ video.title }}</li>
+                                
+                                <li class="duration">
+                                Duration:{{ video.duration }}
+                                </li>
+                            </div>
                         </div>
                     </a>
                 </div>

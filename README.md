@@ -58,6 +58,19 @@ rebuil python and install
 video.get_definition_display
 <!--definition is one field in the video-->
 ```
+3. How to get duration of a video file?
+use moviewpy in python
+```
+pip install moviepy
+```
+```python
+#usage
+from moviepy.editor import VideoFileClip
+clip=VideoFileClip("myvideo.mp4")
+print(clip.duration) #in seconds
+
+```
+
 # Useful 3rd-party app
 ## 1. Django Crispy Forms 
 `pip install django-crispy-forms`
@@ -116,3 +129,5 @@ url(r'^accounts/',include('registration.backends.default.urls')),
 ```
 >templets
 >need to copy templates from official site
+
+
