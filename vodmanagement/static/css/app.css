@@ -9,11 +9,17 @@
     display: flex;
 }
 
-.each-item {
-    max-width: 300px;
-    min-width: 200px;
+.img-response {
+    width: 100% !important;
 }
 
+.each-item {
+    max-width: 300px;
+    /*min-width: 200px;*/
+}
+.panel-heading{
+    padding: 10px 5px;
+}
 .center {
     width: auto;
     display: table;
@@ -32,7 +38,9 @@
     background: black;
     color: white;
 }
-.each-item:hover  div.panel-heading{
-    background-color: #1cd388;
+
+.each-item:hover div.panel-heading {
+    /*background-color: #1cd388;*/
+    background-color: #3c8dbc;
     color: white;
 }

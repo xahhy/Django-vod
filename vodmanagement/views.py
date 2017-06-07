@@ -100,7 +100,7 @@ def login(request):
             auth.login(request, user)
             return HttpResponseRedirect(reverse('vod:homepage'))
         else:
-            state = 'not_exist_or_password_error'
+            state = 'Username or Password Incorrect'
     content = {
         'active_menu': 'homepage',
         'state': state,

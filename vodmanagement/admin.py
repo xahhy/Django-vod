@@ -12,7 +12,7 @@ class VodModelAdmin(admin.ModelAdmin):
     list_filter = ["timestamp","category"]
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
-    search_fields = ["title", "content"]
+    search_fields = ["title", "description"]
     actions = ["delete_hard", "copy_objects", "clear_view_count"]
     # def get_form(self, request, *args, **kwargs):
     #     form = super(VodModelAdmin, self).get_form(request, *args, **kwargs)

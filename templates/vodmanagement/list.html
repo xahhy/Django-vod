@@ -1,6 +1,7 @@
 {% extends "vodmanagement/basic.html" %}
 {% load staticfiles %}
 {% load thumbnail %}
+
 {% block own_scrips %}
     {#    <script src="{% static 'js/hola_player.js'%}"></script>#}
     {#    <script>#}
@@ -35,7 +36,7 @@
     <div class="container-fluid">
         <div class="row">
             {% for video in videos %}
-                <div class="col-xs-12 col-md-3 col-lg-2 each-item">
+                <div class="col-xs-3 col-md-3 col-lg-2 each-item">
                     <a href='{{ video.get_absolute_url }}'>
                         <div class="panel panel-default">
                             <div class="panel-heading text-center">
