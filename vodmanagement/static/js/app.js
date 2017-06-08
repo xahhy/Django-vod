@@ -14,5 +14,8 @@ function click_year(obj){
 	if(cur_path === '/'){
 		cur_path = '/list/'
 	}
+	if(cur_path.indexOf("/vod/") >=0 ){
+		cur_path = '/list/'
+	}
 	window.location.href= cur_path+"?year="+year;
 }

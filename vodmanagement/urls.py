@@ -10,6 +10,6 @@ urlpatterns = [
     url(r'^gallery/$',views.gallery,name='gallery'),
     url(r'^list/$',views.listing,name='list'),
     url(r'^list/(?P<slug>[\w-]+)/$',views.listing,name='list-detail'),
-    url(r'^(?P<slug>[\w-]+)/$',views.vod_detail, name='vod-detail'),
+    url(r'^vod/(?P<slug>[\w-]+)/$',views.vod_detail, name='vod-detail'),
     url(r'^listlink/$',views.listinglink,name='listlink'),
 ]

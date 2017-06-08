@@ -64,21 +64,15 @@
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
+      
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-
-          <!-- Notifications: style can be found in dropdown.less -->
-
-          <!-- Tasks: style can be found in dropdown.less -->
-            <li class="dropdown">
+      <div class="nav navbar-nav">
+        <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Year<span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 {% for year in years %}
@@ -86,6 +80,15 @@
                 {% endfor %}                     
               </ul>
             </li>
+      </div>
+            
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <!-- Messages: style can be found in dropdown.less-->
+
+          <!-- Notifications: style can be found in dropdown.less -->
+
+          <!-- Tasks: style can be found in dropdown.less -->
 
             <li>
                 <a href="/">Home</a>
@@ -165,7 +168,12 @@
 
         {% block category_list %}
         {% for item in categorys %}
-        <li class="" id="video_{{ item.name }}">
+        {% if item.name == title %}
+        <li class="active" id="video_{{ item.name }}">
+        {% else %}
+        <li class="" id="video_{{ item.name }}">       
+        {% endif %}
+
         <a href="{% url 'vod:list-detail' item.name %}">
         <i class="fa fa-book"></i> <span>{{ item.name }}</span>
         </a>
