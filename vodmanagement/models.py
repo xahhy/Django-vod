@@ -222,9 +222,9 @@ class Vod(models.Model):
         if self.video != None and self.video != '':
             print(self.video.path)
             self.file_size = humanfriendly.format_size(self.video.file.size)
-            duration = VideoFileClip(self.video.path).duration
-            self.duration = time_formate(duration)
-            print(self.duration)
+            # duration = VideoFileClip(self.video.path).duration
+            # self.duration = time_formate(duration)
+            # print(self.duration)
         else:
             print("video file is None")
         super(Vod, self).save(*args, **kwargs)

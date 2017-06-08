@@ -54,3 +54,6 @@ li.duration{
     display: block;
     
 }
+nav > div.nav{
+    display: block;
+}

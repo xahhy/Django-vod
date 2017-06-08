@@ -3,8 +3,8 @@ from django.http import JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse,HttpResponseRedirect,Http404
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
@@ -14,21 +14,24 @@ from django.contrib import messages
 from filer.models import Image
 from .models import *
 from django.core import serializers
-from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.core.cache import cache
-from django.views.decorators.http import condition #to use Etag
+from django.views.decorators.http import condition  # to use Etag
 from django.db.models import F
 from django.contrib.auth.decorators import login_required
+from .pagination import CustomPaginator
+
 
 # get distinct years of the Vod ,result in a list
 # ['2014','20323',...]
 def get_years():
-    years_ = get_vod_year_list(Vod,"year")
+    years_ = get_vod_year_list(Vod, "year")
     years = []
     for year in years_:
         years.append(year[0])
     return years
+
 
 def latest_entry(request, slug):
     if slug is None:
@@ -36,15 +39,17 @@ def latest_entry(request, slug):
     else:
         return Vod.objects.filter(slug=slug).latest("updated").updated
 
-def etag_entry(request,slug):
+
+def etag_entry(request, slug):
     return str(latest_entry(request, slug))
+
 
 def gallery(request):
     # if not request.user.is_staff or not request.user.is_superuser:
     #     raise Http404
     form = VodForm(request.POST or None, request.FILES or None)
     print('get form ok!')
-    if  form.is_valid():
+    if form.is_valid():
         image_file = form.cleaned_data['image']
         # Image.save()
         # instance = form.save()
@@ -61,16 +66,18 @@ def gallery(request):
         print('form is invalid')
     return render(request, "vodmanagement/gallery.html")
     # if request.method == 'POST' and request.FILES:
-        # myfile=request.FILES['name_file']
-        # print('file:'+myfile.name)
-        # form=DocumentForm(request.POST,request.FILES)
-        # print('form OK!')
-        # if form.is_valid():
-        #     print('Save OK!')
-        #     form.save()
-        #     return HttpResponseRedirect('homepage')
+    # myfile=request.FILES['name_file']
+    # print('file:'+myfile.name)
+    # form=DocumentForm(request.POST,request.FILES)
+    # print('form OK!')
+    # if form.is_valid():
+    #     print('Save OK!')
+    #     form.save()
+    #     return HttpResponseRedirect('homepage')
 
     # return render(request,'vodmanagement/gallery.html')
+
+
 def categorys():
     categorys = VideoCategory.objects.filter(type='common')
     return categorys
@@ -79,7 +86,7 @@ def categorys():
 def homepage(request):
     user = request.user
     content = None
-    preview_categorys=[]
+    preview_categorys = []
     for category in VideoCategory.objects.all():
         videos = Vod.objects.filter(category__name=category.name)[:6]
         preview_categorys.append(
@@ -93,10 +100,9 @@ def homepage(request):
         'pre_categorys': preview_categorys,
         'categorys': categorys(),
         'user': user.username,
-        'years' : get_years(),
-        }
+        'years': get_years(),
+    }
     return render(request, 'vodmanagement/home.html', content)
-
 
 
 def login(request):
@@ -104,8 +110,8 @@ def login(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        print('username:'+username)
-        print('password:'+password)
+        print('username:' + username)
+        print('password:' + password)
         user = auth.authenticate(username=username, password=password)
         print(user)
         if user is not None:
@@ -119,7 +125,8 @@ def login(request):
         'user': None
     }
     print('retry')
-    return render(request,'vodmanagement/login.html',content)
+    return render(request, 'vodmanagement/login.html', content)
+
 
 @login_required(login_url='/login/')
 def logout(request):
@@ -127,90 +134,102 @@ def logout(request):
     print("log out")
     return HttpResponseRedirect(reverse('vod:login'))
 
+
 # divide data into few pages
-def listing(request,slug=None):
-    print("slug:",slug)
+def listing(request, slug=None):
+    print("slug:", slug)
     if slug is None:
         title = "All Videos"
         title_url = "/list/"
-        video_list = Vod.objects.all()#filter(category__name=slug)
+        video_list = Vod.objects.all()  # filter(category__name=slug)
     else:
         title = slug
-        title_url = "/list/"+slug
+        title_url = "/list/" + slug
         video_list = Vod.objects.filter(category__name=slug)
 
-    #search word
+    # search word
     query = request.GET.get('search_word')
     if query:
         video_list = video_list.filter(
-            Q(title__icontains=query)|
-            Q(category__name__icontains=query)|
+            Q(title__icontains=query) |
+            Q(category__name__icontains=query) |
             Q(description__icontains=query)
             # Q(short_description__icontains=query)
-            ).distinct()
-    #search year
+        ).distinct()
+    # search year
     year = request.GET.get('year')
-    if year is not None:
+    if year is not None and year != "":
         video_list = video_list.filter(year=year)
+    else:
+        year = ""
 
-
-    video_page = Paginator(video_list, 12)
-
+    cur_page = request.GET.get('page')
+    if cur_page:
+        print("cur_page:",cur_page)
+    else:
+        print("cur_page:",cur_page)
+        cur_page = 1
+    video_page = CustomPaginator(cur_page, 5, video_list, 10)
     # print('total pages:'+str(video_page.count))
-    page=request.GET.get('page')
     try:
-        videos = video_page.page(page)
+        videos = video_page.page(cur_page)
     except PageNotAnInteger:
         videos = video_page.page(1)
+        print("not int")
     except EmptyPage:
         videos = video_page.page(video_page.num_pages)
-    
+
+    print("num_pages", video_page.num_pages)
+    print("pager_num_range", videos.paginator.pager_num_range)
     # categorys = VideoCategory.objects.filter(type='common')
     content = {
         'videos': videos,
         'categorys': categorys(),
         'title': title,
         'title_url': title_url,
-        'years' : get_years(),
-        'cur_year' : year,
+        'years': get_years(),
+        'cur_year': year,
     }
     return render(request, 'vodmanagement/list.html', content)
 
+
 def listinglink(request):
     link_list = Link.objects.all()
-    link_page = Paginator(link_list,6)
+    link_page = Paginator(link_list, 6)
     # print('total pages:'+str(video_page.count))
-    page=request.GET.get('page')
+    page = request.GET.get('page')
     try:
         links = link_page.page(page)
     except PageNotAnInteger:
         links = link_page.page(1)
     except EmptyPage:
         links = link_page.page(link_page.num_pages)
-    content={
-        'links':links,
+    content = {
+        'links': links,
     }
-    return render(request,'vodmanagement/listlink.html',content)
+    return render(request, 'vodmanagement/listlink.html', content)
 
-@condition(last_modified_func=latest_entry,etag_func=etag_entry)
-def vod_detail(request,slug=None):
+
+@condition(last_modified_func=latest_entry, etag_func=etag_entry)
+def vod_detail(request, slug=None):
     print(slug)
     # instance = get_object_or_404(Vod, slug=slug)
     # instance.view_count += 1
     instance = Vod.objects.all().filter(slug=slug)
-    instance.update(view_count=F('view_count')+1)
+    instance.update(view_count=F('view_count') + 1)
 
     # cache.set('key',instance)
     # print(instance.view_count )
     context = {
-        "video":instance.first(),
+        "video": instance.first(),
         'categorys': categorys(),
-        'years' : get_years(),
+        'years': get_years(),
 
     }
-    return render(request,'vodmanagement/detail.html',context)
+    return render(request, 'vodmanagement/detail.html', context)
+
 
 # @login_required
 def ajax_get_data(request):
-       json_data = serializers.serialize("json", Vod.objects.all())
-       return HttpResponse(json_data,content_type="application/json")
+    json_data = serializers.serialize("json", Vod.objects.all())
+    return HttpResponse(json_data, content_type="application/json")

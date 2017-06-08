@@ -20,9 +20,9 @@ class VodForm(forms.ModelForm):
         
 
 class VodModelAdmin(admin.ModelAdmin):
-    list_display = ["title","image_tag","category","file_size","duration", "definition","view_count"] #image_tag
+    list_display = ["title","image_tag","category","file_size","duration", "definition", "year", "view_count"] #image_tag
     list_display_links = ["image_tag",]#image_tag
-    list_editable = ["category", 'title', "definition"]
+    list_editable = ["category", 'title', "definition", "year"]
     list_filter = ["year","category"]
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)

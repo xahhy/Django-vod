@@ -38,7 +38,7 @@
 {% block content-header %}
     <section class="content-header">
         <h1>
-            {{ title }}{% if cur_year %}<i class="fa fa-fw fa-angle-right"></i>{{cur_year}} {%endif%}
+            {{ title }}{% if cur_year %}<i class="fa fa-fw fa-angle-right"></i>{{ cur_year }} {% endif %}
         </h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -53,36 +53,55 @@
     <div class="container-fluid">
         <div class="row">
             {% for video in videos %}
-                <div class="col-xs-3 col-md-3 col-lg-2 each-video">
+                <div class="col-xs-4 col-md-3 col-lg-2 each-video">
                     {% include 'vodmanagement/each_video.html' %}
                     </a>
                 </div>
             {% endfor %}
             <div class="col-xs-12 col-md-12 col-lg-12 text-center ">
-                <ul class="pagination">
-                    <!-- <span class="step-links"> -->
+                <ul class="pagination" id="m-pagination" year="{{ cur_year }}" num_pages={{ videos.paginator.num_pages }}>
+
                     {% if videos.has_previous %}
                         <li><a href="?page={{ videos.previous_page_number }}"><<</a></li>
                     {% endif %}
-
-{#                    <li>#}
-{#                        <span class="current">#}
-{#                            Page {{ videos.number }} of {{ videos.paginator.num_pages }}.#}
-{#                        </span>#}
-{#                    </li>#}
-                    {% for page in videos.paginator.page_range %}
+                    <li><a href="?page=1">First</a></li>
+                    <!-- <span class="step-links"> -->
+                    {#                    <li>#}
+                    {#                        <span class="current">#}
+                    {#                            Page {{ videos.number }} of {{ videos.paginator.num_pages }}.#}
+                    {#                        </span>#}
+                    {#                    </li>#}
+                    {% for page in videos.paginator.pager_num_range %}
                         {% if page == videos.number %}
-                            <li class="active"><a href='?page={{ page }}' >{{ page }}</a></li>
+                            <li class="active"><a href='?page={{ page }}'>{{ page }}</a></li>
                         {% else %}
                             <li><a href='?page={{ page }}'>{{ page }}</a></li>
                         {% endif %}
                     {% endfor %}
 
+                    <li><a href="?page={{ videos.paginator.num_pages }}">Last</a></li>
+
+
                     {% if videos.has_next %}
                         <li><a href="?page={{ videos.next_page_number }}">>></a></li>
                     {% endif %}
+
+                    <li><span>Totel {{ videos.paginator.num_pages }}.</span></li>
                     <!-- </span> -->
                 </ul>
+                <!-- <span class="step-links"> -->
+            </div>
+            <div class="col-xs-12 col-md-12 col-lg-12 text-center ">
+                <div class="btn-group dropup">
+                    <button type="button" class="btn btn-default">Go to</button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul id="goto-menue" class="dropdown-menu" role="menu">
+                        <!-- Dropdown menu links -->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
