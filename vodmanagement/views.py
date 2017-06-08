@@ -150,9 +150,7 @@ def listing(request,slug=None):
             ).distinct()
     #search year
     year = request.GET.get('year')
-    print('year=',year)
     if year is not None:
-        print("----------",year)
         video_list = video_list.filter(year=year)
 
 

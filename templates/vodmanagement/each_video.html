@@ -1,0 +1,17 @@
+{% load staticfiles %}
+{% load thumbnail %}
+
+<div class="panel panel-default " style="border: 0px">  
+    <a href='{{ video.get_absolute_url }}'>
+        <img src="{{ video.image|thumbnail_url:'avatar' }}" width="100%"
+             height="auto"/>
+        <span class="video-resolution-text">{{ video.definition }}</span>
+        <div class="panel-heading">
+        <li class="title">{{ video.title }}</li>
+        
+        <li class="duration">
+        DUR:{{ video.duration }}
+        </li>
+        </div>
+    </a>
+</div>

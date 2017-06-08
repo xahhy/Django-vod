@@ -17,7 +17,7 @@
     max-width: 300px;
     /*min-width: 200px;*/
 }
-.panel-heading{
+a > div.panel-heading{
     padding: 0px;
 }
 .center {
