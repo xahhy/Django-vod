@@ -2,12 +2,15 @@ import os
 from django.conf import settings
 import humanfriendly
 from vodmanagement.models import *
-
+import platform
 sys_media_root = '/media/xjtu'
 
 # generate choices depending on the folders in '/media/xjtu'
 # return choices
 def save_path_choices():
+    if 'Windows' in platform.system():
+        return (('default', settings.MEDIA_ROOT + '()'),)
+
     root_size = get_free_size(settings.MEDIA_ROOT)
     choices=(('default',settings.MEDIA_ROOT+'('+root_size+')'),)
     for folder in get_media_folder():
@@ -37,6 +40,9 @@ def get_media_folder():
 # if name="Action", a folder named "USB" in the sys_media_root ,
 # it will create a real folder named "Action_USB" in the USB folder
 def create_category_path(name):
+    if 'Windows' in platform.system():
+        return
+
     for folder in get_media_folder():
         print(folder,name)
         new_name = name+'_'+os.path.basename(folder)

@@ -81,7 +81,7 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Dropdown <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="?year=2017">Action</a></li>
+                <li><a href="">Action</a></li>
                 <li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>
                 <li><a href="#">Separated link</a></li>
@@ -149,10 +149,11 @@
       <form action="/list/" method="get" class="sidebar-form">
         <div class="input-group">
           <input type="text" name="search_word" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
+            <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
-              </span>
+            </span>
+            <input id="search-year" type="text" name="year" class="form-control" style="display: none;"/>
         </div>
       </form>
         <!--search end-->

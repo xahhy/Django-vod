@@ -18,6 +18,22 @@
 {% block scripts %}
 
 {% endblock %}
+
+{% block search_field %}
+    <!--search start-->
+    <form action="" method="get" class="sidebar-form">
+        <div class="input-group">
+            <input type="text" name="search_word" class="form-control" placeholder="Search...">
+            <span class="input-group-btn">
+                <button type="submit" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+            </span>
+            <input type="text" name="year" class="form-control" style="display: none;"/>
+        </div>
+    </form>
+    <!--search end-->
+{% endblock %}
+
 {% block content-header %}
     <section class="content-header">
         <h1>

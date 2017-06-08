@@ -21,3 +21,4 @@ Unidecode==0.4.20
 markdown==2.6.8
 djangorestframework==3.6.3
 moviepy
+django-uuslug

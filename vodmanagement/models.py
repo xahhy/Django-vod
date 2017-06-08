@@ -65,6 +65,7 @@ def upload_video_location(instance, filename):
         category = instance.category.name
     else:
         category = instance.category.name+'_'+folder
+    print("video path:",category)
     return "%s/videos/%s/%s" %(category,new_id,filename)
 
 def upload_image_location(instance, filename):
@@ -212,22 +213,22 @@ class Vod(models.Model):
         #     self.url = "http://" + self.url
         # print(dir(self))
 
-        if self.video != None and self.video != '':
-            print(self.video.path)
-            self.file_size = humanfriendly.format_size(self.video.file.size)
-            duration = VideoFileClip(self.video.path).duration
-            self.duration = time_formate(duration)
-            print(self.duration)
-        else:
-            print("video file is None")
-
         # if self.local_video != '' and self.local_video is not None:
         #     basename = os.path.basename(self.local_video)
         #     self.video.name = settings.LOCAL_MEDIA_URL + basename
         #     print("save local_video to filefield done")
 
-
         super(Vod, self).save(*args, **kwargs)
+        if self.video != None and self.video != '':
+            print(self.video.path)
+            self.file_size = humanfriendly.format_size(self.video.file.size)
+            # duration = VideoFileClip(self.video.path).duration
+            # self.duration = time_formate(duration)
+            # print(self.duration)
+        else:
+            print("video file is None")
+        super(Vod, self).save(*args, **kwargs)
+
 
     def __unicode__(self):
         return self.title
