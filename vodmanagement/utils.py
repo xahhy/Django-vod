@@ -60,6 +60,7 @@ def create_symlink(src,dst,name):
     except:
         pass
 
+# format time in seconds to xx:xx:xx
 def time_formate(seconds):
     hour    = int(seconds/3600)
     minute  = int((seconds-60*hour)/60) 
@@ -70,5 +71,11 @@ def time_formate(seconds):
     second    = "00"+str(second)
     time = "%s:%s:%s"%(hour[-2:],minute[-2:],second[-2:])
     return time
+
+def get_vod_year_list(model,field):
+    queryset = model.objects.values_list(field).distinct().order_by(field)
+    # for item in queryset:
+        # print(item[0])
+    return queryset
 
 

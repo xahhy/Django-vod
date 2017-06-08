@@ -21,6 +21,15 @@ from django.views.decorators.http import condition #to use Etag
 from django.db.models import F
 from django.contrib.auth.decorators import login_required
 
+# get distinct years of the Vod ,result in a list
+# ['2014','20323',...]
+def get_years():
+    years_ = get_vod_year_list(Vod,"year")
+    years = []
+    for year in years_:
+        years.append(year[0])
+    return years
+
 def latest_entry(request, slug):
     if slug is None:
         return None
@@ -84,6 +93,7 @@ def homepage(request):
         'pre_categorys': preview_categorys,
         'categorys': categorys(),
         'user': user.username,
+        'years' : get_years(),
         }
     return render(request, 'vodmanagement/home.html', content)
 
@@ -139,6 +149,11 @@ def listing(request,slug=None):
             # Q(short_description__icontains=query)
             ).distinct()
     #search year
+    year = request.GET.get('year')
+    print('year=',year)
+    if year is not None:
+        print("----------",year)
+        video_list = video_list.filter(year=year)
 
 
     video_page = Paginator(video_list, 12)
@@ -158,6 +173,8 @@ def listing(request,slug=None):
         'categorys': categorys(),
         'title': title,
         'title_url': title_url,
+        'years' : get_years(),
+        'cur_year' : year,
     }
     return render(request, 'vodmanagement/list.html', content)
 
@@ -190,6 +207,8 @@ def vod_detail(request,slug=None):
     context = {
         "video":instance.first(),
         'categorys': categorys(),
+        'years' : get_years(),
+
     }
     return render(request,'vodmanagement/detail.html',context)
 

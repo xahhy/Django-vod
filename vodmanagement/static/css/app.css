@@ -18,7 +18,7 @@
     /*min-width: 200px;*/
 }
 .panel-heading{
-    padding: 2px 5px;
+    padding: 0px;
 }
 .center {
     width: auto;
@@ -39,7 +39,7 @@
     color: white;
 }
 
-.each-video:hover div.panel-heading {
+.each-video:hover div.panel-heading > li{
     /*background-color: #1cd388;*/
     background-color: #3c8dbc;
     color: white;

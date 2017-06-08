@@ -37,7 +37,7 @@
 {% block content-header %}
     <section class="content-header">
         <h1>
-            {{ title }}
+            {{ title }}{% if cur_year %}<i class="fa fa-fw fa-angle-right"></i>{{cur_year}} {%endif%}
         </h1>
         <ol class="breadcrumb">
             <li><a href="/"><i class="fa fa-dashboard"></i> Home</a></li>

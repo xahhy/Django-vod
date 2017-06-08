@@ -222,9 +222,9 @@ class Vod(models.Model):
         if self.video != None and self.video != '':
             print(self.video.path)
             self.file_size = humanfriendly.format_size(self.video.file.size)
-            # duration = VideoFileClip(self.video.path).duration
-            # self.duration = time_formate(duration)
-            # print(self.duration)
+            duration = VideoFileClip(self.video.path).duration
+            self.duration = time_formate(duration)
+            print(self.duration)
         else:
             print("video file is None")
         super(Vod, self).save(*args, **kwargs)
@@ -250,7 +250,7 @@ class Vod(models.Model):
     image_tag.short_description = 'Image'
 
     def get_absolute_url(self):
-        print("get absolute url:",self.slug)
+        # print("get absolute url:",self.slug)
         return reverse("vod:vod-detail", kwargs={"slug": self.slug})
 
     def add_view_count(self):
@@ -280,7 +280,8 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
         # instance.slug = create_slug(instance)
 
 def post_init_receiver(sender, instance, *args, **kwargs):
-    print("post_init!")
+    # print("post_init!")
+    pass
     
 
 pre_save.connect(pre_save_post_receiver, sender=Vod)
