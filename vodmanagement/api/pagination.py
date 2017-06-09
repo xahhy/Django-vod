@@ -11,5 +11,5 @@ class VodLimitOffsetPagination(LimitOffsetPagination):
 
 
 class VodPageNumberPagination(PageNumberPagination):
-    page_size = 2
+    page_size = 3
     

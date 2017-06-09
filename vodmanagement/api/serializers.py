@@ -20,6 +20,8 @@ class VodListSerializer(ModelSerializer):
             'title',
             'image',
             'category',
+            'definition',
+            'duration',
             'slug',
         ]
 

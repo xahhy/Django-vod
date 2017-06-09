@@ -26,6 +26,7 @@ SECRET_KEY = '%ur^wgur*+1c$kxk_(bkqonaebu3&f#a7v+g7j)65k=6%z*itz'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL=True
 
 #my settings
 THUMBNAIL_HIGH_RESOLUTION = True
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     'vodmanagement.apps.VodConfig',
     'epg.apps.EpgConfig',
     'rest_framework',
+    'corsheaders',
 
     # The following apps are required:
 
@@ -75,6 +77,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    # 'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,8 +86,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
 
+]
 ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATES = [
