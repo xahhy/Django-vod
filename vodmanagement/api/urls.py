@@ -5,6 +5,7 @@ from .views import *
 
 urlpatterns = [
     url(r'^$', VodListAPIView.as_view(), name='list'),
+    url(r'^home/$', HomeListAPIView.as_view(), name='home'),
     url(r'^category/$', CategoryListAPIView.as_view(), name='category'),
     url(r'^year/$', YearListAPIView.as_view(), name='year'),
     # url(r'^create/$', PostCreateAPIView.as_view(), name='create'),

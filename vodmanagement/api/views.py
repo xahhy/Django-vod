@@ -1,4 +1,5 @@
 from django.db.models import Q
+import itertools
 from rest_framework.views import APIView
 from vodmanagement.views import get_years
 from rest_framework.response import Response
@@ -53,7 +54,10 @@ class VodListAPIView(ListAPIView):
                 Q(title__icontains=search) |
                 Q(description__icontains=search)
             )
-        
+        # search year
+        year = self.request.GET.get('year')
+        if year is not None and year != "":
+            queryset_list = queryset_list.filter(year=year)
 
         return queryset_list
 
@@ -69,6 +73,7 @@ class CategoryListAPIView(ListAPIView):
     permission_classes = [AllowAny]
     queryset = VideoCategory.objects.all()
 
+
 class YearListAPIView(APIView):
     def get(self, request, format=None):
         """
@@ -76,4 +81,20 @@ class YearListAPIView(APIView):
         """
         years = get_years()
         return Response(years)
+
+
+class HomeListAPIView(APIView):
+
+    def get(self, request, format=None):
+        preview_categorys = []
+        for category in VideoCategory.objects.all():
+            videos = Vod.objects.filter(category__name=category.name)[:6]
+            preview_categorys.append(
+                {
+                    'category': category.name,
+                    'videos': VodListSerializer(videos,many=True).data
+                }
+            )
+        return Response(preview_categorys)
+
 

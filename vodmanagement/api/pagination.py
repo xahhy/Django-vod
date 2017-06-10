@@ -12,7 +12,7 @@ class VodLimitOffsetPagination(LimitOffsetPagination):
 
 
 class VodPageNumberPagination(PageNumberPagination):
-    page_size = 3
+    page_size = 12
     def get_paginated_response(self, data):
         year = self.request.query_params.get('year')
         return Response(OrderedDict([

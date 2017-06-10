@@ -1,9 +1,12 @@
 from django.conf.urls import include,url
 from django.contrib import admin
 from django.conf import settings
+from django.views.generic import TemplateView
+
 from . import views
 
 urlpatterns = [
+    url(r'vod/$',views.direct),
     url(r'^login/$',views.login,name='login'),
     url(r'^logout/$',views.logout,name='logout'),
     url(r'^$',views.homepage,name='homepage'),

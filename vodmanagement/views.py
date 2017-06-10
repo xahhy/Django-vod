@@ -8,6 +8,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib import auth
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
+from django.template.loader import render_to_string
+
 from mysite.settings import STATIC_URL
 from .forms import VodForm
 from django.contrib import messages
@@ -22,7 +24,10 @@ from django.db.models import F
 from django.contrib.auth.decorators import login_required
 from .pagination import CustomPaginator
 
-
+def direct(request):
+    path = settings.STATIC_ROOT+"\\art.html"
+    html = open(path,encoding='utf-8').read()
+    return HttpResponse(html)
 # get distinct years of the Vod ,result in a list
 # ['2014','20323',...]
 def get_years():

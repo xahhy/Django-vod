@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from rest_framework.serializers import (
-    HyperlinkedIdentityField,
-    ModelSerializer,
-    SerializerMethodField
-    )
+from rest_framework.serializers import *
+# (
+#     HyperlinkedIdentityField,
+#     ModelSerializer,
+#     SerializerMethodField
+#     )
 from vodmanagement.models import *
 from easy_thumbnails.files import get_thumbnailer
 
@@ -64,3 +65,8 @@ class CategoryListSerializer(ModelSerializer):
     class Meta:
         model = VideoCategory
         fields = ['name']
+
+
+# class HomeListSerializer(Serializer):
+#     videos = VodListSerializer()
+#     category = CategoryListSerializer()
