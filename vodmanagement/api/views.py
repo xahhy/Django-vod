@@ -1,5 +1,7 @@
 from django.db.models import Q
-
+from rest_framework.views import APIView
+from vodmanagement.views import get_years
+from rest_framework.response import Response
 from rest_framework.filters import (
         SearchFilter,
         OrderingFilter,
@@ -66,4 +68,12 @@ class CategoryListAPIView(ListAPIView):
     serializer_class = CategoryListSerializer
     permission_classes = [AllowAny]
     queryset = VideoCategory.objects.all()
+
+class YearListAPIView(APIView):
+    def get(self, request, format=None):
+        """
+        Return a list of all users.
+        """
+        years = get_years()
+        return Response(years)
 

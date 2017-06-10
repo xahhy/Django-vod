@@ -1,7 +1,7 @@
 import os
 from django.conf import settings
 import humanfriendly
-from vodmanagement.models import *
+# from vodmanagement.models import Vod
 import platform
 sys_media_root = '/media/xjtu'
 
