@@ -7,7 +7,6 @@ from rest_framework.serializers import (
 from vodmanagement.models import *
 from easy_thumbnails.files import get_thumbnailer
 
-
 class VodListSerializer(ModelSerializer):
     # category = serializers.SlugRelatedField(
     #     read_only=True,
