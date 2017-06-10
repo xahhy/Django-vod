@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL=True
-
+CORS_ALLOW_CREDENTIALS=False
 #my settings
 THUMBNAIL_HIGH_RESOLUTION = True
 THUMBNAIL_PROCESSORS = (
@@ -59,10 +59,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # user apps
+    'corsheaders',
     'vodmanagement.apps.VodConfig',
     'epg.apps.EpgConfig',
     'rest_framework',
-    'corsheaders',
 
     # The following apps are required:
 

@@ -62,3 +62,8 @@ class VodDetailAPIView(RetrieveAPIView):
     serializer_class = VodDetailSerializer
     permission_classes = [AllowAny]
 
+class CategoryListAPIView(ListAPIView):
+    serializer_class = CategoryListSerializer
+    permission_classes = [AllowAny]
+    queryset = VideoCategory.objects.all()
+

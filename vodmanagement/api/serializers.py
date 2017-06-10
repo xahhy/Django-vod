@@ -5,14 +5,16 @@ from rest_framework.serializers import (
     SerializerMethodField
     )
 from vodmanagement.models import *
+from easy_thumbnails.files import get_thumbnailer
 
 
 class VodListSerializer(ModelSerializer):
-    category = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='name'
-     )
-
+    # category = serializers.SlugRelatedField(
+    #     read_only=True,
+    #     slug_field='name'
+    #  )
+    image =  SerializerMethodField()
+    category =  SerializerMethodField()
     class Meta:
         model = Vod
         fields = [
@@ -27,6 +29,11 @@ class VodListSerializer(ModelSerializer):
 
     def get_category(self,obj):
         return str(obj.category)
+
+    def get_image(self,obj):
+        thumb_url = get_thumbnailer(obj.image)['avatar'].url
+        return thumb_url
+
 
 
 class VodDetailSerializer(ModelSerializer):
@@ -51,3 +58,10 @@ class VodDetailSerializer(ModelSerializer):
 
     def get_category(self,obj):
         return str(obj.category)
+
+
+#Category Serializers
+class CategoryListSerializer(ModelSerializer):
+    class Meta:
+        model = VideoCategory
+        fields = ['name']
