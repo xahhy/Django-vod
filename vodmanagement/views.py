@@ -174,7 +174,7 @@ def listing(request, slug=None):
     else:
         print("cur_page:",cur_page)
         cur_page = 1
-    video_page = CustomPaginator(cur_page, 5, video_list, 10)
+    video_page = CustomPaginator(cur_page, 5, video_list, 12)
     # print('total pages:'+str(video_page.count))
     try:
         videos = video_page.page(cur_page)
@@ -185,7 +185,7 @@ def listing(request, slug=None):
         videos = video_page.page(video_page.num_pages)
 
     print("num_pages", video_page.num_pages)
-    print("pager_num_range", videos.paginator.pager_num_range)
+    print("pager_num_range", videos.paginator.pager_num_range())
     # categorys = VideoCategory.objects.filter(type='common')
     content = {
         'videos': videos,

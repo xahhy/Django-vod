@@ -14,11 +14,11 @@ class CustomPaginator(Paginator):
 
     def pager_num_range(self):
         if self.num_pages < self.per_pager_num:
-            return range(1, self.num_pages + 1)
+            return list(range(1, self.num_pages + 1))
         # 如果页数特别多
         part = int(self.per_pager_num / 2)
         if self.current_page <= part:
-            return range(1, self.per_pager_num + 1)
+            return list(range(1, self.per_pager_num + 1))
         if (self.current_page + part) > self.num_pages:
-            return range(self.num_pages - self.per_pager_num + 1, self.num_pages + 1)
-        return range(self.current_page - part, self.current_page + part + 1)
+            return list(range(self.num_pages - self.per_pager_num + 1, self.num_pages + 1))
+        return list(range(self.current_page - part, self.current_page + part + 1))
