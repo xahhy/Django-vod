@@ -9,6 +9,8 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
+import datetime
+
 import corsheaders.middleware
 import os
 
@@ -106,6 +108,9 @@ TEMPLATES = [
         },
     },
 ]
+JWT_AUTH={
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+}
 # AUTHENTICATION_BACKENDS = (
 #
 #     # Needed to login by username in Django admin, regardless of `allauth`

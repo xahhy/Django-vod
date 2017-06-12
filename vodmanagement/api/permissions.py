@@ -10,12 +10,16 @@ class HasPermission(BasePermission):
     #     return False
 
     def has_object_permission(self, request, view, obj):
+        return True
         #member = Membership.objects.get(user=request.user)
         #member.is_active
         print(request.user)
         permission = False
         if request.user.is_authenticated:
-            permission = request.user.userpermission.has_permision()
+            try:
+                permission = request.user.userpermission.has_permision()
+            except:
+                pass
         print(permission)
         return permission
         # if request.method in SAFE_METHODS:
