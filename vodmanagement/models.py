@@ -36,6 +36,9 @@ class UserPermission(models.Model):
     permission = models.CharField(max_length=100,blank=True,null=True)
     end_date = models.DateTimeField(blank=True,null=True)
 
+    def __str__(self):
+        return str(self.user)
+
     def has_permision(self):
         delta = self.end_date.date() - datetime.date.today()
         print(delta.days)
