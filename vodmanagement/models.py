@@ -29,6 +29,18 @@ for i in range(0,10):
 >>>
 This script will copy 10 objs[0] in database
 """
+class UserPermission(models.Model):
+    user = models.OneToOneField(User)
+    permission = models.CharField(max_length=100,blank=True,null=True)
+
+    def has_permision(self):
+        return True
+    class Meta:
+        permissions = (
+            ('view',u'can view all videos'),
+        )
+
+
 class VodManager(models.Manager):
     def active(self, *args, **kwargs):
         # Post.objects.all() = super(PostManager, self).all()

@@ -28,6 +28,7 @@ from .serializers import *
 
 from vodmanagement.models import *
 from .pagination import *
+from .permissions import *
 
 class VodListAPIView(ListAPIView):
     serializer_class = VodListSerializer
@@ -66,7 +67,7 @@ class VodDetailAPIView(RetrieveAPIView):
     queryset = Vod.objects.all()
     lookup_field = "id"
     serializer_class = VodDetailSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [HasPermission]
 
 class CategoryListAPIView(ListAPIView):
     serializer_class = CategoryListSerializer

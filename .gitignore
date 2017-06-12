@@ -10,6 +10,7 @@ db.sqlite3
 another_media/*
 real-media/*
 *.log
+*.rar
 
 !.gitignore
 !__init__.py
