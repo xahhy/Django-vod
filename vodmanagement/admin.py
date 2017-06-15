@@ -14,6 +14,15 @@ class VodForm(forms.ModelForm):
         for instance in self.fields["category"].queryset:
             create_category_path(name=instance.name)
 
+    def clean_title(self):
+        print("vod form clean")
+        data = self.cleaned_data['title']
+        return data
+
+    def clean(self):
+        print("vod form clean all")
+        return super(VodForm,self).clean()
+
     class Meta:
         model = Vod       
         fields = '__all__'

@@ -198,7 +198,7 @@ class Vod(models.Model):
             blank=True)
     video = models.FileField(upload_to=upload_video_location,null=True,blank=True)
     duration = models.CharField(max_length=50,blank=True,null=True)
-    local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True, recursive=True)#,match="*\.mp4")
+    local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True, recursive=True)
     definition = models.CharField(max_length=10,choices=VIDEO_QUALITY,blank=False,default='H')
     # image = FilerImageField(null=True, blank=True,
     #                         related_name="image_name")
