@@ -79,6 +79,7 @@ class CreateDatabase:
 
         # Create table [program].
         self.RunCommand("CREATE TABLE IF NOT EXISTS program ( \
+			  id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,\
                           channel_id VARCHAR(45) NOT NULL, \
                           start_time DATETIME, \
                           end_time DATETIME, \
@@ -88,9 +89,11 @@ class CreateDatabase:
                           event_id INT(11) NOT NULL, \
                           UNIQUE (url), \
                           UNIQUE (event_id), \
-                          PRIMARY KEY (event_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
+			  UNIQUE (id),\
+                          PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8")
 
     def GetChannel(self):
+        self.RunCommand("use %s" % self.db)
         self.tree = ET.parse(UR.urlopen(channel_url))
         self.root = self.tree.getroot()
         for self.channel in self.root.findall('channel'):
@@ -121,8 +124,8 @@ class CreateDatabase:
 if __name__ == '__main__':
     database = 'tsrtmp'
     cd = CreateDatabase(database)
-    cd.DropDatabase(database)  # <--- Uncomment if you need to use.
-    cd.CreateDb(database)
+    #cd.DropDatabase(database)  # <--- Uncomment if you need to use.
+    #cd.CreateDb(database)
     cd.GetChannel()
     print('All Done.')
 
