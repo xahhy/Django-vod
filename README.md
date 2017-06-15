@@ -131,3 +131,17 @@ url(r'^accounts/',include('registration.backends.default.urls')),
 >need to copy templates from official site
 
 
+
+
+
+
+
+# TEMP
+list all files in dir:
+import os
+for (dir,dirnames,filenames) in os.walk(MEDIA_ROOT,followlinks=True):
+     for file in filenames:
+             if file.endswith('mp4'):
+                     print(dirnames,file)
+
+
