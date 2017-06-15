@@ -30,11 +30,13 @@ def get_free_size(path):
 # return a list
 def get_media_folder():
     folders=[]
-    for item in os.listdir(sys_media_root):
-        real_path = sys_media_root+'/'+item
-        if os.path.isdir(real_path):
-            folders.append(real_path)
-
+    try:
+        for item in os.listdir(sys_media_root):
+            real_path = sys_media_root+'/'+item
+            if os.path.isdir(real_path):
+                folders.append(real_path)
+    except:
+        pass
     return folders
 
 # if name="Action", a folder named "USB" in the sys_media_root ,
@@ -47,6 +49,7 @@ def create_category_path(name):
         print(folder,name)
         new_name = name+'_'+os.path.basename(folder)
         create_symlink(folder, settings.MEDIA_ROOT, new_name)
+
  
 def create_symlink(src,dst,name):
     src += '/'+ name
