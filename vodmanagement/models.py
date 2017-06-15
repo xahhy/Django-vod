@@ -16,7 +16,8 @@ import os
 from .utils import *
 import datetime
 from moviepy.editor import VideoFileClip # get video duration
-
+from filer.fields.file import FilerFileField
+from filer.fields.image import FilerImageField
 """
 Copy data in XXX model:
 >>> 
@@ -183,7 +184,8 @@ class Link(models.Model):
     name = models.CharField(max_length=512)
     url = models.TextField(max_length=10240)
     category = models.ForeignKey(VideoCategory, null=True)
-
+    video = FilerFileField(null=True, blank=True, related_name="link_video")
+    image = FilerImageField(null=True, blank=True, related_name="link_image")
     def __str__(self):
         return self.name
 

@@ -191,6 +191,7 @@ REST_FRAMEWORK = {
     )
 }
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 LANGUAGE_CODE = 'zh-Hans'
@@ -215,3 +216,19 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOCAL_MEDIA_URL = 'local_file/'
 LOCAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT ,'local_file')
+
+FILER_STORAGES = {
+    'public': {
+        'main': {
+            'ENGINE': 'filer.storage.PublicFileSystemStorage',
+            'OPTIONS': {
+                'location': MEDIA_ROOT,
+                'base_url': '/media/filer/',
+            },
+            # 'UPLOAD_TO': 'filer.utils.generate_filename.randomized',
+            'UPLOAD_TO': 'filer.utils.generate_filename.upload_video_location',
+            # 'UPLOAD_TO' : 'vodmanagement.models.upload_video_location',
+            'UPLOAD_TO_PREFIX': 'filer_public',
+        },
+    },
+}
