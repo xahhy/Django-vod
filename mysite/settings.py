@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'filer',
     'mptt',
+    'progressbarupload',
 
     "djangocms_admin_style",
     'django.contrib.admin',
@@ -225,10 +226,17 @@ FILER_STORAGES = {
                 'location': MEDIA_ROOT,
                 'base_url': '/media/filer/',
             },
-            # 'UPLOAD_TO': 'filer.utils.generate_filename.randomized',
-            'UPLOAD_TO': 'filer.utils.generate_filename.upload_video_location',
+            'UPLOAD_TO': 'filer.utils.generate_filename.by_date',
+            # 'UPLOAD_TO': 'filer.utils.generate_filename.upload_video_location',
             # 'UPLOAD_TO' : 'vodmanagement.models.upload_video_location',
             'UPLOAD_TO_PREFIX': 'filer_public',
         },
     },
 }
+
+FILE_UPLOAD_HANDLERS = (
+    "progressbarupload.uploadhandler.ProgressBarUploadHandler",
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+)
+PROGRESSBARUPLOAD_INCLUDE_JQUERY = False

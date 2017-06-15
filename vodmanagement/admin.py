@@ -29,6 +29,8 @@ class VodModelAdmin(admin.ModelAdmin):
     search_fields = ["title", "description"]
     actions = ["delete_hard", "copy_objects", "clear_view_count"]
     form = VodForm
+    change_form_template = 'progressbarupload/change_form.html'
+    add_form_template = 'progressbarupload/change_form.html'
     # def get_form(self, request, *args, **kwargs):
     #     form = super(VodModelAdmin, self).get_form(request, *args, **kwargs)
     #     form.base_fields['creator'].initial = request.user
@@ -66,6 +68,8 @@ class VodModelAdmin(admin.ModelAdmin):
         self.message_user(request,"%s item successfully cleared view count."%queryset.count()
             ,messages.SUCCESS)
 
+    class Media:
+        js = ("http://code.jquery.com/jquery.min.js",)
     # class Meta:
         # model = Vod
 
@@ -98,3 +102,4 @@ admin.site.register(Link,LinkModelAdmin)
 admin.site.register(VideoCategory,VideoCategoryModelAdmin)
 admin.site.register(Vod, VodModelAdmin)
 admin.site.register(UserPermission)
+# admin.site.register(VodModelAdmin,UploadFileModelAdmin)

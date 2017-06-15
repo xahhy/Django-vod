@@ -15,7 +15,7 @@ from uuslug import uuslug
 import os
 from .utils import *
 import datetime
-from moviepy.editor import VideoFileClip # get video duration
+# from moviepy.editor import VideoFileClip # get video duration
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
 """
@@ -262,7 +262,7 @@ class Vod(models.Model):
 
     def image_tag(self):
         if self.image is not None and str(self.image) != "":
-            print("image:"+str(self.image))
+            # print("image:"+str(self.image))
             if os.path.exists(self.image.path):
                  return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
             else:
