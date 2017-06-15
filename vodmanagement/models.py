@@ -18,6 +18,7 @@ import datetime
 # from moviepy.editor import VideoFileClip # get video duration
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
+from .my_storage import *
 """
 Copy data in XXX model:
 >>> 
@@ -196,7 +197,7 @@ class Vod(models.Model):
     image = models.ImageField(upload_to=upload_image_location,
             null=True,
             blank=True)
-    video = models.FileField(upload_to=upload_video_location,null=True,blank=True)
+    video = models.FileField(upload_to=upload_video_location,null=True,blank=True,storage=VodStorage())
     duration = models.CharField(max_length=50,blank=True,null=True)
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True, recursive=True)
     definition = models.CharField(max_length=10,choices=VIDEO_QUALITY,blank=False,default='H')
