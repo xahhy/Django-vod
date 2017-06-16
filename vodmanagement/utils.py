@@ -9,13 +9,13 @@ sys_media_root = '/media/xjtu'
 # return choices
 def save_path_choices():
     if 'Windows' in platform.system():
-        return (('default', settings.MEDIA_ROOT + '()'),)
+        return (('hhy', settings.MEDIA_ROOT + '()'),)
 
     root_size = get_free_size(settings.MEDIA_ROOT)
     choices=(('default',settings.MEDIA_ROOT+'('+root_size+')'),)
     for folder in get_media_folder():
         media_size = get_free_size(folder)
-        choices = choices + ((os.path.basename(folder),folder+'('+media_size+')'),)
+        choices = choices + ((os.path.basename(folder), folder+'('+media_size+')'),)
 
     return choices
 

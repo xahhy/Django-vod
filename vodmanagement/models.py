@@ -20,6 +20,7 @@ from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
 from .my_storage import *
 from admin_resumable.fields import ModelAdminResumableFileField
+from django.utils.encoding import uri_to_iri
 """
 Copy data in XXX model:
 >>> 
@@ -200,7 +201,8 @@ class Vod(models.Model):
             null=True,
             blank=True)
     # video = ModelAdminResumableFileField(upload_to=upload_video_location,null=True,blank=True,storage=VodStorage())
-    video = ModelAdminResumableFileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
+    # video = ModelAdminResumableFileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
+    video = ModelAdminResumableFileField(null=True,blank=True,storage=VodStorage())
     duration = models.CharField(max_length=50,blank=True,null=True)
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True, recursive=True)
     definition = models.CharField(max_length=10,choices=VIDEO_QUALITY,blank=False,default='H')
@@ -247,9 +249,11 @@ class Vod(models.Model):
 
         super(Vod, self).save(*args, **kwargs)
         if self.video != None and self.video != '':
-            pass
-            # print(self.video.path)
-            # self.file_size = humanfriendly.format_size(self.video.file.size)
+            basename = os.path.basename(self.video.name) #Djan%20go.mp4
+            rel_name = uri_to_iri(basename)#Djan go.mp4
+            self.video.name = os.path.join(settings.MEDIA_ROOT, self.save_path, rel_name)
+            print(self.video.name)
+            self.file_size = humanfriendly.format_size(self.video.file.size)
             # duration = VideoFileClip(self.video.path).duration
             # self.duration = time_formate(duration)
             # print(self.duration)
