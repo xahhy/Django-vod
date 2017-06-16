@@ -199,7 +199,7 @@ class Vod(models.Model):
     image = models.ImageField(upload_to=upload_image_location,
             null=True,
             blank=True)
-    video = models.FileField(upload_to=upload_video_location,null=True,blank=True,storage=VodStorage())
+    video = ModelAdminResumableFileField(upload_to=upload_video_location,null=True,blank=True,storage=VodStorage())
     duration = models.CharField(max_length=50,blank=True,null=True)
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True, recursive=True)
     definition = models.CharField(max_length=10,choices=VIDEO_QUALITY,blank=False,default='H')
