@@ -199,7 +199,8 @@ class Vod(models.Model):
     image = models.ImageField(upload_to=upload_image_location,
             null=True,
             blank=True)
-    video = ModelAdminResumableFileField(upload_to=upload_video_location,null=True,blank=True,storage=VodStorage())
+    # video = ModelAdminResumableFileField(upload_to=upload_video_location,null=True,blank=True,storage=VodStorage())
+    video = ModelAdminResumableFileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
     duration = models.CharField(max_length=50,blank=True,null=True)
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True, recursive=True)
     definition = models.CharField(max_length=10,choices=VIDEO_QUALITY,blank=False,default='H')
@@ -231,6 +232,8 @@ class Vod(models.Model):
 
     def save(self, *args, **kwargs):
         print("--------------")
+        print("video path:",self.video)
+
         if self.description is None or self.description == "":
             self.description = default_description(self)
         # if not "http" in self.url:
@@ -244,8 +247,9 @@ class Vod(models.Model):
 
         super(Vod, self).save(*args, **kwargs)
         if self.video != None and self.video != '':
-            print(self.video.path)
-            self.file_size = humanfriendly.format_size(self.video.file.size)
+            pass
+            # print(self.video.path)
+            # self.file_size = humanfriendly.format_size(self.video.file.size)
             # duration = VideoFileClip(self.video.path).duration
             # self.duration = time_formate(duration)
             # print(self.duration)
