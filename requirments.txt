@@ -21,3 +21,4 @@ PyMySQL==0.7.11
 python-slugify==1.2.4
 tqdm==4.11.2
 Unidecode==0.4.20
+django-admin-resumable-js
