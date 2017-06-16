@@ -19,6 +19,7 @@ import datetime
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
 from .my_storage import *
+from admin_resumable.fields import ModelAdminResumableFileField
 """
 Copy data in XXX model:
 >>> 
@@ -187,6 +188,7 @@ class Link(models.Model):
     category = models.ForeignKey(VideoCategory, null=True)
     video = FilerFileField(null=True, blank=True, related_name="link_video")
     image = FilerImageField(null=True, blank=True, related_name="link_image")
+    file = ModelAdminResumableFileField(blank=True, null=True)
     def __str__(self):
         return self.name
 
@@ -207,7 +209,7 @@ class Vod(models.Model):
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
     category = models.ForeignKey(VideoCategory, null=True)
-    save_path = models.CharField(max_length=128,blank=False)  # ,default=FileDirectory.objects.first())
+    save_path = models.CharField(max_length=128,blank=False,null=True)  # ,default=FileDirectory.objects.first())
     year = models.CharField(max_length=10,blank=False,null=True,
         default=datetime.datetime.now().year)
     # type can be LINK or VOD

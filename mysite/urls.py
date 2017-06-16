@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import admin_resumable
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include,url
@@ -23,12 +24,14 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^admin_resumable/', include('admin_resumable.urls')),
+
     # url(r'^polls/',include('polls.urls')),
     # url(r'^tools/',include('tools.urls')),
     url(r'^api/auth/token/', obtain_jwt_token),
     url(r'^api/',include("vodmanagement.api.urls",namespace='vod-api')),
     url(r'',include('vodmanagement.urls',namespace='vod')),
-    url(r'^progressbarupload/', include('progressbarupload.urls')),
+    # url(r'^progressbarupload/', include('progressbarupload.urls')),
 
     # url(r'^filer/',include('filer.urls')),
     # url(r'^accounts/', include('allauth.urls')),

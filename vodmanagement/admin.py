@@ -38,8 +38,8 @@ class VodModelAdmin(admin.ModelAdmin):
     search_fields = ["title", "description"]
     actions = ["delete_hard", "copy_objects", "clear_view_count"]
     form = VodForm
-    change_form_template = 'progressbarupload/change_form.html'
-    add_form_template = 'progressbarupload/change_form.html'
+    # change_form_template = 'progressbarupload/change_form.html'
+    # add_form_template = 'progressbarupload/change_form.html'
     # def get_form(self, request, *args, **kwargs):
     #     form = super(VodModelAdmin, self).get_form(request, *args, **kwargs)
     #     form.base_fields['creator'].initial = request.user
