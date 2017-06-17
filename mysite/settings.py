@@ -234,7 +234,7 @@ FILER_STORAGES = {
         },
     },
 }
-
+ADMIN_RESUMABLE_CHUNKSIZE = 1024*1024*10
 # FILE_UPLOAD_HANDLERS = (
 #     "progressbarupload.uploadhandler.ProgressBarUploadHandler",
 #     "django.core.files.uploadhandler.MemoryFileUploadHandler",

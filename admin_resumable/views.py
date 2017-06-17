@@ -104,12 +104,13 @@ def admin_resumable(request):
     elif request.method == 'GET':
         r = ResumableFile(storage, request.GET)
         if not r.chunk_exists:
-            return HttpResponse('chunk not found', status=404)
+            return HttpResponse('chunk not found', status=204)
         if r.is_complete:
             actual_filename = storage.save(r.filename, r.file)
             r.delete_chunks()
             return HttpResponse(storage.url(actual_filename))
         return HttpResponse('chunk exists')
+    return HttpResponse('Welcom to use resumable!')
 
 def admin_resumable_set(request):
     global upload_to_global
