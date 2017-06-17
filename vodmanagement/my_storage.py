@@ -1,9 +1,11 @@
 from django.core.files.storage import FileSystemStorage
 
+
 class VodStorage(FileSystemStorage):
     """
     Returns same name for existing file and deletes existing file on save.
     """
+
     def _save(self, name, content):
         if self.exists(name):
             self.delete(name)

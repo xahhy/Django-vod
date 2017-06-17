@@ -16,7 +16,7 @@ Including another URLconf
 import admin_resumable
 from django.conf.urls import url
 from django.contrib import admin
-from django.conf.urls import include,url
+from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
@@ -29,8 +29,8 @@ urlpatterns = [
     # url(r'^polls/',include('polls.urls')),
     # url(r'^tools/',include('tools.urls')),
     url(r'^api/auth/token/', obtain_jwt_token),
-    url(r'^api/',include("vodmanagement.api.urls",namespace='vod-api')),
-    url(r'',include('vodmanagement.urls',namespace='vod')),
+    url(r'^api/', include("vodmanagement.api.urls", namespace='vod-api')),
+    url(r'', include('vodmanagement.urls', namespace='vod')),
     # url(r'^progressbarupload/', include('progressbarupload.urls')),
 
     # url(r'^filer/',include('filer.urls')),

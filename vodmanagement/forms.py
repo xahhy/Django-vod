@@ -1,11 +1,9 @@
 from django import forms
 
-
 from .models import Vod
 
 
 class VodForm(forms.ModelForm):
-
     class Meta:
         model = Vod
         fields = [
@@ -13,4 +11,3 @@ class VodForm(forms.ModelForm):
             # "content",
             "image",
         ]
-

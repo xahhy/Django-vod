@@ -17,7 +17,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -28,21 +27,21 @@ SECRET_KEY = '%ur^wgur*+1c$kxk_(bkqonaebu3&f#a7v+g7j)65k=6%z*itz'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CORS_ORIGIN_ALLOW_ALL=True
-CORS_ALLOW_CREDENTIALS=False
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = False
 CORS_ALLOW_HEADERS = corsheaders.defaults.default_headers + (
     'x-ijt',
 )
-#my settings
+# my settings
 THUMBNAIL_HIGH_RESOLUTION = True
 THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.colorspace',
     'easy_thumbnails.processors.autocrop',
-    #'easy_thumbnails.processors.scale_and_crop',
+    # 'easy_thumbnails.processors.scale_and_crop',
     'filer.thumbnail_processors.scale_and_crop_with_subject_location',
     'easy_thumbnails.processors.filters',
 )
-#filer cononical url set
+# filer cononical url set
 # FILER_CANONICAL_URL = 'sharing/'
 
 # Application definition
@@ -72,7 +71,6 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # The following apps are required:
-
 
     # 'allauth',
     # 'allauth.account',
@@ -110,7 +108,7 @@ TEMPLATES = [
         },
     },
 ]
-JWT_AUTH={
+JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
 }
 # AUTHENTICATION_BACKENDS = (
@@ -131,7 +129,6 @@ JWT_AUTH={
 # SITE_ID = 1
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -139,7 +136,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        
+
         # 'ENGINE': 'django.db.backends.mysql',
         # 'NAME' : 'tsrtmp',
         # 'USER' : 'root',
@@ -148,7 +145,6 @@ DATABASES = {
         # 'PORT': '',#'3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -172,7 +168,7 @@ THUMBNAIL_ALIASES = {
     '': {
         'avatar': {'size': (200, 300), 'crop': True},
     },
-    }
+}
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
@@ -182,17 +178,16 @@ REST_FRAMEWORK = {
     #     'rest_framework.parsers.JSONParser',
     # )
     "DEFAULT_AUTHENTICATION_CLASSES": (
-         #'rest_framework.authentication.SessionAuthentication',
-         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        #'rest_framework.authentication.BasicAuthentication'
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication'
 
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         'rest_framework.permissions.IsAuthenticated',
-        #'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     )
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -207,7 +202,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
@@ -217,7 +211,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOCAL_MEDIA_URL = 'local_file/'
-LOCAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT ,'local_file')
+LOCAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT, 'local_file')
 
 FILER_STORAGES = {
     'public': {
@@ -234,7 +228,7 @@ FILER_STORAGES = {
         },
     },
 }
-ADMIN_RESUMABLE_CHUNKSIZE = 1024*1024*10
+ADMIN_RESUMABLE_CHUNKSIZE = 1024 * 1024 * 10
 # FILE_UPLOAD_HANDLERS = (
 #     "progressbarupload.uploadhandler.ProgressBarUploadHandler",
 #     "django.core.files.uploadhandler.MemoryFileUploadHandler",

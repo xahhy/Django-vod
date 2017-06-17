@@ -7,7 +7,7 @@ from django.contrib import admin
 from django.conf import settings
 import humanfriendly
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save,post_init
+from django.db.models.signals import pre_save, post_init
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 from django.core.files import File
@@ -21,6 +21,7 @@ from filer.fields.image import FilerImageField
 from .my_storage import *
 from admin_resumable.fields import ModelAdminResumableFileField
 from django.utils.encoding import uri_to_iri
+
 """
 Copy data in XXX model:
 >>> 
@@ -37,8 +38,8 @@ This script will copy 10 objs[0] in database
 
 class UserPermission(models.Model):
     user = models.OneToOneField(User)
-    permission = models.CharField(max_length=100,blank=True,null=True)
-    end_date = models.DateTimeField(blank=True,null=True)
+    permission = models.CharField(max_length=100, blank=True, null=True)
+    end_date = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
         return str(self.user)
@@ -49,7 +50,6 @@ class UserPermission(models.Model):
         if delta.days >= 0:
             return True
         return False
-
 
 
 class VodManager(models.Manager):
@@ -77,32 +77,34 @@ def upload_location(instance, filename):
     print('save image')
     return "%s/%s" % (new_id, filename)
 
+
 def upload_video_location(instance, filename):
     VodModel = instance.__class__
     if VodModel.objects.count() is not 0:
-        new_id = VodModel.objects.order_by("id").last().id +1
+        new_id = VodModel.objects.order_by("id").last().id + 1
     else:
         new_id = 0
     folder = instance.save_path
     if folder == "default":
         category = instance.category.name
     else:
-        category = instance.category.name+'_'+folder
-    print("video path:",category)
-    return "%s/videos/%s/%s" %(category,new_id,filename)
+        category = instance.category.name + '_' + folder
+    print("video path:", category)
+    return "%s/videos/%s/%s" % (category, new_id, filename)
+
 
 def upload_image_location(instance, filename):
     VodModel = instance.__class__
     if VodModel.objects.count() is not 0:
-        new_id = VodModel.objects.order_by("id").last().id +1
+        new_id = VodModel.objects.order_by("id").last().id + 1
     else:
         new_id = 0
     folder = instance.save_path
     if folder == "default":
         category = instance.category.name
     else:
-        category = instance.category.name+'_'+folder
-    return "%s/images/%s/%s" %(category,new_id,filename)
+        category = instance.category.name + '_' + folder
+    return "%s/images/%s/%s" % (category, new_id, filename)
 
 
 def default_description(instance):
@@ -138,13 +140,14 @@ TYPES = (
     ('special', 'Special purpose'),
 )
 VIDEO_QUALITY = (
-    ('SD','Standard Definition'),
-    ('HD','High Definition'),
-    ('FHD','Full HD'),
+    ('SD', 'Standard Definition'),
+    ('HD', 'High Definition'),
+    ('FHD', 'Full HD'),
 )
-SAVE_PATH=(
-    ('',settings.LOCAL_MEDIA_ROOT),
-    )
+SAVE_PATH = (
+    ('', settings.LOCAL_MEDIA_ROOT),
+)
+
 
 class VideoCategory(models.Model):
     name = models.CharField(max_length=128)
@@ -152,8 +155,9 @@ class VideoCategory(models.Model):
                             choices=TYPES,
                             default='common'
                             )
-    
+
     isSecret = models.BooleanField(default=False)
+
     # directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
 
     def __str__(self):
@@ -161,7 +165,7 @@ class VideoCategory(models.Model):
 
     def save(self, *args, **kwargs):
         # print(self.directory)
-        #make a folder self.name in the self.directory  
+        # make a folder self.name in the self.directory
         # src = self.directory.path+'/'+self.name
         # dst = settings.MEDIA_ROOT+'/'+str(self.name)
         # try:
@@ -190,31 +194,33 @@ class Link(models.Model):
     video = FilerFileField(null=True, blank=True, related_name="link_video")
     image = FilerImageField(null=True, blank=True, related_name="link_image")
     file = ModelAdminResumableFileField(blank=True, null=True)
+
     def __str__(self):
         return self.name
+
 
 # ---------------------------------------------------------------------
 
 class Vod(models.Model):
     title = models.CharField(max_length=120)
     image = models.ImageField(upload_to=upload_image_location,
-            null=True,
-            blank=True)
+                              null=True,
+                              blank=True)
     # video = ModelAdminResumableFileField(upload_to=upload_video_location,null=True,blank=True,storage=VodStorage())
     # video = ModelAdminResumableFileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
-    video = ModelAdminResumableFileField(null=True,blank=True,storage=VodStorage())
-    duration = models.CharField(max_length=50,blank=True,null=True)
-    local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT,blank=True, recursive=True)
-    definition = models.CharField(max_length=10,choices=VIDEO_QUALITY,blank=False,default='H')
+    video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage())
+    duration = models.CharField(max_length=50, blank=True, null=True)
+    local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT, blank=True, recursive=True)
+    definition = models.CharField(max_length=10, choices=VIDEO_QUALITY, blank=False, default='H')
     # image = FilerImageField(null=True, blank=True,
     #                         related_name="image_name")
     # video = FilerFileField(null=True, blank=True, related_name="video_name")
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
     category = models.ForeignKey(VideoCategory, null=True)
-    save_path = models.CharField(max_length=128,blank=False,null=True)  # ,default=FileDirectory.objects.first())
-    year = models.CharField(max_length=10,blank=False,null=True,
-        default=datetime.datetime.now().year)
+    save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
+    year = models.CharField(max_length=10, blank=False, null=True,
+                            default=datetime.datetime.now().year)
     # type can be LINK or VOD
     # type = models.CharField(max_length=128,
     #                         choices=(('link','LINK'),('vod','VOD'),),
@@ -227,14 +233,13 @@ class Vod(models.Model):
     description = models.TextField(blank=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)  # The first time added
-    slug = models.SlugField(unique=True,blank=True)
-
+    slug = models.SlugField(unique=True, blank=True)
 
     objects = VodManager()
 
     def save(self, *args, **kwargs):
         print("--------------")
-        print("video path:",self.video)
+        print("video path:", self.video)
 
         if self.description is None or self.description == "":
             self.description = default_description(self)
@@ -249,11 +254,11 @@ class Vod(models.Model):
 
         super(Vod, self).save(*args, **kwargs)
         if self.video != None and self.video != '':
-            basename = os.path.basename(self.video.name) #Djan%20go.mp4
-            rel_name = uri_to_iri(basename)#Djan go.mp4
+            basename = os.path.basename(self.video.name)  # Djan%20go.mp4
+            rel_name = uri_to_iri(basename)  # Djan go.mp4
             # self.video.name = os.path.join(settings.MEDIA_ROOT, self.save_path, rel_name)
             self.video.name = os.path.join(self.save_path, rel_name)
-            print("save_path:",self.save_path)
+            print("save_path:", self.save_path)
             print(self.video.name)
             self.file_size = humanfriendly.format_size(self.video.file.size)
             # duration = VideoFileClip(self.video.path).duration
@@ -262,7 +267,6 @@ class Vod(models.Model):
         else:
             print("video file is None")
         super(Vod, self).save(*args, **kwargs)
-
 
     def __unicode__(self):
         return self.title
@@ -277,7 +281,7 @@ class Vod(models.Model):
         if self.image is not None and str(self.image) != "":
             # print("image:"+str(self.image))
             if os.path.exists(self.image.path):
-                 return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
+                return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
             else:
                 return mark_safe('<img src="#" width="150" height="200" />')
 
@@ -290,7 +294,8 @@ class Vod(models.Model):
     def add_view_count(self):
         self.view_count_temp += 1
 
-def create_slug(instance, new_slug=None,new_num=0):
+
+def create_slug(instance, new_slug=None, new_num=0):
     slug = slugify(instance.title)
     default_slug = slug
     if new_slug is not None:
@@ -299,27 +304,30 @@ def create_slug(instance, new_slug=None,new_num=0):
     exists = qs.exists()
     if exists:
         new_num += 1
-        new_slug = "%s-%s" %(default_slug, new_num)
-        return create_slug(instance, new_slug=new_slug,new_num=new_num)
+        new_slug = "%s-%s" % (default_slug, new_num)
+        return create_slug(instance, new_slug=new_slug, new_num=new_num)
     return slug
+
 
 def slug_exists(slug):
     qs = Vod.objects.filter(slug=slug).order_by("-id")
     exists = qs.exists()
     return exists
 
+
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
-        instance.slug = uuslug(instance.title,instance=instance)
+        instance.slug = uuslug(instance.title, instance=instance)
         # instance.slug = create_slug(instance)
+
 
 def post_init_receiver(sender, instance, *args, **kwargs):
     # print("post_init!")
     pass
-    
+
 
 pre_save.connect(pre_save_post_receiver, sender=Vod)
-post_init.connect(post_init_receiver,sender=Vod)
+post_init.connect(post_init_receiver, sender=Vod)
 """
 from vodmanagement.models import *
 objs = Vod.objects.all()

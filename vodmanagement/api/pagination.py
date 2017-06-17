@@ -1,8 +1,8 @@
 from rest_framework.pagination import *
-    # (
-    # LimitOffsetPagination,
-    # PageNumberPagination,
-    # )
+# (
+# LimitOffsetPagination,
+# PageNumberPagination,
+# )
 from vodmanagement.pagination import *
 
 
@@ -58,7 +58,3 @@ class VodPageNumberPagination(PageNumberPagination):
 
         self.request = request
         return list(self.page)
-
-
-
-    

@@ -4,9 +4,9 @@ from rest_framework.views import APIView
 from vodmanagement.views import get_years
 from rest_framework.response import Response
 from rest_framework.filters import (
-        SearchFilter,
-        OrderingFilter,
-    )
+    SearchFilter,
+    OrderingFilter,
+)
 from rest_framework.generics import (
     CreateAPIView,
     DestroyAPIView,
@@ -14,7 +14,7 @@ from rest_framework.generics import (
     UpdateAPIView,
     RetrieveAPIView,
     RetrieveUpdateAPIView
-    )
+)
 from rest_framework.pagination import PageNumberPagination
 
 from rest_framework.permissions import (
@@ -22,7 +22,7 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser,
     IsAuthenticatedOrReadOnly,
-    )
+)
 
 from .serializers import *
 
@@ -30,14 +30,15 @@ from vodmanagement.models import *
 from .pagination import *
 from .permissions import *
 
+
 class VodListAPIView(ListAPIView):
     serializer_class = VodListSerializer
     permission_classes = [AllowAny]
-    pagination_class = VodPageNumberPagination #PageNumberPagination
+    pagination_class = VodPageNumberPagination  # PageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
-        #queryset_list = super(PostListAPIView, self).get_queryset(*args, **kwargs)
-        queryset_list = Vod.objects.all() #filter(user=self.request.user)
+        # queryset_list = super(PostListAPIView, self).get_queryset(*args, **kwargs)
+        queryset_list = Vod.objects.all()  # filter(user=self.request.user)
         category = self.request.GET.get("category")
         if category:
             queryset_list = queryset_list.filter(category__name=category)
@@ -69,6 +70,7 @@ class VodDetailAPIView(RetrieveAPIView):
     serializer_class = VodDetailSerializer
     permission_classes = [HasPermission]
 
+
 class CategoryListAPIView(ListAPIView):
     serializer_class = CategoryListSerializer
     permission_classes = [AllowAny]
@@ -85,7 +87,6 @@ class YearListAPIView(APIView):
 
 
 class HomeListAPIView(APIView):
-
     def get(self, request, format=None):
         preview_categorys = []
         for category in VideoCategory.objects.all():
@@ -93,9 +94,7 @@ class HomeListAPIView(APIView):
             preview_categorys.append(
                 {
                     'category': category.name,
-                    'videos': VodListSerializer(videos,many=True).data
+                    'videos': VodListSerializer(videos, many=True).data
                 }
             )
         return Response(preview_categorys)
-
-
