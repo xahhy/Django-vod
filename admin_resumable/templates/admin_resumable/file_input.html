@@ -41,6 +41,8 @@
             var before=$("#{{ id }}_uploaded_status").html();
             $("#{{ id }}_uploaded_status").html(before+'<br/>'+message + ' Uploaded');
             $("form").removeClass("{{ name }}_disabled");
+{#            $("[name='_save'").click();#}
+
         });
         r.on('fileError', function(file, message) {
             $("#{{ id }}_uploaded_status").html(message);
@@ -51,8 +53,6 @@
 
         $("[name='_save'").click(function(){
             console.log("click save");
-            r.upload();
-            console.log("upload done");
         });
 
     });

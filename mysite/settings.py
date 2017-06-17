@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # user apps
     'corsheaders',
     'vodmanagement.apps.VodConfig',
@@ -229,6 +228,7 @@ FILER_STORAGES = {
     },
 }
 ADMIN_RESUMABLE_CHUNKSIZE = 1024 * 1024 * 10
+ADMIN_RESUMABLE_STORAGE = 'vodmanagement.my_storage.VodStorage'
 # FILE_UPLOAD_HANDLERS = (
 #     "progressbarupload.uploadhandler.ProgressBarUploadHandler",
 #     "django.core.files.uploadhandler.MemoryFileUploadHandler",

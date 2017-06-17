@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 
 from admin_resumable.files import ResumableFile
+from vodmanagement import models
 
 global upload_to_global
 def ensure_dir(f):
@@ -89,7 +90,6 @@ def admin_resumable(request):
     upload_to = get_upload_to(request)
     # global upload_to_global
     # upload_to = upload_to_global
-    print(upload_to)
     storage = get_storage(upload_to)
     if request.method == 'POST':
         chunk = request.FILES.get('file')
@@ -99,6 +99,7 @@ def admin_resumable(request):
         if r.is_complete:
             actual_filename = storage.save(r.filename, r.file)
             r.delete_chunks()
+            # r.save_model(models.Vod, upload_to)
             return HttpResponse(storage.url(actual_filename))
         return HttpResponse('chunk uploaded')
     elif request.method == 'GET':
@@ -118,6 +119,6 @@ def admin_resumable_set(request):
     upload_to_global = upload_to_
     field = get_field(request)
     field.orig_upload_to = upload_to_global
-    print('get upload_to_:',upload_to_)
+    print('get upload_to_:', upload_to_)
     return HttpResponse(upload_to_)
 

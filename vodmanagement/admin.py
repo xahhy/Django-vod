@@ -115,6 +115,7 @@ class LinkModelAdmin(admin.ModelAdmin):
     list_editable = ["category"]
 
 
+
 admin.site.register(FileDirectory)
 admin.site.register(Link, LinkModelAdmin)
 admin.site.register(VideoCategory, VideoCategoryModelAdmin)

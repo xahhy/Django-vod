@@ -19,7 +19,7 @@ import datetime
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
 from .my_storage import *
-from admin_resumable.fields import ModelAdminResumableFileField
+from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField
 from django.utils.encoding import uri_to_iri
 
 """
@@ -203,11 +203,9 @@ class Link(models.Model):
 
 class Vod(models.Model):
     title = models.CharField(max_length=120)
-    image = models.ImageField(upload_to=upload_image_location,
-                              null=True,
-                              blank=True)
-    # video = ModelAdminResumableFileField(upload_to=upload_video_location,null=True,blank=True,storage=VodStorage())
-    # video = ModelAdminResumableFileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
+    # image = models.ImageField(upload_to=upload_image_location, null=True, blank=True)
+    # video = models.FileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
+    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage())
     video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage())
     duration = models.CharField(max_length=50, blank=True, null=True)
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT, blank=True, recursive=True)
@@ -266,6 +264,8 @@ class Vod(models.Model):
             # print(self.duration)
         else:
             print("video file is None")
+
+        self.image.name = os.path.join(self.save_path, os.path.basename(self.image.name))
         super(Vod, self).save(*args, **kwargs)
 
     def __unicode__(self):

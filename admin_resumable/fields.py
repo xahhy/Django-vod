@@ -111,3 +111,18 @@ class ModelAdminResumableFileField(models.FileField):
         }
         kwargs.update(defaults)
         return super(ModelAdminResumableFileField, self).formfield(**kwargs)
+
+
+class ModelAdminResumableImageField(models.ImageField):
+    orig_upload_to = ''
+
+    def formfield(self, **kwargs):
+        content_type_id = ContentType.objects.get_for_model(self.model).id
+        defaults = {
+            'form_class': FormAdminResumableFileField,
+            'widget': AdminResumableWidget(attrs={
+                'content_type_id': content_type_id,
+                'field_name': self.name})
+        }
+        kwargs.update(defaults)
+        return super(ModelAdminResumableImageField, self).formfield(**kwargs)
