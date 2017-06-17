@@ -251,7 +251,9 @@ class Vod(models.Model):
         if self.video != None and self.video != '':
             basename = os.path.basename(self.video.name) #Djan%20go.mp4
             rel_name = uri_to_iri(basename)#Djan go.mp4
-            self.video.name = os.path.join(settings.MEDIA_ROOT, self.save_path, rel_name)
+            # self.video.name = os.path.join(settings.MEDIA_ROOT, self.save_path, rel_name)
+            self.video.name = os.path.join(self.save_path, rel_name)
+            print("save_path:",self.save_path)
             print(self.video.name)
             self.file_size = humanfriendly.format_size(self.video.file.size)
             # duration = VideoFileClip(self.video.path).duration

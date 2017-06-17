@@ -46,14 +46,15 @@ def create_category_path(name):
         return
 
     for folder in get_media_folder():
-        print(folder,name)
+        print("get media folders:",folder,name)
         new_name = name+'_'+os.path.basename(folder)
-        create_symlink(folder, settings.MEDIA_ROOT, new_name)
+        create_symlink(folder, os.path.join(settings.MEDIA_ROOT, os.path.basename(folder)))
 
  
-def create_symlink(src,dst,name):
-    src += '/'+ name
-    dst += '/'+ name
+def create_symlink(src,dst,name=None):
+    if name is not None:
+        src += '/'+ name
+        dst += '/'+ name
     try:
         os.makedirs(src)
     except:
