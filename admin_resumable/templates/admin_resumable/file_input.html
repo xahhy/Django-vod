@@ -28,6 +28,7 @@
                 'upload_to_': save_path,
                 field_name: '{{ field_name }}',
                 content_type_id: '{{ content_type_id }}'
+{#                save_model : {% if save_model %}true{% else %}false{% endif %}#}
             };
             $.get('{% url 'admin_resumable_set' %}',content, function(data,status){
                 alert('Data:'+data+" status:"+status);

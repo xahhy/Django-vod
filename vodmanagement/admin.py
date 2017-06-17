@@ -115,10 +115,25 @@ class LinkModelAdmin(admin.ModelAdmin):
     list_editable = ["category"]
 
 
+class MultipleUploadForm(forms.ModelForm):
+    """docstring for VodForm"""
+
+    def __init__(self, *args, **kwargs):
+        super(MultipleUploadForm, self).__init__(*args, **kwargs)
+        self.fields["save_path"] = forms.ChoiceField(choices=save_path_choices())
+
+    class Meta:
+        model = MultipleUpload
+        fields = '__all__'
+
+
+class MultipleUploadModelAdmin(admin.ModelAdmin):
+    form = MultipleUploadForm
+
 
 admin.site.register(FileDirectory)
 admin.site.register(Link, LinkModelAdmin)
 admin.site.register(VideoCategory, VideoCategoryModelAdmin)
 admin.site.register(Vod, VodModelAdmin)
 admin.site.register(UserPermission)
-# admin.site.register(VodModelAdmin,UploadFileModelAdmin)
+admin.site.register(MultipleUpload, MultipleUploadModelAdmin)

@@ -88,6 +88,7 @@ def get_field(request):
 @staff_member_required
 def admin_resumable(request):
     upload_to = get_upload_to(request)
+    field = get_field(request)
     # global upload_to_global
     # upload_to = upload_to_global
     storage = get_storage(upload_to)
@@ -99,7 +100,9 @@ def admin_resumable(request):
         if r.is_complete:
             actual_filename = storage.save(r.filename, r.file)
             r.delete_chunks()
-            # r.save_model(models.Vod, upload_to)
+            if field.save_model:
+                r.save_model(models.Vod, upload_to)
+                print("save model = True")
             return HttpResponse(storage.url(actual_filename))
         return HttpResponse('chunk uploaded')
     elif request.method == 'GET':

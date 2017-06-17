@@ -19,7 +19,7 @@ import datetime
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
 from .my_storage import *
-from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField
+from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField,ModelAdminResumableMultiFileField
 from django.utils.encoding import uri_to_iri
 
 """
@@ -197,6 +197,12 @@ class Link(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# ---------------------------------------------------------------------
+class MultipleUpload(models.Model):
+    files = ModelAdminResumableMultiFileField(null=True, blank=True, storage=VodStorage())
+    save_path = models.CharField(max_length=128, blank=False, null=True)
 
 
 # ---------------------------------------------------------------------

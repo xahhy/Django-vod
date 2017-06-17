@@ -95,6 +95,8 @@ class FormAdminResumableFileField(FileField):
 
 
 class ModelAdminResumableFileField(models.FileField):
+    save_model = False
+
     def __init__(self, verbose_name=None, name=None, upload_to='',
                  storage=None, **kwargs):
         self.orig_upload_to = upload_to
@@ -115,7 +117,7 @@ class ModelAdminResumableFileField(models.FileField):
 
 class ModelAdminResumableImageField(models.ImageField):
     orig_upload_to = ''
-
+    save_model = False
     def formfield(self, **kwargs):
         content_type_id = ContentType.objects.get_for_model(self.model).id
         defaults = {
@@ -126,3 +128,23 @@ class ModelAdminResumableImageField(models.ImageField):
         }
         kwargs.update(defaults)
         return super(ModelAdminResumableImageField, self).formfield(**kwargs)
+
+
+class ModelAdminResumableMultiFileField(models.FileField):
+    save_model = True
+    def __init__(self, verbose_name=None, name=None, upload_to='',
+                 storage=None, **kwargs):
+        self.orig_upload_to = upload_to
+        super(ModelAdminResumableMultiFileField, self).__init__(
+            verbose_name, name, 'unused', **kwargs)
+
+    def formfield(self, **kwargs):
+        content_type_id = ContentType.objects.get_for_model(self.model).id
+        defaults = {
+            'form_class': FormAdminResumableFileField,
+            'widget': AdminResumableWidget(attrs={
+                'content_type_id': content_type_id,
+                'field_name': self.name})
+        }
+        kwargs.update(defaults)
+        return super(ModelAdminResumableMultiFileField, self).formfield(**kwargs)
