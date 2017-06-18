@@ -146,4 +146,10 @@ for (dir,dirnames,filenames) in os.walk(MEDIA_ROOT,followlinks=True):
              if file.endswith('mp4'):
                      print(dirnames,file)
 
+# Versions
+1. release1.0
+...
+
+2. release2.0
+redesign file field, use more robost 3rd party app and deeply custmize it.Happy hacking!
 
