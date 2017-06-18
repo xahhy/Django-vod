@@ -264,6 +264,7 @@ class Vod(models.Model):
             self.video.name = os.path.join(self.save_path, rel_name)
             print("save_path:", self.save_path)
             print(self.video.name)
+            print('size:', self.video.file.size)
             self.file_size = humanfriendly.format_size(self.video.file.size)
             # duration = VideoFileClip(self.video.path).duration
             # self.duration = time_formate(duration)
@@ -271,7 +272,11 @@ class Vod(models.Model):
         else:
             print("video file is None")
 
-        self.image.name = os.path.join(self.save_path, os.path.basename(self.image.name))
+        try:
+            if self.image:
+                self.image.name = os.path.join(self.save_path, os.path.basename(uri_to_iri(self.image.name)))
+        except:
+            pass
         super(Vod, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -285,7 +290,7 @@ class Vod(models.Model):
 
     def image_tag(self):
         if self.image is not None and str(self.image) != "":
-            # print("image:"+str(self.image))
+            print("image tage:"+str(self.image))
             if os.path.exists(self.image.path):
                 return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
             else:
@@ -299,6 +304,8 @@ class Vod(models.Model):
 
     def add_view_count(self):
         self.view_count_temp += 1
+
+
 
 
 def create_slug(instance, new_slug=None, new_num=0):

@@ -20,7 +20,7 @@ def get_upload_to(ct_id, field_name):
     ct = ContentType.objects.get_for_id(ct_id)
     model_cls = ct.model_class()
     field = model_cls._meta.get_field(field_name)
-    print(field_name)
+
     return field.orig_upload_to
 
 
@@ -30,12 +30,25 @@ class ResumableWidget(FileInput):
 
     def render(self, name, value, attrs=None, **kwargs):
         print("resumable widget render")
-        upload_to = get_upload_to(
-            self.attrs['content_type_id'], self.attrs['field_name'])
-        storage = get_storage(upload_to)
+        # upload_to = get_upload_to(
+        #     self.attrs['content_type_id'], self.attrs['field_name'])
+        # storage = get_storage(upload_to)
+        # if value:
+        #     if isinstance(value, str):
+        #         file_name = os.path.basename(value)
+        #     else:
+        #         file_name = os.path.basename(value.name)
+        #     file_url = storage.url(file_name)
+        # else:
+        #     file_url = ""
         if value:
-            file_name = os.path.basename(value.name)
-            file_url = storage.url(file_name)
+            if isinstance(value, str):
+                if value.startswith(settings.MEDIA_URL):
+                    file_url = value
+                else:
+                    file_url = settings.MEDIA_URL + value
+            else:
+                file_url =  settings.MEDIA_URL + value.name
         else:
             file_url = ""
 

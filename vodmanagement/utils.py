@@ -4,7 +4,7 @@ import humanfriendly
 # from vodmanagement.models import Vod
 import platform
 
-sys_media_root = '/media/xjtu'
+sys_media_root = '/media/hhy'
 
 
 # generate choices depending on the folders in '/media/xjtu'
@@ -21,6 +21,11 @@ def save_path_choices():
 
     return choices
 
+def get_save_path_choice(key):
+    choices = save_path_choices()
+    for choice in choices:
+        if choice[0] == key:
+            return (choice,)
 
 # get free size of the path in human readable
 def get_free_size(path):

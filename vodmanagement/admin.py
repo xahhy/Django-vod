@@ -6,14 +6,21 @@ from django.contrib import messages
 from uuslug import uuslug
 from django.conf import settings
 from .utils import *
-
+import re
 
 class VodForm(forms.ModelForm):
     """docstring for VodForm"""
 
     def __init__(self, *args, **kwargs):
         super(VodForm, self).__init__(*args, **kwargs)
-        self.fields["save_path"] = forms.ChoiceField(choices=save_path_choices())
+        if (self.instance.image.name is '' or self.instance.image.name is None) \
+                and (self.instance.video.name is '' or self.instance.video.name is None):
+            print("save path is empty")
+            self.fields["save_path"] = forms.ChoiceField(choices=save_path_choices())
+        else:
+            print("save path is:",self.instance.save_path)
+            self.fields["save_path"] = forms.ChoiceField(choices=get_save_path_choice(self.instance.save_path))
+            # self.fields['save_path'].widget.attrs['disabled="disabled"'] = True
         for instance in self.fields["category"].queryset:
             create_category_path(name=instance.name)
 
@@ -56,8 +63,13 @@ class VodModelAdmin(admin.ModelAdmin):
     def delete_hard(self, request, queryset):
         for obj in queryset:
             try:
-                # print(obj.image.file.)
-                os.remove(obj.image.path)
+                image_dir = os.path.dirname(obj.image.path)
+                image_basename = os.path.basename(obj.image.path)
+                for (dir, dirnames, files) in os.walk(image_dir):
+                    for file in files:
+                        if re.match(image_basename+'*',file):
+                            print("matched file:",file)
+                            os.remove(os.path.join(image_dir,file))
                 os.remove(obj.video.path)
                 pass
             except:

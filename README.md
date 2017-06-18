@@ -130,7 +130,9 @@ url(r'^accounts/',include('registration.backends.default.urls')),
 >templets
 >need to copy templates from official site
 
-
+## 3. django-admin-resumable-js
+awesome django admin resumable upload file app.
+This Django-vod system customize it deeply to support dynamic upload path and multiple files upload.
 
 
 
