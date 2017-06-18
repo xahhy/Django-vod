@@ -203,6 +203,7 @@ class Link(models.Model):
 class MultipleUpload(models.Model):
     files = ModelAdminResumableMultiFileField(null=True, blank=True, storage=VodStorage())
     save_path = models.CharField(max_length=128, blank=False, null=True)
+    category = models.ForeignKey(VideoCategory, null=True)
 
 
 # ---------------------------------------------------------------------

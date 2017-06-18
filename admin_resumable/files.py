@@ -3,6 +3,8 @@ import fnmatch
 import os
 from django.core.files.base import File
 from django.conf import settings
+from vodmanagement import models
+
 
 class ResumableFile(object):
     def __init__(self, storage, kwargs):
@@ -94,27 +96,36 @@ class ResumableFile(object):
             size += self.storage.size(chunk)
         return size
 
-    def save_model(self, model, save_path):
+    def save_model(self, model, save_path,request):
+        category = request.POST['category']
+        if category is '':
+            category = models.VideoCategory.objects.first().id
+        print("multiple category is ",category)
         (short_name, extension) = os.path.splitext(os.path.basename(self.base_filename))
+        file_url = os.path.join(save_path, self.base_filename)
         if extension in self.video_allow:
             obj = model.objects.filter(title=short_name)
             if obj:
-                obj.update(video=self.base_filename)
+                obj.update(video=file_url)
                 print("obj exists , update video")
             else:
-                obj = model(title=short_name, video=self.filename, description="multiple upload", save_path=save_path)
+                obj = model(title=short_name, description="multiple upload", save_path=save_path,category=models.VideoCategory.objects.get(id=category))
+                obj.video.name = file_url
+                print("model video name=",obj.video.name)
                 obj.save()
                 print("video save model done:", self.filename)
 
         if extension in self.image_allow:
             obj = model.objects.filter(title=short_name)
-            image_name = self.storage.base_url[7:] + self.base_filename
+            image_name = self.storage.base_url[7:] + self.base_filename #[7:] --> '/media/'
             print("image name=", image_name)
             if obj:
-                obj.update(image=image_name)
+                obj.update(image=file_url)
                 print("obj exists , update image")
             else:
-                obj = model(title=short_name, image=image_name, description="multiple upload", save_path=save_path)
+                obj = model(title=short_name, description="multiple upload", save_path=save_path,category=models.VideoCategory.objects.get(id=category))
+                obj.image.name = file_url
+                print("model image name=", obj.image.name)
                 obj.image.field.orig_upload_to = save_path
                 obj.save()
                 print("image save model done:", self.filename)

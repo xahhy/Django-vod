@@ -24,11 +24,13 @@
         r.assignBrowse($('#{{ id }}_input_file'));
         r.on('fileAdded', function(file) {
             var save_path=$("#id_save_path").val();
+            var category = $("#id_category").val();
+            r.opts.query = Object.assign(r.opts.query, {'category':category});
+
             var content={
                 'upload_to_': save_path,
                 field_name: '{{ field_name }}',
                 content_type_id: '{{ content_type_id }}'
-{#                save_model : {% if save_model %}true{% else %}false{% endif %}#}
             };
             $.get('{% url 'admin_resumable_set' %}',content, function(data,status){
                 alert('Data:'+data+" status:"+status);

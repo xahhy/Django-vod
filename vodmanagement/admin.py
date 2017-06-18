@@ -40,8 +40,8 @@ class VodForm(forms.ModelForm):
 
 class VodModelAdmin(admin.ModelAdmin):
     list_display = ["title", "image_tag", "category", "file_size", "duration", "definition", "year",
-                    "view_count"]  # image_tag
-    list_display_links = ["image_tag", ]  # image_tag
+                    "view_count", "timestamp"]  # image_tag
+    list_display_links = ["image_tag", "timestamp"]  # image_tag
     list_editable = ["category", 'title', "definition", "year"]
     list_filter = ["year", "category"]
     # fields = ('image_tag',)
@@ -97,6 +97,7 @@ class VodModelAdmin(admin.ModelAdmin):
 
     class Media:
         js = ("http://code.jquery.com/jquery.min.js",)
+
         # class Meta:
         # model = Vod
 

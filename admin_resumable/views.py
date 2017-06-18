@@ -101,7 +101,7 @@ def admin_resumable(request):
             actual_filename = storage.save(r.filename, r.file)
             r.delete_chunks()
             if field.save_model:
-                r.save_model(models.Vod, upload_to)
+                r.save_model(models.Vod, upload_to, request=request)
                 print("save model = True")
             return HttpResponse(storage.url(actual_filename))
         return HttpResponse('chunk uploaded')
