@@ -10,7 +10,7 @@ class ResumableFile(object):
         self.kwargs = kwargs
         self.chunk_suffix = "_part_"
         self.video_allow = getattr(settings, 'ADMIN_RESUMABLE_VIDEO_ALLOW', ['.mp4'])
-        self.image_allow = getattr(settings, 'ADMIN_RESUMABLE_IMAGE_ALLOW', ['.jpg'])
+        self.image_allow = getattr(settings, 'ADMIN_RESUMABLE_IMAGE_ALLOW', ['.jpg','.png'])
 
     @property
     def chunk_exists(self):
