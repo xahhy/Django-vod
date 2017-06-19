@@ -63,14 +63,16 @@ class VodModelAdmin(admin.ModelAdmin):
     def delete_hard(self, request, queryset):
         for obj in queryset:
             try:
-                image_dir = os.path.dirname(obj.image.path)
-                image_basename = os.path.basename(obj.image.path)
-                for (dir, dirnames, files) in os.walk(image_dir):
-                    for file in files:
-                        if re.match(image_basename+'*',file):
-                            print("matched file:",file)
-                            os.remove(os.path.join(image_dir,file))
-                os.remove(obj.video.path)
+                # image_dir = os.path.dirname(obj.image.path)
+                # image_basename = os.path.basename(obj.image.path)
+                # for (dir, dirnames, files) in os.walk(image_dir):
+                #     for file in files:
+                #         if re.match(image_basename+'*',file):
+                #             print("matched file:",file)
+                #             os.remove(os.path.join(image_dir,file))
+                delete_hard(obj.image.path)
+                delete_hard(obj.video.path)
+                # os.remove(obj.video.path)
                 pass
             except:
                 pass

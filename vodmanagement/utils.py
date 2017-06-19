@@ -1,4 +1,6 @@
 import os
+import re
+
 from django.conf import settings
 import humanfriendly
 # from vodmanagement.models import Vod
@@ -93,3 +95,13 @@ def get_vod_year_list(model, field):
     # for item in queryset:
     # print(item[0])
     return queryset
+
+# delete all files related to the file
+def delete_hard(file_path):
+    dir = os.path.dirname(file_path)
+    basename = os.path.basename(file_path)
+    for (dir, dirnames, files) in os.walk(dir):
+        for file in files:
+            if re.match(basename + '*', file):
+                print("matched file:", file)
+                os.remove(os.path.join(dir, file))

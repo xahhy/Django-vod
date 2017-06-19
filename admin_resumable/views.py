@@ -50,6 +50,8 @@ def get_storage(upload_to):
     else:
         url_path =  os.path.join(settings.MEDIA_URL, get_chunks_subdir())
         location = get_chunks_dir()
+    print("location:", location)
+    print("url_path:", url_path)
     storage_class_name = getattr(
         settings,
         'ADMIN_RESUMABLE_STORAGE',
@@ -70,6 +72,10 @@ def get_upload_to(request):
     ct = ContentType.objects.get_for_id(ct_id)
     model_cls = ct.model_class()
     field = model_cls._meta.get_field(field_name)
+    print("field:", field,field.orig_upload_to)
+    global upload_to_global
+    print("global:", upload_to_global)
+    return upload_to_global
     return field.orig_upload_to
 
 def get_field(request):
@@ -122,6 +128,7 @@ def admin_resumable_set(request):
     upload_to_global = upload_to_
     field = get_field(request)
     field.orig_upload_to = upload_to_global
+    print('admin set field:', field)
     print('get upload_to_:', upload_to_)
     return HttpResponse(upload_to_)
 
