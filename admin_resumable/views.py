@@ -65,10 +65,12 @@ def get_upload_to(request):
     if request.method == 'POST':
         ct_id = request.POST['content_type_id']
         field_name = request.POST['field_name']
+        upload_to = request.POST['save_path']
     else:
         ct_id = request.GET['content_type_id']
         field_name = request.GET['field_name']
-
+        upload_to = request.POST['save_path']
+    return upload_to
     ct = ContentType.objects.get_for_id(ct_id)
     model_cls = ct.model_class()
     field = model_cls._meta.get_field(field_name)

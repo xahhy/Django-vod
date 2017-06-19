@@ -33,7 +33,7 @@
                     confirm: function () {
                         console.log("upload start");
                         var category = $("#id_category").val();
-                        r.opts.query = Object.assign(r.opts.query, {'category': category});
+                        r.opts.query = Object.assign(r.opts.query, {'category': category,'save_path':save_path});
                         var content = {
                             'upload_to_': save_path,
                             field_name: '{{ field_name }}',
