@@ -1,75 +1,92 @@
 <script>
-(function($) {
-    $(function() {
-
-
-        $('form').submit(function() {
-            if($(this).hasClass('{{ name }}_disabled')) {
-                return false;
+{% block script_head %}{% endblock %}
+    (function ($) {
+        $(function () {
+            $('form').submit(function () {
+                if ($(this).hasClass('{{ name }}_disabled')) {
+                    return false;
+                }
+            });
+            if (!(new Resumable().support)) {
+                alert("No uploader support");
             }
-        });
-
-        if (!(new Resumable().support)) {
-            alert("No uploader support");
-        }
-        var r = new Resumable({
-            target: '{% url 'admin_resumable' %}',
-            chunkSize: {{ chunkSize }},
-            query: {
-                csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
-                field_name: '{{ field_name }}',
-                content_type_id: '{{ content_type_id }}'
-            },
-        });
-        r.assignBrowse($('#{{ id }}_input_file'));
-        r.on('fileAdded', function(file,event) {
-            console.log("add file")
-            var save_path_sel = $('#id_save_path');
-            var save_path=save_path_sel.val();
-            var cur_option = save_path_sel.find('[value='+save_path+']').text();
-            var msg = "Confirm save path:\n" + cur_option;
-            var conf = confirm(msg);
-            if(conf){
-                console.log("upload start");
-                var category = $("#id_category").val();
-                r.opts.query = Object.assign(r.opts.query, {'category':category});
-                var content={
-                    'upload_to_': save_path,
+            var r = new Resumable({
+                target: '{% url 'admin_resumable' %}',
+                chunkSize: {{ chunkSize }},
+                query: {
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
                     field_name: '{{ field_name }}',
                     content_type_id: '{{ content_type_id }}'
-                };
-                $.get('{% url 'admin_resumable_set' %}',content, function(data,status){
-                    r.upload();
-                    $("form").addClass("{{ name }}_disabled");
+                },
+            });
+            r.assignBrowse($('#{{ id }}_input_file'));
+            r.on('fileAdded', function (file, event) {
+                {% block vod_title %}{% endblock %}
+                console.log("add file")
+                var save_path_sel = $('#id_save_path');
+                var confirm_sel = $('#confirm_upload');
+                var save_path = save_path_sel.val();
+                var cur_option = save_path_sel.find('[value=' + save_path + ']').text();
+                var msg = "Are you sure to upload to: <br/>" + cur_option;
+                jQuery.confirm({
+                    text: msg,
+                    confirm: function () {
+                        console.log("upload start");
+                        var category = $("#id_category").val();
+                        r.opts.query = Object.assign(r.opts.query, {'category': category});
+                        var content = {
+                            'upload_to_': save_path,
+                            field_name: '{{ field_name }}',
+                            content_type_id: '{{ content_type_id }}'
+                        };
+                        $.get('{% url 'admin_resumable_set' %}', content, function (data, status) {
+                            r.upload();
+                            $("form").addClass("{{ name }}_disabled");
+                        });
+                    },
+                    cancel: function () {
+                        console.log("refuse upload");
+                        r.removeFile(file);
+                    }
                 });
-            }else{
-                console.log("refuse upload");
-                r.removeFile(file);
+            });
+            r.on('fileSuccess', function (file, message) {
+                $('#{{ id }}').val(message);
+                var before = $("#{{ id }}_uploaded_status").html();
+                $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' Uploaded');
+                $("form").removeClass("{{ name }}_disabled");
+                {#            $("[name='_save'").click();#}
+                $('#{{ id }}_upload_icon').hide();
+                console.log("upload done");
+            });
+            r.on('fileError', function (file, message) {
+                $("#{{ id }}_uploaded_status").html(message);
+            });
+            r.on('progress', function (file, message) {
+                {#                $('#{{ id }}_progress').val(r.progress());#}
+                update_processbar($('#{{ id }}_progress'), r.progress());
+                $('#{{ id }}_upload_icon').show();
+
+            });
+        });
+        function update_processbar(bar, value) {
+            var now = value * 100;
+            if (now === 100) {
+                bar.addClass('progress-bar-success');
+            } else {
+                bar.remove('progress-bar-success');
+
             }
+            bar.css('width', now + '%');
+        }
 
-        });
-        r.on('fileSuccess', function(file, message) {
-            $('#{{ id }}').val(message);
-            var before=$("#{{ id }}_uploaded_status").html();
-            $("#{{ id }}_uploaded_status").html(before+'<br/>'+message + ' Uploaded');
-            $("form").removeClass("{{ name }}_disabled");
-{#            $("[name='_save'").click();#}
+        function success_processbar(bar) {
+            bar.addClass('progress-bar-success');
+        }
 
-        });
-        r.on('fileError', function(file, message) {
-            $("#{{ id }}_uploaded_status").html(message);
-        });
-        r.on('progress', function(file, message) {
-            $('#{{ id }}_progress').val(r.progress());
-        });
 
-        $("[name='_save']").click(function(){
-            console.log("click save");
-        });
-
-    });
-
-})(django.jQuery);
+    })(django.jQuery);
+    {#    })(jQuery);#}
 
 
 </script>
@@ -93,7 +110,14 @@
         <span id="{{ id }}_uploaded_status"></span>
         <input type="file" id="{{ id }}_input_file">
     </p>
-    <progress id="{{ id }}_progress" value="0" max="1" style="width:500px"></progress>
+    {#    <progress id="{{ id }}_progress" value="0" max="1" style="width:500px"></progress>#}
+    <div class="progress">
+        <div id="{{ id }}_progress" class="progress-bar" role="progressbar" aria-valuenow="0"
+             aria-valuemin="0" aria-valuemax="1">
+            {#            <span class="sr-only"></span>#}
+            <span id="{{ id }}_upload_icon"><i class='fa fa-circle-o-notch fa-spin'></i>processing</span>
+        </div>
+    </div>
 </div>
 
 <input type="hidden" name="{{ name }}" id="{{ id }}" value="{{ value }}">

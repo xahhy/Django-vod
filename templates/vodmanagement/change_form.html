@@ -1,0 +1,49 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+
+{% block extrahead %}
+    {{ block.super }}
+{#    <script src="{% static 'plugins/jQuery/jquery-3.1.1.min.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'js/jquery.confirm.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'font-awesome-4.7/css/font-awesome.min.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    <div class="modal fade" tabindex="-1" role="dialog" id="confirm_upload" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <p>One fine body&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    {{ block.super }}
+{% endblock %}
+
+
+{% block admin_change_form_document_ready %}
+    {{ block.super }}
+    <script>
+        $("[name='_save']").click(function (e) {
+            e.preventDefault();
+            alert("fuck");
+            console.log("click save");
+            $("form").submit();
+        });
+        {#        $('#confirm_upload').modal('show');#}
+    </script>
+{% endblock %}

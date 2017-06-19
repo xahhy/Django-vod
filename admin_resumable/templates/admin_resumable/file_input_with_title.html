@@ -1,0 +1,12 @@
+{% extends 'admin_resumable/file_input.html' %}
+{% block script_head %}
+    function getFileName(file){
+    var pos=file.lastIndexOf(".");
+    return file.substring(0, pos);
+    }
+{% endblock %}
+
+{% block vod_title %}
+    var filename = getFileName(file.fileName);
+    $('#id_title').val(filename);
+{% endblock %}

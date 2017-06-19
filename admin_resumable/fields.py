@@ -87,6 +87,14 @@ class ResumableWidget(FileInput):
 
 
 class AdminResumableWidget(ResumableWidget):
+    template_name = 'admin_resumable/file_input_with_title.html'
+    @property
+    def media(self):
+        js = ["resumable.js"]
+        return forms.Media(js=[static("admin_resumable/js/%s" % path) for path in js])
+
+class AdminFileResumableWidget(ResumableWidget):
+    template_name = 'admin_resumable/file_input.html'
     @property
     def media(self):
         js = ["resumable.js"]
@@ -135,7 +143,7 @@ class ModelAdminResumableImageField(models.ImageField):
         content_type_id = ContentType.objects.get_for_model(self.model).id
         defaults = {
             'form_class': FormAdminResumableFileField,
-            'widget': AdminResumableWidget(attrs={
+            'widget': AdminFileResumableWidget(attrs={
                 'content_type_id': content_type_id,
                 'field_name': self.name})
         }
@@ -145,6 +153,7 @@ class ModelAdminResumableImageField(models.ImageField):
 
 class ModelAdminResumableMultiFileField(models.FileField):
     save_model = True
+
     def __init__(self, verbose_name=None, name=None, upload_to='',
                  storage=None, **kwargs):
         self.orig_upload_to = upload_to
@@ -155,7 +164,7 @@ class ModelAdminResumableMultiFileField(models.FileField):
         content_type_id = ContentType.objects.get_for_model(self.model).id
         defaults = {
             'form_class': FormAdminResumableFileField,
-            'widget': AdminResumableWidget(attrs={
+            'widget': AdminFileResumableWidget(attrs={
                 'content_type_id': content_type_id,
                 'field_name': self.name})
         }

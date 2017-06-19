@@ -50,8 +50,8 @@ class VodModelAdmin(admin.ModelAdmin):
     actions = ["delete_hard", "copy_objects", "clear_view_count"]
     form = VodForm
 
-    # change_form_template = 'progressbarupload/change_form.html'
-    # add_form_template = 'progressbarupload/change_form.html'
+    change_form_template = 'vodmanagement/change_form.html'
+    add_form_template = 'vodmanagement/change_form.html'
     # def get_form(self, request, *args, **kwargs):
     #     form = super(VodModelAdmin, self).get_form(request, *args, **kwargs)
     #     form.base_fields['creator'].initial = request.user
@@ -98,6 +98,7 @@ class VodModelAdmin(admin.ModelAdmin):
                           , messages.SUCCESS)
 
     class Media:
+        pass
         js = ("http://code.jquery.com/jquery.min.js",)
 
         # class Meta:
@@ -144,6 +145,8 @@ class MultipleUploadForm(forms.ModelForm):
 
 class MultipleUploadModelAdmin(admin.ModelAdmin):
     form = MultipleUploadForm
+    change_form_template = 'vodmanagement/change_form.html'
+    add_form_template = 'vodmanagement/change_form.html'
 
 
 admin.site.register(FileDirectory)
