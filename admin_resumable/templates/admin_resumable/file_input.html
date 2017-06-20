@@ -54,15 +54,23 @@
             $('#{{ id }}_input_file').on('change', function (e) {
                 console.log('change');
                 setTimeout(function () {
-                    var msg = "Are you sure to upload:<br/>" + file_names + "to: <br/>" + cur_option;
+                    var msg = '<div class="text-center" style="color:blue">Are you sure to upload:</div><b>'
+                        + file_names
+                        + "</b>"
+                        + '<div class="text-center" style="color:blue">to:</div>'
+                        + '<span style="color: red">'
+                        + cur_option
+                        + '</span>';
+                    msg = '<div class="text-center">' + msg + '</div';
                     console.log(msg);
                     jQuery.confirm({
+                        columnClass: 'medium',
                         title: 'Confirm',
                         content: msg,
                         type: 'green',
                         buttons: {
                             ok: {
-                                text: "ok!",
+                                text: "Yes!",
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
                                 action: function () {

@@ -60,23 +60,27 @@ class VodModelAdmin(admin.ModelAdmin):
         obj.creator = request.user
         super(VodModelAdmin, self).save_model(request, obj, form, change)
 
+    def delete_model(self, request, object):
+        try:
+            delete_hard(object.image.path)
+        except:
+            pass
+        try:
+            delete_hard(object.video.path)
+        except:
+            pass
+        object.delete()
+
     def delete_hard(self, request, queryset):
         for obj in queryset:
             try:
-                # image_dir = os.path.dirname(obj.image.path)
-                # image_basename = os.path.basename(obj.image.path)
-                # for (dir, dirnames, files) in os.walk(image_dir):
-                #     for file in files:
-                #         if re.match(image_basename+'*',file):
-                #             print("matched file:",file)
-                #             os.remove(os.path.join(image_dir,file))
                 delete_hard(obj.image.path)
-                delete_hard(obj.video.path)
-                # os.remove(obj.video.path)
-                pass
             except:
                 pass
-
+            try:
+                delete_hard(obj.video.path)
+            except:
+                pass
             obj.delete()
 
     delete_hard.short_description = "Delete  object from disk"
