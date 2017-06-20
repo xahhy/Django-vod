@@ -1,5 +1,15 @@
 <script>
     {% block script_head %}{% endblock %}
+    function getFileName(file) {
+        var pos = file.lastIndexOf(".");
+        return file.substring(0, pos);
+    }
+    function getFileType(file) {
+        var pos = file.lastIndexOf(".");
+        return file.substring(pos+1);
+    }
+
+
     (function ($) {
         $(function () {
             var file_names = '';
@@ -7,7 +17,7 @@
             var confirm_sel = $('#confirm_upload');
             var save_path = save_path_sel.val();
             var cur_option = save_path_sel.find('[value=' + save_path + ']').text();
-
+            var video_allow = ['mp4', 'm3u8'];
             $('form').submit(function () {
                 if ($(this).hasClass('{{ name }}_disabled')) {
                     return false;
@@ -29,14 +39,17 @@
             r.assignDrop($('#{{ id }}_input_file'));
             r.on('fileAdded', function (file, event) {
                 {% block vod_title %}{% endblock %}
-                console.log("add file")
-                file_names += file.fileName + '<br/>';
+                console.log("add file");
+{#                file_names += file.fileName + '<br/>';#}
             });
             r.on('fileSuccess', function (file, message) {
                 $('#{{ id }}').val(message);
                 var before = $("#{{ id }}_uploaded_status").html();
                 $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' Uploaded');
-                $("form").removeClass("{{ name }}_disabled");
+
+                if(video_allow.toString().indexOf(getFileType(file.fileName)) > -1){
+                    $("form").removeClass('uploading');
+                }
                 {#            $("[name='_save'").click();#}
                 $('#{{ id }}_upload_icon').hide();
                 console.log("upload done");
@@ -54,6 +67,10 @@
             $('#{{ id }}_input_file').on('change', function (e) {
                 console.log('change');
                 setTimeout(function () {
+                    file_names = '';
+                    r.files.map(function (file) {
+                       file_names += file.fileName + '<br/>py';
+                    });
                     var msg = '<div class="text-center" style="color:blue">Are you sure to upload:</div><b>'
                         + file_names
                         + "</b>"
@@ -87,7 +104,7 @@
                                     };
                                     $.get('{% url 'admin_resumable_set' %}', content, function (data, status) {
                                         r.upload();
-                                        $("form").addClass("{{ name }}_disabled");
+                                        $("form").addClass('uploading');
                                     });
                                 }
                             },

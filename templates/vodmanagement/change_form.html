@@ -3,7 +3,7 @@
 
 {% block extrahead %}
     {{ block.super }}
-{#    <script src="{% static 'plugins/jQuery/jquery-3.1.1.min.js' %}"></script>#}
+    <script src="{% static 'plugins/jQuery/jquery-3.1.1.min.js' %}"></script>
 {#    <script type="text/javascript" src="{% static 'js/jquery.confirm.min.js' %}"></script>#}
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
@@ -44,7 +44,11 @@
         $("[name='_save']").click(function (e) {
             e.preventDefault();
             console.log("click save");
-            $("form").submit();
+            if($('form').hasClass('uploading')){
+                console.log('upload is not complete');
+            } else {
+                $("form").submit();
+            }
         });
         {#        $('#confirm_upload').modal('show');#}
     </script>
