@@ -39,7 +39,15 @@ class VodForm(forms.ModelForm):
 
     class Meta:
         model = Vod
-        fields = '__all__'
+        fields = (
+            'category',
+            'save_path',
+            'video',
+            'title',
+            'image',
+            'year',
+            'description',
+        )
 
 
 class VodModelAdmin(admin.ModelAdmin):

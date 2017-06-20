@@ -6,7 +6,7 @@
     }
     function getFileType(file) {
         var pos = file.lastIndexOf(".");
-        return file.substring(pos+1);
+        return file.substring(pos + 1);
     }
 
 
@@ -40,20 +40,38 @@
             r.on('fileAdded', function (file, event) {
                 {% block vod_title %}{% endblock %}
                 console.log("add file");
-{#                file_names += file.fileName + '<br/>';#}
+                {#                file_names += file.fileName + '<br/>';#}
             });
             r.on('fileSuccess', function (file, message) {
                 $('#{{ id }}').val(message);
                 var before = $("#{{ id }}_uploaded_status").html();
                 $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' Uploaded');
 
-                if(video_allow.toString().indexOf(getFileType(file.fileName)) > -1){
+                if (video_allow.toString().indexOf(getFileType(file.fileName)) > -1) {
                     $("form").removeClass('uploading');
                 }
                 {#            $("[name='_save'").click();#}
                 $('#{{ id }}_upload_icon').hide();
                 r.removeFile(file);
                 console.log("upload done");
+                {% block file_success %}
+                    $.confirm({
+                        title: 'Save?',
+                        content: 'Upload complete, you will be automatically save in 5 seconds.',
+                        autoClose: 'Save|5000',
+                        buttons: {
+                            Save: {
+                                text: 'Save',
+                                action: function () {
+                                    $("[name='_save']").click();
+                                }
+                            },
+                            cancel: function () {
+                                $.alert('canceled');
+                            }
+                        }
+                    });
+                {% endblock %}
             });
             r.on('fileError', function (file, message) {
                 $("#{{ id }}_uploaded_status").html(message);
@@ -70,7 +88,7 @@
                 setTimeout(function () {
                     file_names = '';
                     r.files.map(function (file) {
-                       file_names += file.fileName + '<br/>';
+                        file_names += file.fileName + '<br/>';
                     });
                     var msg = '<div class="text-center" style="color:blue">Are you sure to upload:</div><b>'
                         + file_names

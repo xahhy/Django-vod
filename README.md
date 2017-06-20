@@ -134,8 +134,8 @@ url(r'^accounts/',include('registration.backends.default.urls')),
 awesome django admin resumable upload file app.
 This Django-vod system customize it deeply to support dynamic upload path and multiple files upload.
 
-
-
+## 4. Awesome Jquery Confirm Plugins
+http://craftpip.github.io/jquery-confirm/
 
 
 # TEMP
