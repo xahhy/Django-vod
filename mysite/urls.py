@@ -22,6 +22,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_jwt.views import obtain_jwt_token
 
+admin.site.site_header = 'vod administration'
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^admin_resumable/', include('admin_resumable.urls')),

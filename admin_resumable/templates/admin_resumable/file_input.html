@@ -52,6 +52,7 @@
                 }
                 {#            $("[name='_save'").click();#}
                 $('#{{ id }}_upload_icon').hide();
+                r.removeFile(file);
                 console.log("upload done");
             });
             r.on('fileError', function (file, message) {
@@ -69,7 +70,7 @@
                 setTimeout(function () {
                     file_names = '';
                     r.files.map(function (file) {
-                       file_names += file.fileName + '<br/>py';
+                       file_names += file.fileName + '<br/>';
                     });
                     var msg = '<div class="text-center" style="color:blue">Are you sure to upload:</div><b>'
                         + file_names
@@ -133,7 +134,7 @@
             bar.addClass('progress-bar-success');
         }
 
-    })(django.jQuery);
+    })(jQuery);
     {#    })(jQuery);#}
 
 

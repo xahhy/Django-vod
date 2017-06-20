@@ -8,6 +8,10 @@ from django.conf import settings
 from .utils import *
 import re
 
+from django.contrib.admin import AdminSite
+from django.utils.translation import ugettext_lazy
+
+
 class VodForm(forms.ModelForm):
     """docstring for VodForm"""
 
@@ -103,7 +107,7 @@ class VodModelAdmin(admin.ModelAdmin):
 
     class Media:
         pass
-        js = ("http://code.jquery.com/jquery.min.js",)
+        # js = ("http://code.jquery.com/jquery.min.js",)
 
         # class Meta:
         # model = Vod
@@ -149,8 +153,8 @@ class MultipleUploadForm(forms.ModelForm):
 
 class MultipleUploadModelAdmin(admin.ModelAdmin):
     form = MultipleUploadForm
-    change_form_template = 'vodmanagement/change_form.html'
-    add_form_template = 'vodmanagement/change_form.html'
+    change_form_template = 'vodmanagement/MultipleUpload/change_form.html'
+    add_form_template = 'vodmanagement/MultipleUpload/change_form.html'
 
 
 admin.site.register(FileDirectory)
