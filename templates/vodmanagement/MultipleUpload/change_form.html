@@ -1,5 +1,5 @@
 {% extends 'vodmanagement/change_form.html' %}
 
 {% block submit_buttons_bottom %}
-    Clear Buttons
+    <a href="{% url 'admin:vodmanagement_vod_changelist' %}" class="btn btn-default">Back to vod site</a>
 {% endblock %}

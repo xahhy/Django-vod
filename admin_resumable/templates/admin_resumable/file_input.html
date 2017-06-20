@@ -55,22 +55,7 @@
                 r.removeFile(file);
                 console.log("upload done");
                 {% block file_success %}
-                    $.confirm({
-                        title: 'Save?',
-                        content: 'Upload complete, you will be automatically save in 5 seconds.',
-                        autoClose: 'Save|5000',
-                        buttons: {
-                            Save: {
-                                text: 'Save',
-                                action: function () {
-                                    $("[name='_save']").click();
-                                }
-                            },
-                            cancel: function () {
-                                $.alert('canceled');
-                            }
-                        }
-                    });
+
                 {% endblock %}
             });
             r.on('fileError', function (file, message) {
