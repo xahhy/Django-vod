@@ -1,7 +1,13 @@
 <script>
-{% block script_head %}{% endblock %}
+    {% block script_head %}{% endblock %}
     (function ($) {
         $(function () {
+            var file_names = '';
+            var save_path_sel = $('#id_save_path');
+            var confirm_sel = $('#confirm_upload');
+            var save_path = save_path_sel.val();
+            var cur_option = save_path_sel.find('[value=' + save_path + ']').text();
+
             $('form').submit(function () {
                 if ($(this).hasClass('{{ name }}_disabled')) {
                     return false;
@@ -20,35 +26,11 @@
                 },
             });
             r.assignBrowse($('#{{ id }}_input_file'));
+            r.assignDrop($('#{{ id }}_input_file'));
             r.on('fileAdded', function (file, event) {
                 {% block vod_title %}{% endblock %}
                 console.log("add file")
-                var save_path_sel = $('#id_save_path');
-                var confirm_sel = $('#confirm_upload');
-                var save_path = save_path_sel.val();
-                var cur_option = save_path_sel.find('[value=' + save_path + ']').text();
-                var msg = "Are you sure to upload to: <br/>" + cur_option;
-                jQuery.confirm({
-                    text: msg,
-                    confirm: function () {
-                        console.log("upload start");
-                        var category = $("#id_category").val();
-                        r.opts.query = Object.assign(r.opts.query, {'category': category,'save_path':save_path});
-                        var content = {
-                            'upload_to_': save_path,
-                            field_name: '{{ field_name }}',
-                            content_type_id: '{{ content_type_id }}'
-                        };
-                        $.get('{% url 'admin_resumable_set' %}', content, function (data, status) {
-                            r.upload();
-                            $("form").addClass("{{ name }}_disabled");
-                        });
-                    },
-                    cancel: function () {
-                        console.log("refuse upload");
-                        r.removeFile(file);
-                    }
-                });
+                file_names += file.fileName + '<br/>';
             });
             r.on('fileSuccess', function (file, message) {
                 $('#{{ id }}').val(message);
@@ -68,6 +50,48 @@
                 $('#{{ id }}_upload_icon').show();
 
             });
+
+            $('#{{ id }}_input_file').on('change', function (e) {
+                console.log('change');
+                setTimeout(function () {
+                    var msg = "Are you sure to upload:<br/>" + file_names + "to: <br/>" + cur_option;
+                    console.log(msg);
+                    jQuery.confirm({
+                        title: 'Confirm',
+                        content: msg,
+                        type: 'green',
+                        buttons: {
+                            ok: {
+                                text: "ok!",
+                                btnClass: 'btn-primary',
+                                keys: ['enter'],
+                                action: function () {
+                                    console.log("upload start");
+                                    var category = $("#id_category").val();
+                                    r.opts.query = Object.assign(r.opts.query, {
+                                        'category': category,
+                                        'save_path': save_path
+                                    });
+                                    var content = {
+                                        'upload_to_': save_path,
+                                        field_name: '{{ field_name }}',
+                                        content_type_id: '{{ content_type_id }}'
+                                    };
+                                    $.get('{% url 'admin_resumable_set' %}', content, function (data, status) {
+                                        r.upload();
+                                        $("form").addClass("{{ name }}_disabled");
+                                    });
+                                }
+                            },
+                            cancel: function () {
+                                console.log("refuse upload");
+                                r.cancel();
+                                file_names = '';
+                            }
+                        }
+                    })
+                }, 500)
+            });
         });
         function update_processbar(bar, value) {
             var now = value * 100;
@@ -83,7 +107,6 @@
         function success_processbar(bar) {
             bar.addClass('progress-bar-success');
         }
-
 
     })(django.jQuery);
     {#    })(jQuery);#}
@@ -108,7 +131,7 @@
         {% endif %}
 
         <span id="{{ id }}_uploaded_status"></span>
-        <input type="file" id="{{ id }}_input_file">
+        <input type="file" id="{{ id }}_input_file" style="position：absolute;">
     </p>
     {#    <progress id="{{ id }}_progress" value="0" max="1" style="width:500px"></progress>#}
     <div class="progress">

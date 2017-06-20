@@ -29,7 +29,7 @@ class ResumableWidget(FileInput):
     clear_checkbox_label = ugettext_lazy('Clear')
 
     def render(self, name, value, attrs=None, **kwargs):
-        print("resumable widget render")
+        attrs['display="hhy"'] = True
         # upload_to = get_upload_to(
         #     self.attrs['content_type_id'], self.attrs['field_name'])
         # storage = get_storage(upload_to)
@@ -48,7 +48,7 @@ class ResumableWidget(FileInput):
                 else:
                     file_url = settings.MEDIA_URL + value
             else:
-                file_url =  settings.MEDIA_URL + value.name
+                file_url = settings.MEDIA_URL + value.name
         else:
             file_url = ""
 
@@ -88,13 +88,16 @@ class ResumableWidget(FileInput):
 
 class AdminResumableWidget(ResumableWidget):
     template_name = 'admin_resumable/file_input_with_title.html'
+
     @property
     def media(self):
         js = ["resumable.js"]
         return forms.Media(js=[static("admin_resumable/js/%s" % path) for path in js])
 
+
 class AdminFileResumableWidget(ResumableWidget):
     template_name = 'admin_resumable/file_input.html'
+
     @property
     def media(self):
         js = ["resumable.js"]
@@ -139,6 +142,7 @@ class ModelAdminResumableFileField(models.FileField):
 class ModelAdminResumableImageField(models.ImageField):
     orig_upload_to = ''
     save_model = False
+
     def formfield(self, **kwargs):
         content_type_id = ContentType.objects.get_for_model(self.model).id
         defaults = {

@@ -4,10 +4,13 @@
 {% block extrahead %}
     {{ block.super }}
 {#    <script src="{% static 'plugins/jQuery/jquery-3.1.1.min.js' %}"></script>#}
-    <script type="text/javascript" src="{% static 'js/jquery.confirm.min.js' %}"></script>
+{#    <script type="text/javascript" src="{% static 'js/jquery.confirm.min.js' %}"></script>#}
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'font-awesome-4.7/css/font-awesome.min.css' %}">
+    <script type="text/javascript" src="{% static 'plugins/jquery-confirm/jquery-confirm.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'plugins/jquery-confirm/jquery-confirm.min.css' %}">
+
 
 {% endblock %}
 

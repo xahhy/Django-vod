@@ -11,6 +11,8 @@ from admin_resumable.files import ResumableFile
 from vodmanagement import models
 
 global upload_to_global
+
+
 def ensure_dir(f):
     d = os.path.dirname(f)
     if not os.path.exists(d):
@@ -48,7 +50,7 @@ def get_storage(upload_to):
         url_path = os.path.join(settings.MEDIA_URL, upload_to)
         ensure_dir(location)
     else:
-        url_path =  os.path.join(settings.MEDIA_URL, get_chunks_subdir())
+        url_path = os.path.join(settings.MEDIA_URL, get_chunks_subdir())
         location = get_chunks_dir()
     print("location:", location)
     print("url_path:", url_path)
@@ -65,20 +67,18 @@ def get_upload_to(request):
     if request.method == 'POST':
         ct_id = request.POST['content_type_id']
         field_name = request.POST['field_name']
-        upload_to = request.POST['save_path']
+        save_path = request.POST['save_path']
     else:
         ct_id = request.GET['content_type_id']
         field_name = request.GET['field_name']
-        upload_to = request.POST['save_path']
-    return upload_to
+        save_path = request.GET['save_path']
+    return save_path
     ct = ContentType.objects.get_for_id(ct_id)
     model_cls = ct.model_class()
     field = model_cls._meta.get_field(field_name)
-    print("field:", field,field.orig_upload_to)
     global upload_to_global
-    print("global:", upload_to_global)
     return upload_to_global
-    return field.orig_upload_to
+
 
 def get_field(request):
     if request.method == 'POST':
@@ -92,6 +92,7 @@ def get_field(request):
     model_cls = ct.model_class()
     field = model_cls._meta.get_field(field_name)
     return field
+
 
 @staff_member_required
 def admin_resumable(request):
@@ -124,6 +125,7 @@ def admin_resumable(request):
         return HttpResponse('chunk exists')
     return HttpResponse('Welcom to use resumable!')
 
+
 def admin_resumable_set(request):
     global upload_to_global
     upload_to_ = request.GET.get('upload_to_')
@@ -133,4 +135,3 @@ def admin_resumable_set(request):
     print('admin set field:', field)
     print('get upload_to_:', upload_to_)
     return HttpResponse(upload_to_)
-
