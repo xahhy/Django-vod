@@ -75,17 +75,18 @@
                     r.files.map(function (file) {
                         file_names += file.fileName + '<br/>';
                     });
-                    var msg = '<div class="text-center" style="color:blue">Are you sure to upload:</div><b>'
+                    var msg = '<div class="text-center" style="color:green;font-weight:bold">Are you sure you want to upload:</div><b>'
                         + file_names
                         + "</b>"
-                        + '<div class="text-center" style="color:blue">to:</div>'
-                        + '<span style="color: red">'
+                        + '<div class="text-center" style="color:green;font-weight:bold">to:</div>'
+                        + '<span style="color: red;font-weight:bold">'
                         + cur_option
                         + '</span>';
                     msg = '<div class="text-center">' + msg + '</div';
                     console.log(msg);
                     jQuery.confirm({
                         columnClass: 'medium',
+                        icon: 'fa fa-warning',
                         title: 'Confirm',
                         content: msg,
                         type: 'green',
