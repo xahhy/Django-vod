@@ -78,6 +78,7 @@ class CategoryListAPIView(ListAPIView):
 
 
 class YearListAPIView(APIView):
+    permission_classes = [AllowAny]
     def get(self, request, format=None):
         """
         Return a list of all users.
@@ -87,6 +88,8 @@ class YearListAPIView(APIView):
 
 
 class HomeListAPIView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, format=None):
         preview_categorys = []
         for category in VideoCategory.objects.all():
