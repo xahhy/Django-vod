@@ -153,3 +153,7 @@ for (dir,dirnames,filenames) in os.walk(MEDIA_ROOT,followlinks=True):
 2. release2.0
 redesign file field, use more robost 3rd party app and deeply custmize it.Happy hacking!
 
+# URLS
+/       :   Home page
+/vod    :   Django-vod
+/replay :   Apache-tomcat:8080

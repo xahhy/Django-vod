@@ -47,6 +47,8 @@ class VodForm(forms.ModelForm):
             'image',
             'year',
             'description',
+            'slug',
+            'search_word',
         )
 
 
@@ -58,7 +60,7 @@ class VodModelAdmin(admin.ModelAdmin):
     list_filter = ["year", "category"]
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
-    search_fields = ["title", "description"]
+    search_fields = ["title", "description", "search_word"]
     actions = ["delete_hard", "copy_objects", "clear_view_count"]
     form = VodForm
 

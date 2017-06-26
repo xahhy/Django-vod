@@ -1,3 +1,4 @@
+import six
 from django.db import models
 from django.utils import timezone
 from filer.fields.image import FilerImageField
@@ -21,7 +22,12 @@ from filer.fields.image import FilerImageField
 from .my_storage import *
 from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField,ModelAdminResumableMultiFileField
 from django.utils.encoding import uri_to_iri
-
+# for pinyin search
+from xpinyin import Pinyin
+if six.PY3:
+    from django.utils.encoding import smart_str
+else:
+    from django.utils.encoding import smart_unicode as smart_str
 """
 Copy data in XXX model:
 >>> 
@@ -239,11 +245,15 @@ class Vod(models.Model):
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)  # The first time added
     slug = models.SlugField(unique=True, blank=True)
-
+    search_word = models.CharField(max_length=100, null=True, blank=True)
     objects = VodManager()
 
     def save(self, *args, **kwargs):
         print("--------------")
+        p = Pinyin()
+        full_pinyin = p.get_pinyin(smart_str(self.title), '')
+        first_pinyin = p.get_initials(smart_str(self.title), '').lower()
+        self.search_word = " ".join([full_pinyin, first_pinyin])
         print("video path:", self.video)
 
         if self.description is None or self.description == "":
