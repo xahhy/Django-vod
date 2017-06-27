@@ -4,7 +4,7 @@ import sys
 import pymysql
 import django
 
-pymysql.install_as_MySQLdb()
+# pymysql.install_as_MySQLdb()
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
     django.setup()
