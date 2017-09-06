@@ -27,11 +27,11 @@ function click_pagination() {
 
 $(function(){
 	// auto open and close for year button
-	$('li.dropdown').mouseover(function() {
-     	$(this).addClass('open');
-     }).mouseout(function() {
-        $(this).removeClass('open');
-    });
+	// $('li.dropdown').mouseover(function() {
+     // 	$(this).addClass('open');
+     // }).mouseout(function() {
+     //    $(this).removeClass('open');
+    // });
 
 	//add year param to paginator
 	$("ul.pagination > li").each(function () {

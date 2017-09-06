@@ -47,12 +47,12 @@
                 var before = $("#{{ id }}_uploaded_status").html();
                 $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' Uploaded');
 
-                if (video_allow.toString().indexOf(getFileType(file.fileName)) > -1) {
-                    $("form").removeClass('uploading');
-                }
+{#                if (video_allow.toString().indexOf(getFileType(file.fileName)) > -1) {#}
+                $("form").removeClass('uploading');
+{#                }#}
                 {#            $("[name='_save'").click();#}
                 $('#{{ id }}_upload_icon').hide();
-                r.removeFile(file);
+{#                r.removeFile(file);#}
                 console.log("upload done");
                 {% block file_success %}
 
@@ -63,7 +63,7 @@
             });
             r.on('progress', function (file, message) {
                 {#                $('#{{ id }}_progress').val(r.progress());#}
-                update_processbar($('#{{ id }}_progress'), r.progress());
+                update_processbar($('#{{ id }}_progress'), r.progress(true));
                 $('#{{ id }}_upload_icon').show();
 
             });
@@ -127,11 +127,13 @@
             var now = value * 100;
             if (now === 100) {
                 bar.addClass('progress-bar-success');
+                bar.find("span").html("Success");
             } else {
                 bar.removeClass('progress-bar-success');
 
             }
             bar.css('width', now + '%');
+            console.log(now)
         }
 
         function success_processbar(bar) {

@@ -168,8 +168,8 @@ class MultipleUploadModelAdmin(admin.ModelAdmin):
 
 
 admin.site.register(FileDirectory)
-admin.site.register(Link, LinkModelAdmin)
+# admin.site.register(Link, LinkModelAdmin)
 admin.site.register(VideoCategory, VideoCategoryModelAdmin)
 admin.site.register(Vod, VodModelAdmin)
-admin.site.register(UserPermission)
+# admin.site.register(UserPermission)
 admin.site.register(MultipleUpload, MultipleUploadModelAdmin)

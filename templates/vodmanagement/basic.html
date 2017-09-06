@@ -36,9 +36,11 @@
     <!-- FastClick -->
     <!-- <script src="../../plugins/fastclick/fastclick.js"></script> -->
     <!-- AdminLTE App -->
-    <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
-    <script src="{% static 'js/video.js' %}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/video-js.css' %}">
+{#    <script src="{% static 'dist/js/adminlte.min.js' %}"></script>#}
+{#    <script src="{% static 'js/video.js' %}"></script>#}
+    <script src="{% static 'plugins/hola/videojs.hls.js' %}"></script>
+{#    <link rel="stylesheet" type="text/css" href="{% static 'css/video-js.css' %}">#}
+    <link rel="stylesheet" type="text/css" href="{% static 'plugins/hola/video-js.css' %}">
     <!-- AdminLTE for demo purposes -->
     <!-- <script src="../../dist/js/demo.js"></script> -->
     {% block scripts %}
@@ -47,8 +49,8 @@
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
 
-  <script src="{% static 'js/html5shiv.js' %}"></script>
-  <script src="{% static 'js/respond.min.js' %}"></script>
+{#  <script src="{% static 'js/html5shiv.js' %}"></script>#}
+{#  <script src="{% static 'js/respond.min.js' %}"></script>#}
   <![endif]-->
 </head>
 
@@ -267,7 +269,7 @@
 
 <script>
     $(document).ready(function () {
-        $('.sidebar-menu').tree()
+        //$('.sidebar-menu').tree()
     })
 </script>
 {% block own_scrips %}

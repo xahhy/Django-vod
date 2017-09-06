@@ -1,4 +1,4 @@
-env/*
+env*/*
 media/**
 static/**
 .idea/*
