@@ -91,13 +91,13 @@ class HomeListAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, format=None):
-        preview_categorys = []
+        preview_categories = []
         for category in VideoCategory.objects.all():
             videos = Vod.objects.filter(category__name=category.name)[:6]
-            preview_categorys.append(
+            preview_categories.append(
                 {
                     'category': category.name,
                     'videos': VodListSerializer(videos, many=True).data
                 }
             )
-        return Response(preview_categorys)
+        return Response(preview_categories)

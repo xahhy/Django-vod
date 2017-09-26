@@ -103,6 +103,6 @@ def delete_hard(file_path):
     print("base name=", basename)
     for (dir, dirnames, files) in os.walk(dir):
         for file in files:
-            if re.match(basename + '*', file):
+            if re.match(re.escape(basename)+ '*', file):
                 print("matched file:", file)
                 os.remove(os.path.join(dir, file))

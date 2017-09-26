@@ -301,7 +301,7 @@ class Vod(models.Model):
 
     def image_tag(self):
         if self.image is not None and str(self.image) != "":
-            print("image tage:"+str(self.image))
+            # print("image tage:"+str(self.image))
             if os.path.exists(self.image.path):
                 return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
             else:
