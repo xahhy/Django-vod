@@ -15,7 +15,6 @@ class Channel(models.Model):
     sort = models.IntegerField()
 
     class Meta:
-        app_label = 'epg'
         db_table = 'channel'
 
     def __str__(self):
@@ -31,7 +30,6 @@ class Program(models.Model):
     event_id    = models.IntegerField(null=True,blank=True)
 
     class Meta:
-        app_label = 'epg'
         db_table = 'program'
 
     def __str__(self):
