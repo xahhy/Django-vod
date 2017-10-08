@@ -32,6 +32,9 @@ from .permissions import *
 
 
 class VodListAPIView(ListAPIView):
+    """
+    VodListAPIView doc
+    """
     serializer_class = VodListSerializer
     permission_classes = [AllowAny]
     pagination_class = VodPageNumberPagination  # PageNumberPagination
@@ -65,6 +68,10 @@ class VodListAPIView(ListAPIView):
 
 
 class VodDetailAPIView(RetrieveAPIView):
+    """
+    VodDetailAPIView doc
+
+    """
     queryset = Vod.objects.all()
     lookup_field = "id"
     serializer_class = VodDetailSerializer
@@ -72,12 +79,18 @@ class VodDetailAPIView(RetrieveAPIView):
 
 
 class CategoryListAPIView(ListAPIView):
+    """
+    CategoryListAPIView doc
+    """
     serializer_class = CategoryListSerializer
     permission_classes = [AllowAny]
     queryset = VideoCategory.objects.all()
 
 
 class YearListAPIView(APIView):
+    """
+    YearListAPIView doc
+    """
     permission_classes = [AllowAny]
     def get(self, request, format=None):
         """
@@ -88,6 +101,9 @@ class YearListAPIView(APIView):
 
 
 class HomeListAPIView(APIView):
+    """
+    HomeListAPIView doc
+    """
     permission_classes = [AllowAny]
 
     def get(self, request, format=None):

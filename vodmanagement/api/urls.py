@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^(?P<id>[\w-]+)/$', VodDetailAPIView.as_view(), name='detail'),
     # url(r'^(?P<slug>[\w-]+)/edit/$', PostUpdateAPIView.as_view(), name='update'),
     # url(r'^(?P<slug>[\w-]+)/delete/$', PostDeleteAPIView.as_view(), name='delete'),
+
 ]

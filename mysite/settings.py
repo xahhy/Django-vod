@@ -14,7 +14,12 @@ import datetime
 import corsheaders.middleware
 import os
 
+from django.conf import settings
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from mysite.router import DatabaseAppsRouter
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -68,6 +73,10 @@ INSTALLED_APPS = [
     'vodmanagement.apps.VodConfig',
     'epg.apps.EpgConfig',
     'rest_framework',
+    # 'rest_framework_docs',
+    # 'drf_autodocs'
+    'rest_framework_swagger',
+
 
     # The following apps are required:
 
@@ -130,6 +139,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+DATABASE_ROUTERS = ['mysite.router.DatabaseAppsRouter']
+DATABASE_APPS_MAPPING = {
+    'epg': 'tsrtmp'
+}
 
 DATABASES = {
     'default': {
@@ -142,8 +155,17 @@ DATABASES = {
         # 'PASSWORD': '1234',
         # 'HOST': '',
         # 'PORT': '',#'3306',
+    },
+    'tsrtmp': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'tsrtmp',
+        'USER': 'root',
+        'PASSWORD': '123',
+        'HOST': '1.8.90.63',
+        'PORT': '',
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

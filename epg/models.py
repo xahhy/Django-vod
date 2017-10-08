@@ -12,6 +12,11 @@ class Channel(models.Model):
     PID             = models.IntegerField(null=True,blank=True)
     PGID            = models.IntegerField(null=True,blank=True)
     client_ip       = models.CharField(max_length=50,null=True,blank=True)
+    sort = models.IntegerField()
+
+    class Meta:
+        app_label = 'epg'
+        db_table = 'channel'
 
     def __str__(self):
         return self.channel_name+'('+self.channel_id+')'
@@ -24,6 +29,10 @@ class Program(models.Model):
     title       = models.CharField(max_length=50,null=True,blank=True)
     finished    = models.IntegerField(null=True,blank=True,default=0)
     event_id    = models.IntegerField(null=True,blank=True)
+
+    class Meta:
+        app_label = 'epg'
+        db_table = 'program'
 
     def __str__(self):
         return str(self.channel)

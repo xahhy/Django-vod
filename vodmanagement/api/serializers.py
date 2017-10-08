@@ -38,6 +38,10 @@ class VodListSerializer(ModelSerializer):
 
 
 class VodDetailSerializer(ModelSerializer):
+    """
+    VodDetailSerializer doc
+
+    """
     # category = SerializerMethodField()
     definition = serializers.StringRelatedField()
     # category = serializers.PrimaryKeyRelatedField(read_only=True)

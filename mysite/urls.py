@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from rest_framework.documentation import include_docs_urls
 import admin_resumable
 from django.conf.urls import url
 from django.contrib import admin
@@ -23,8 +24,9 @@ from django.conf.urls.static import static
 from rest_framework_jwt.views import obtain_jwt_token
 
 admin.site.site_header = 'vod administration'
-
 urlpatterns = [
+    # url(r'^docs/', include('rest_framework_docs.urls')),
+    # url(r'^', include('drf_autodocs.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^admin_resumable/', include('admin_resumable.urls')),
 

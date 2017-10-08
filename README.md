@@ -71,6 +71,13 @@ print(clip.duration) #in seconds
 
 ```
 
+4. Can't drop tables because of it contains foreign key.
+
+Remove foreign key check and then can drop tables successfully!
+```mysql
+SET FOREIGN_KEY_CHECKS = 0;
+drop table xxx;
+```
 # Useful 3rd-party app
 ## 1. Django Crispy Forms 
 `pip install django-crispy-forms`
