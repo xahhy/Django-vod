@@ -1,5 +1,5 @@
 var info;
-var server_url = 'http://192.168.0.145:8000';
+var server_url = 'http://localhost:8000';
 var api_video_list_url = server_url + '/api?format=json';
 var api_categary_list_url = server_url + '/api/category?format=json';
 var api_home_list_url = server_url + '/api/home?format=json';

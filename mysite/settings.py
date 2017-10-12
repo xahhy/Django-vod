@@ -75,7 +75,7 @@ INSTALLED_APPS = [
     'rest_framework',
     # 'rest_framework_docs',
     # 'drf_autodocs'
-    'rest_framework_swagger',
+    # 'rest_framework_swagger',
 
 
     # The following apps are required:
@@ -158,9 +158,9 @@ DATABASES = {
     },
     'tsrtmp': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'flask',
+        'NAME': 'tsrtmp',
         'USER': 'root',
-        'PASSWORD': '1234',
+        'PASSWORD': '123',
         'HOST': '',
         'PORT': '',
     }

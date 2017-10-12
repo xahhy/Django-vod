@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Blank Page</title>
+    <title>南海数字点播</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -40,9 +40,7 @@
     <script src="/static/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <!-- <script src="/static/../../dist/js/demo.js"></script> -->
-    {% block scripts %}
 
-    {% endblock scripts %}
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
 
@@ -91,36 +89,10 @@
                     <!-- Tasks: style can be found in dropdown.less -->
 
                     <li>
-                        <a onclick="render_home_list()" href="javascript:void(0);">Home</a>
+                        <a onclick="render_home_list()" href="javascript:void(0);">主页</a>
                     </li>
-                    <!-- User Account: style can be found in dropdown.less -->
-                    <li class="dropdown user user-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="/static/resource/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                            <span class="hidden-xs">{{ user }}</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <!-- User image -->
-                            <li class="user-header">
-                                <img src="/static/resource/dist/img/user2-160x160.jpg" class="img-circle"
-                                     alt="User Image">
-                                <p>
-                                    <!--{{ user }} - Web Developer-->
-                                    <small>Member since Nov. 2012</small>
-                                </p>
-                            </li>
-                            <!-- Menu Body -->
-
-                            <!-- Menu Footer-->
-                            <li class="user-footer">
-                                <div class="pull-left">
-                                    <!--<a href="{% url 'admin:index" class="btn btn-default btn-flat">Settings</a>-->
-                                </div>
-                                <div class="pull-right">
-                                    <!--<a href="{% url 'vod:logout" class="btn btn-default btn-flat">Sign out</a>-->
-                                </div>
-                            </li>
-                        </ul>
+                    <li>
+                        <a href="/admin">管理员</a>
                     </li>
                     <!-- Control Sidebar Toggle Button -->
                 </ul>
@@ -146,7 +118,7 @@
             </div>
             <!-- search form -->
 
-            {% block search_field %}
+
             <!--search start-->
             <form action="/list/" method="get" class="sidebar-form">
                 <div class="input-group">
@@ -158,35 +130,12 @@
                 </div>
             </form>
             <!--search end-->
-            {% endblock %}
+
 
 
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul id="category-list" class="sidebar-menu" data-widget="tree">
-                <li class="header" id="all_video"><a href="#"><i class="fa fa-home"></i> <span>All Videos</span></a>
-                </li>
-
-                <!--{% block category_list %}-->
-                <!--{% for item in categorys %}-->
-                <!--{% if item.name == title %}-->
-                <!--<li class="active" id="video_{{ item.name }}">-->
-                <!--{% else %}-->
-                <!--<li class="" id="video_{{ item.name }}">-->
-                <!--{% endif %}-->
-
-                <!--<a href="{% url 'vod:list-detail' item.name %}">-->
-                <!--<i class="fa fa-book"></i> <span>{{ item.name }}</span>-->
-                <!--</a>-->
-                <!--&lt;!&ndash;<ul class="treeview-menu">-->
-                <!--<li><a href=""><i class="fa fa-circle-o"></i>Hello</a></li>-->
-                <!--</ul>&ndash;&gt;-->
-                <!--</li>-->
-                <!--{% endfor %}-->
-                <!--{% endblock %}-->
-
-                <!-- <li><a href="{% url 'vod:login"><i class="fa fa-sign-in"></i> <span>Login Page</span></a></li> -->
-            </ul>
+            <ul id="category-list" class="sidebar-menu" data-widget="tree"></ul>
         </section>
         <!-- /.sidebar -->
     </aside>
