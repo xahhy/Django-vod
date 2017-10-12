@@ -158,10 +158,10 @@ DATABASES = {
     },
     'tsrtmp': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tsrtmp',
+        'NAME': 'flask',
         'USER': 'root',
-        'PASSWORD': '123',
-        'HOST': '1.8.90.63',
+        'PASSWORD': '1234',
+        'HOST': '',
         'PORT': '',
     }
 }

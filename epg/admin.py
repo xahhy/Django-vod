@@ -6,13 +6,14 @@ from .models import *
 
 
 # Register your models here.
+@admin.register(Channel)
 class ChannelModelAdmin(admin.ModelAdmin):
     list_display = ['channel_id', 'channel_name', 'rtmp_url']
     list_display_links = ['channel_id']  # image_tag
     list_editable = ['channel_name', 'rtmp_url']
     search_fields = ['channel_id', 'channel_name']
 
-
+@admin.register(Program)
 class ProgramModelAdmin(admin.ModelAdmin):
     """
     Program admin site view
@@ -64,17 +65,19 @@ class CategoryForm(forms.ModelForm):
         self.cleaned_data['records'].update(category=instance)
         return instance
 
+@admin.register(Category)
 class CategoryModelAdmin(admin.ModelAdmin):
-    pass
+    filter_horizontal = ['records']
     # inlines = [RecordInLine]
     # form = CategoryForm
 
+@admin.register(Record)
 class RecordModelAdmin(admin.ModelAdmin):
     list_display = ['channel', 'title', 'url']
     # list_editable = ['category']
 
 
-admin.site.register(Channel, ChannelModelAdmin)
-admin.site.register(Program, ProgramModelAdmin)
-admin.site.register(Category, CategoryModelAdmin)
-admin.site.register(Record, RecordModelAdmin)
+# admin.site.register(Channel, ChannelModelAdmin)
+# admin.site.register(Program, ProgramModelAdmin)
+# admin.site.register(Category, CategoryModelAdmin)
+# admin.site.register(Record, RecordModelAdmin)

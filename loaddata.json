@@ -1,0 +1,10 @@
+[
+  {
+    "model": "epg.Category",
+    "pk": 1,
+    "fields": {
+      "name": "录制节目",
+      "description": "这里填写节目说明"
+    }
+  }
+]

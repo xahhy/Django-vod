@@ -78,6 +78,23 @@ Remove foreign key check and then can drop tables successfully!
 SET FOREIGN_KEY_CHECKS = 0;
 drop table xxx;
 ```
+
+5. Can't create table in an existing database.
+
+Run in shell:
+```
+migrate --fake-initial <app_name> --database "<database_name_in_settings>"
+```
+
+6. Initiate data in database.
+
+Use manage.py, run command:
+```
+manage.py loaddata <data_file_name>
+```
+
+the data file format is a json or yaml file.
+
 # Useful 3rd-party app
 ## 1. Django Crispy Forms 
 `pip install django-crispy-forms`
