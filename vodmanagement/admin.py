@@ -22,7 +22,7 @@ class VodForm(forms.ModelForm):
             print("save path is empty")
             self.fields["save_path"] = forms.ChoiceField(choices=save_path_choices())
         else:
-            print("save path is:",self.instance.save_path)
+            print("save path is:", self.instance.save_path)
             self.fields["save_path"] = forms.ChoiceField(choices=get_save_path_choice(self.instance.save_path))
             # self.fields['save_path'].widget.attrs['disabled="disabled"'] = True
         for instance in self.fields["category"].queryset:
@@ -52,24 +52,32 @@ class VodForm(forms.ModelForm):
         )
 
 
+@admin.register(Vod)
 class VodModelAdmin(admin.ModelAdmin):
     list_display = ["title", "image_tag", "category", "file_size", "duration", "definition", "year",
-                    "view_count", "timestamp"]  # image_tag
+                    "view_count", "timestamp", 'colored_active']  # image_tag
     list_display_links = ["image_tag", "timestamp"]  # image_tag
     list_editable = ["category", 'title', "definition", "year"]
     list_filter = ["year", "category"]
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
     search_fields = ["title", "description", "search_word"]
-    actions = ["delete_hard", "copy_objects", "clear_view_count"]
+    actions = ["delete_hard", "copy_objects", "clear_view_count", 'activate_vod', 'deactivate_vod']
     form = VodForm
+    fieldsets = [
+        ('Description', {'fields': ['category', 'save_path', 'year', 'description', 'active']}),
+        ('Files', {'fields': ['image', 'video', 'title']}),
+        ('Advanced', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})
+    ]
 
     change_form_template = 'vodmanagement/change_form.html'
     add_form_template = 'vodmanagement/change_form.html'
+
     # def get_form(self, request, *args, **kwargs):
     #     form = super(VodModelAdmin, self).get_form(request, *args, **kwargs)
     #     form.base_fields['creator'].initial = request.user
     #     return form
+
     def save_model(self, request, obj, form, change):
         obj.creator = request.user
         super(VodModelAdmin, self).save_model(request, obj, form, change)
@@ -110,6 +118,22 @@ class VodModelAdmin(admin.ModelAdmin):
         self.message_user(request, "%s item successfully copyed." % queryset.count()
                           , messages.SUCCESS)
 
+    def activate_vod(self, request, queryset):
+        for item in queryset:
+            item.active = 1
+            item.save()
+        self.message_user(request, "%s个节目成功激活." % queryset.count()
+                          , messages.SUCCESS)
+    activate_vod.short_description = '激活节目列表'
+
+    def deactivate_vod(self, request, queryset):
+        for item in queryset:
+            item.active = 0
+            item.save()
+        self.message_user(request, "%s个节目成功取消激活." % queryset.count()
+                          , messages.SUCCESS)
+    deactivate_vod.short_description = '取消激活节目'
+
     def clear_view_count(self, request, queryset):
         queryset.update(view_count=0)
         self.message_user(request, "%s item successfully cleared view count." % queryset.count()
@@ -132,6 +156,7 @@ class MyAdminForm(forms.ModelForm):
         fields = '__all__'
 
 
+@admin.register(VideoCategory)
 class VideoCategoryModelAdmin(admin.ModelAdmin):
     list_display = ["category_description", "type", "isSecret"]
     list_editable = ["isSecret"]
@@ -161,15 +186,33 @@ class MultipleUploadForm(forms.ModelForm):
         fields = '__all__'
 
 
+@admin.register(MultipleUpload)
 class MultipleUploadModelAdmin(admin.ModelAdmin):
     form = MultipleUploadForm
     change_form_template = 'vodmanagement/MultipleUpload/change_form.html'
     add_form_template = 'vodmanagement/MultipleUpload/change_form.html'
 
 
+@admin.register(VodList)
+class VodListModelAdmin(admin.ModelAdmin):
+    filter_horizontal = ['vod_list']
+    list_display = ['title', 'colored_active']
+    actions = ['activate_vod_list', 'deactivate_vod_list']
+
+    def activate_vod_list(self, request, queryset):
+        for item in queryset:
+            item.active = 1
+            item.save()
+        self.message_user(request, "%s个节目列表成功激活." % queryset.count()
+                          , messages.SUCCESS)
+    activate_vod_list.short_description = '激活节目列表'
+
+    def deactivate_vod_list(self, request, queryset):
+        for item in queryset:
+            item.active = 0
+            item.save()
+        self.message_user(request, "%s个节目列表成功取消激活." % queryset.count()
+                          , messages.SUCCESS)
+    deactivate_vod_list.short_description = '取消激活节目列表'
+
 admin.site.register(FileDirectory)
-# admin.site.register(Link, LinkModelAdmin)
-admin.site.register(VideoCategory, VideoCategoryModelAdmin)
-admin.site.register(Vod, VodModelAdmin)
-# admin.site.register(UserPermission)
-admin.site.register(MultipleUpload, MultipleUploadModelAdmin)

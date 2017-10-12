@@ -1,6 +1,7 @@
 import six
 from django.db import models
 from django.utils import timezone
+from django.utils.html import format_html
 from filer.fields.image import FilerImageField
 from filer.fields.file import FilerFileField
 from django.utils.safestring import mark_safe
@@ -213,6 +214,25 @@ class MultipleUpload(models.Model):
 
 
 # ---------------------------------------------------------------------
+class VodList(models.Model):
+    title = models.CharField(max_length=120)
+    description = models.TextField(blank=True)
+    category = models.ForeignKey(VideoCategory, null=True)
+    vod_list = models.ManyToManyField('Vod')
+    active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
+
+    def colored_active(self):
+        color_code = 'red' if self.active == 0 else 'green'
+        return format_html(
+            '<span style="color:{};">{}</span>',
+            color_code,
+            self.get_active_display()
+        )
+    colored_active.short_description = '是否激活'
+
+    def __str__(self):
+        return self.title
+# ---------------------------------------------------------------------
 
 class Vod(models.Model):
     title = models.CharField(max_length=120)
@@ -246,6 +266,9 @@ class Vod(models.Model):
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)  # The first time added
     slug = models.SlugField(unique=True, blank=True)
     search_word = models.CharField(max_length=10000, null=True, blank=True)
+
+    video_list = models.ManyToManyField('self', blank=True, symmetrical=False)
+    active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
     objects = VodManager()
 
     def save(self, *args, **kwargs):
@@ -316,7 +339,15 @@ class Vod(models.Model):
     def add_view_count(self):
         self.view_count_temp += 1
 
+    def colored_active(self):
+        color_code = 'red' if self.active == 0 else 'green'
+        return format_html(
+            '<span style="color:{};">{}</span>',
+            color_code,
+            self.get_active_display()
+        )
 
+    colored_active.short_description = '是否激活'
 
 
 def create_slug(instance, new_slug=None, new_num=0):
