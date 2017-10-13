@@ -37,19 +37,18 @@
     {{ block.super }}
 {% endblock %}
 
-
-{% block admin_change_form_document_ready %}
-    {{ block.super }}
-    <script>
-        $("[name='_save']").click(function (e) {
-            e.preventDefault();
-            console.log("click save");
-            if($('form').hasClass('uploading')){
-                console.log('upload is not complete');
-            } else {
-                $("form").submit();
-            }
-        });
-        {#        $('#confirm_upload').modal('show');#}
-    </script>
-{% endblock %}
+{# If I add below, the many to many field will not save correctly#}
+{#{% block admin_change_form_document_ready %}#}
+{#    {{ block.super }}#}
+{#    <script>#}
+{#        $("[name='_save']").click(function (e) {#}
+{#            e.preventDefault();#}
+{#            console.log("click save");#}
+{#            if($('form').hasClass('uploading')){#}
+{#                console.log('upload is not complete');#}
+{#            } else {#}
+{#                $("form").submit();#}
+{#            }#}
+{#        });#}
+{#    </script>#}
+{#{% endblock %}#}

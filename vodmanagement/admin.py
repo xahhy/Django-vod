@@ -37,6 +37,13 @@ class VodForm(forms.ModelForm):
         print("vod form clean all")
         return super(VodForm, self).clean()
 
+    # def save(self, commit=True):
+    #     instance = super(VodForm, self).save(commit=False)
+    #     instance.save()
+    #     self.save_m2m()
+    #     return instance
+
+
     class Meta:
         model = Vod
         fields = (
@@ -66,7 +73,7 @@ class VodModelAdmin(admin.ModelAdmin):
     form = VodForm
     fieldsets = [
         ('Description', {'fields': ['category', 'save_path', 'year', 'description', 'active']}),
-        ('Files', {'fields': ['image', 'video', 'title']}),
+        ('Files', {'fields': ['image', ('local_video', 'video'), 'title']}),
         ('Advanced', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})
     ]
 
@@ -79,7 +86,7 @@ class VodModelAdmin(admin.ModelAdmin):
     #     return form
 
     def save_model(self, request, obj, form, change):
-        obj.creator = request.user
+        # obj.creator = request.user
         super(VodModelAdmin, self).save_model(request, obj, form, change)
 
     def delete_model(self, request, object):
@@ -142,7 +149,6 @@ class VodModelAdmin(admin.ModelAdmin):
     class Media:
         pass
         # js = ("http://code.jquery.com/jquery.min.js",)
-
         # class Meta:
         # model = Vod
 
@@ -161,12 +167,13 @@ class VideoCategoryModelAdmin(admin.ModelAdmin):
     list_display = ["category_description", "type", "isSecret"]
     list_editable = ["isSecret"]
     search_fields = ["name"]
+    filter_horizontal = ['subset']
     form = MyAdminForm
 
     def category_description(self, obj):
-        return obj.name
+        return str(obj)
 
-    category_description.short_description = 'Category Name'
+    category_description.short_description = '分类名称'
 
 
 class LinkModelAdmin(admin.ModelAdmin):
@@ -214,5 +221,10 @@ class VodListModelAdmin(admin.ModelAdmin):
         self.message_user(request, "%s个节目列表成功取消激活." % queryset.count()
                           , messages.SUCCESS)
     deactivate_vod_list.short_description = '取消激活节目列表'
+
+
+@admin.register(VideoTag)
+class VideoTagModelAdmin(admin.ModelAdmin):
+    pass
 
 admin.site.register(FileDirectory)

@@ -4,7 +4,7 @@ import os
 from django.core.files.base import File
 from django.conf import settings
 from vodmanagement import models
-
+from datetime import datetime
 
 class ResumableFile(object):
     def __init__(self, storage, kwargs):
@@ -71,10 +71,9 @@ class ResumableFile(object):
         if '/' in filename:
             raise Exception('Invalid filename')
         return filename
-        return "%s_%s" % (
-            self.kwargs.get('resumableTotalSize'),
-            filename
-        )
+        #     self.kwargs.get('resumableTotalSize'),
+        #     filename
+        # )
 
     @property
     def is_complete(self):

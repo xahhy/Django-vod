@@ -1,4 +1,6 @@
+import json
 import os
+from pathlib import Path
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -126,6 +128,18 @@ def admin_resumable(request):
     return HttpResponse('Welcom to use resumable!')
 
 
+def check_file_names(file_names, upload_to):
+    file_list = json.loads(file_names)
+    exist_file_list = []
+    for file_name in file_list:
+        file = Path(settings.MEDIA_ROOT) / Path(upload_to) / file_name
+        if file.is_file():
+            exist_file_list.append(file_name)
+    if exist_file_list:
+        return exist_file_list
+    return None
+
+
 def admin_resumable_set(request):
     global upload_to_global
     upload_to_ = request.GET.get('upload_to_')
@@ -134,4 +148,27 @@ def admin_resumable_set(request):
     field.orig_upload_to = upload_to_global
     print('admin set field:', field)
     print('get upload_to_:', upload_to_)
+
+    # Get file name list
+    file_names = request.GET.get('file_names')
+    print(file_names)
+    ret = check_file_names(file_names, upload_to_)
+    if ret is not None:
+        return HttpResponse(json.dumps(ret))
     return HttpResponse(upload_to_)
+
+
+def admin_resumable_delete(request):
+    global upload_to_global
+    print('Enter delete file')
+    file_names = request.GET.get('delete_file_names')
+    file_list = json.loads(file_names)
+    number = len(file_list)
+    count = 0
+    for file_name in file_list:
+        file = Path(settings.MEDIA_ROOT) / Path(upload_to_global) / file_name
+        if file.is_file():
+            os.remove(file)
+            count += 1
+            print('remove',file)
+    return HttpResponse(f'delete {count} files, total {number} files')

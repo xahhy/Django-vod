@@ -158,7 +158,7 @@ DATABASES = {
     },
     'tsrtmp': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tsrtmp',
+        'NAME': 'flask',
         'USER': 'root',
         'PASSWORD': '123',
         'HOST': '',
@@ -231,8 +231,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-LOCAL_MEDIA_URL = 'local_file/'
-LOCAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT, 'local_file')
+LOCAL_FOLDER_NAME = 'local_file'
+LOCAL_MEDIA_URL = LOCAL_FOLDER_NAME + '/'
+LOCAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT, LOCAL_FOLDER_NAME)
 
 FILER_STORAGES = {
     'public': {

@@ -16,6 +16,7 @@ class CategoryForm(forms.ModelForm):
             choices.append((choice.id, str(choice)))
         w.choices = choices
 
+
 # Register your models here.
 @admin.register(Channel)
 class ChannelModelAdmin(admin.ModelAdmin):

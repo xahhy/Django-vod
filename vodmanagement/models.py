@@ -23,6 +23,7 @@ from filer.fields.image import FilerImageField
 from .my_storage import *
 from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField,ModelAdminResumableMultiFileField
 from django.utils.encoding import uri_to_iri
+from pathlib import Path
 # for pinyin search
 from xpinyin import Pinyin
 if six.PY3:
@@ -162,13 +163,13 @@ class VideoCategory(models.Model):
                             choices=TYPES,
                             default='common'
                             )
-
     isSecret = models.BooleanField(default=False)
-
+    level = models.IntegerField(null=False, blank=False, default=1)
+    subset = models.ManyToManyField('self', blank=True)
     # directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
 
     def __str__(self):
-        return self.name
+        return self.name + str(f'(level {self.level})')
 
     def save(self, *args, **kwargs):
         # print(self.directory)
@@ -214,12 +215,20 @@ class MultipleUpload(models.Model):
 
 
 # ---------------------------------------------------------------------
+class VideoTag(models.Model):
+    name = models.CharField(max_length=200, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+
+# ---------------------------------------------------------------------
 class VodList(models.Model):
     title = models.CharField(max_length=120)
     description = models.TextField(blank=True)
     category = models.ForeignKey(VideoCategory, null=True)
     vod_list = models.ManyToManyField('Vod')
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
+    tags = models.ManyToManyField(VideoTag, blank=True)
 
     def colored_active(self):
         color_code = 'red' if self.active == 0 else 'green'
@@ -266,6 +275,7 @@ class Vod(models.Model):
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)  # The first time added
     slug = models.SlugField(unique=True, blank=True)
     search_word = models.CharField(max_length=10000, null=True, blank=True)
+    # tags = models.ManyToManyField(VideoTag, blank=True)
 
     video_list = models.ManyToManyField('self', blank=True, symmetrical=False)
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
@@ -281,21 +291,20 @@ class Vod(models.Model):
 
         if self.description is None or self.description == "":
             self.description = default_description(self)
-        # if not "http" in self.url:
-        #     self.url = "http://" + self.url
-        # print(dir(self))
 
         if self.local_video != '' and self.local_video is not None:
-            basename = os.path.basename(self.local_video)
-            self.video.name = settings.LOCAL_MEDIA_URL + basename
+            basename = Path(self.local_video).relative_to(Path(settings.LOCAL_MEDIA_ROOT))
+            self.video.name = Path(settings.LOCAL_MEDIA_URL)/basename
             print("save local_video to filefield done")
 
         super(Vod, self).save(*args, **kwargs)
         if self.video != None and self.video != '':
-            basename = os.path.basename(self.video.name)  # Djan%20go.mp4
+            basename = Path(self.video.name).name  # Djan%20go.mp4
             rel_name = uri_to_iri(basename)  # Djan go.mp4
-            # self.video.name = os.path.join(settings.MEDIA_ROOT, self.save_path, rel_name)
-            self.video.name = os.path.join(self.save_path, rel_name)
+
+            #  Make sure the self.video.name is not in the LOCAL_FOLDER
+            if not self.video.name.startswith(settings.LOCAL_FOLDER_NAME):
+                self.video.name = Path(self.save_path)/rel_name
             print("save_path:", self.save_path)
             print(self.video.name)
             print('size:', self.video.file.size)
@@ -308,10 +317,11 @@ class Vod(models.Model):
 
         try:
             if self.image:
-                self.image.name = os.path.join(self.save_path, os.path.basename(uri_to_iri(self.image.name)))
+                # self.image.name = os.path.join(self.save_path, os.path.basename(uri_to_iri(self.image.name)))
+                self.image.name = Path(self.save_path)/Path(uri_to_iri(self.image.name)).name
         except:
             pass
-        super(Vod, self).save(*args, **kwargs)
+        return super(Vod, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.title

@@ -39,7 +39,7 @@
             r.assignDrop($('#{{ id }}_input_file'));
             r.on('fileAdded', function (file, event) {
                 {% block vod_title %}{% endblock %}
-                console.log("add file");
+                 console.log("add file");
                 {#                file_names += file.fileName + '<br/>';#}
             });
             r.on('fileSuccess', function (file, message) {
@@ -82,7 +82,7 @@
                         + '<span style="color: red;font-weight:bold">'
                         + cur_option
                         + '</span>';
-                    msg = '<div class="text-center">' + msg + '</div';
+                    msg = '<div class="text-center">' + msg + '</div>';
                     console.log(msg);
                     jQuery.confirm({
                         columnClass: 'medium',
@@ -102,14 +102,62 @@
                                         'category': category,
                                         'save_path': save_path
                                     });
+                                    var file_name_list = [];
+                                    r.files.map(function (file) {
+                                        file_name_list.push(file.fileName);
+                                    });
+                                    console.log(file_name_list);
                                     var content = {
                                         'upload_to_': save_path,
                                         field_name: '{{ field_name }}',
-                                        content_type_id: '{{ content_type_id }}'
+                                        content_type_id: '{{ content_type_id }}',
+                                        'file_names': JSON.stringify(file_name_list)
                                     };
                                     $.get('{% url 'admin_resumable_set' %}', content, function (data, status) {
-                                        r.upload();
-                                        $("form").addClass('uploading');
+                                        console.log(data);
+                                        console.log(status);
+                                        if(data.startsWith('[')){
+                                            var error_files = JSON.parse(data);
+                                            var error_message = '文件<br/><br/><span style="color: red;font-weight:bold">';
+                                            error_files.map(function (file) {
+                                                error_message += file + '<br/>';
+                                            });
+                                            error_message += '</span><br/>已经存在!';
+                                            error_message = '<div class="text-center">' + error_message + '</div>';
+                                            // Confirm to delete the existing file.
+                                            jQuery.confirm({
+                                                columnClass: 'medium',
+                                                icon: 'fa fa-warning',
+                                                title: '是否删除服务器文件',
+                                                content: error_message,
+                                                type: 'red',
+                                                buttons: {
+                                                    ok: {
+                                                        text: "Yes!",
+                                                        btnClass: 'btn-primary',
+                                                        keys: ['enter'],
+                                                        action: function () {
+                                                            console.log('start delete file');
+                                                            $.get('{% url 'admin_resumable_delete' %}', {'delete_file_names':data},function(data, status){
+                                                                r.upload();
+                                                                $("form").addClass('uploading')
+                                                            });
+                                                        }
+                                                    },
+                                                    cancel: function () {
+                                                        console.log('cancel delete file');
+                                                        r.cancel();
+                                                        file_names = '';
+                                                        console.log('Canncel upload because of file already exists.');
+                                                    }
+                                                }
+                                            });
+
+
+                                        }else {
+                                            r.upload();
+                                            $("form").addClass('uploading')
+                                        }
                                     });
                                 }
                             },

@@ -140,8 +140,13 @@ class ModelAdminResumableFileField(models.FileField):
 
 
 class ModelAdminResumableImageField(models.ImageField):
-    orig_upload_to = ''
+    # orig_upload_to = ''
     save_model = False
+
+    def __init__(self, verbose_name=None, name=None, width_field=None, height_field=None, **kwargs):
+        self.orig_upload_to = ''
+        super(ModelAdminResumableImageField, self).__init__(verbose_name, name, width_field, height_field, **kwargs)
+
 
     def formfield(self, **kwargs):
         content_type_id = ContentType.objects.get_for_model(self.model).id
