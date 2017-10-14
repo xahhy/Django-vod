@@ -78,14 +78,20 @@ class VodDetailAPIView(RetrieveAPIView):
     permission_classes = [HasPermission]
 
 
-class CategoryListAPIView(ListAPIView):
+class CategoryListAPIView(APIView):
     """
     CategoryListAPIView doc
     """
     serializer_class = CategoryListSerializer
     permission_classes = [AllowAny]
-    queryset = VideoCategory.objects.all()
+    # queryset = VideoCategory.objects.all()
 
+    def get(self, request, format=None):
+        categories = {}
+        for level_1 in VideoCategory.objects.filter(level=1):
+            children = level_1.subset.all()
+            categories[level_1.name]= CategoryListSerializer(children, many=True).data
+        return Response(categories)
 
 class YearListAPIView(APIView):
     """

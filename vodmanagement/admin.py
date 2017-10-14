@@ -164,17 +164,21 @@ class MyAdminForm(forms.ModelForm):
 
 @admin.register(VideoCategory)
 class VideoCategoryModelAdmin(admin.ModelAdmin):
-    list_display = ["category_description", "type", "isSecret"]
+    list_display = ['category_description', 'colored_level', 'type', 'isSecret']
     list_editable = ["isSecret"]
     search_fields = ["name"]
     filter_horizontal = ['subset']
+    ordering = ['level']
     form = MyAdminForm
+    fieldsets = [
+        ('描述', {'fields': ['name', 'level', 'subset']}),
+        ('高级', {'fields': ['isSecret', 'type'], 'classes': ['collapse']})
+    ]
 
     def category_description(self, obj):
         return str(obj)
 
     category_description.short_description = '分类名称'
-
 
 class LinkModelAdmin(admin.ModelAdmin):
     list_display = ["name", "category"]

@@ -158,18 +158,19 @@ SAVE_PATH = (
 
 
 class VideoCategory(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, verbose_name='分类名称')
     type = models.CharField(max_length=128,
                             choices=TYPES,
-                            default='common'
+                            default='common',
+                            verbose_name='类型'
                             )
-    isSecret = models.BooleanField(default=False)
-    level = models.IntegerField(null=False, blank=False, default=1)
-    subset = models.ManyToManyField('self', blank=True)
+    isSecret = models.BooleanField(default=False, verbose_name='是否加密')
+    level = models.IntegerField(null=False, blank=False, default=1, choices=((1, '一级分类'), (2, '二级分类')), verbose_name='分类等级')
+    subset = models.ManyToManyField('self', blank=True, verbose_name='分类关系')
     # directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
 
     def __str__(self):
-        return self.name + str(f'(level {self.level})')
+        return self.name + str(f'  (level {self.level})')
 
     def save(self, *args, **kwargs):
         # print(self.directory)
@@ -191,6 +192,16 @@ class VideoCategory(models.Model):
     class Meta:
         # Edit Default Model Name for Human read
         verbose_name_plural = """Video Categorys"""
+
+    def colored_level(self):
+        color_code = 'red' if self.level == 1 else 'green'
+        return format_html(
+            '<span style="color:{};">{}</span>',
+            color_code,
+            self.get_level_display()
+        )
+
+    colored_level.short_description = '分级'
 
 
 # ---------------------------------------------------------------------

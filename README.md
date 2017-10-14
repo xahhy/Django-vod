@@ -181,3 +181,6 @@ redesign file field, use more robost 3rd party app and deeply custmize it.Happy 
 /       :   Home page
 /vod    :   Django-vod
 /replay :   Apache-tomcat:8080
+
+# VOD API Reference
+## Get All Categories
