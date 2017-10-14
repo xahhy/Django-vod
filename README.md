@@ -184,3 +184,32 @@ redesign file field, use more robost 3rd party app and deeply custmize it.Happy 
 
 # VOD API Reference
 ## Get All Categories
+*URL:* <ip>:<port>/api/category
+
+*Example Response:*
+```json
+{
+    "电影": [
+        {
+            "name": "动作片"
+        },
+        {
+            "name": "冒险片"
+        },
+        {
+            "name": "科幻片"
+        },
+        {
+            "name": "历史片"
+        }
+    ],
+    "电视剧": [
+        {
+            "name": "都市"
+        },
+        {
+            "name": "言情"
+        }
+    ]
+}
+```

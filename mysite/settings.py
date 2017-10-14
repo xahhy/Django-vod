@@ -252,6 +252,14 @@ FILER_STORAGES = {
 }
 ADMIN_RESUMABLE_CHUNKSIZE = 1024 * 1024 * 10
 ADMIN_RESUMABLE_STORAGE = 'vodmanagement.my_storage.VodStorage'
+
+# Memory Cache
+CACHES = {
+    'default':{
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 # FILE_UPLOAD_HANDLERS = (
 #     "progressbarupload.uploadhandler.ProgressBarUploadHandler",
 #     "django.core.files.uploadhandler.MemoryFileUploadHandler",

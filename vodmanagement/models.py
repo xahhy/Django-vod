@@ -43,7 +43,6 @@ for i in range(0,10):
 This script will copy 10 objs[0] in database
 """
 
-
 class UserPermission(models.Model):
     user = models.OneToOneField(User)
     permission = models.CharField(max_length=100, blank=True, null=True)
