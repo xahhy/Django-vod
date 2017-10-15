@@ -30,10 +30,11 @@ def direct(request):
     return HttpResponse(html)
 # get distinct years of the Vod ,result in a list
 # ['2014','20323',...]
-def get_years():
-    years_ = get_vod_year_list(Vod, "year")
+def get_years(category):
+    if category == '全部':category=None
+    _years = get_vod_field_list(Vod, 'year',category)
     years = []
-    for year in years_:
+    for year in _years:
         years.append(year[0])
     return years
 
@@ -105,7 +106,7 @@ def homepage(request):
         'pre_categorys': preview_categorys,
         'categorys': categorys(),
         'user': user.username,
-        'years': get_years(),
+        'years': get_years(None),
     }
     return render(request, 'vodmanagement/home.html', content)
 

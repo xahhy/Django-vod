@@ -13,28 +13,28 @@ from django.utils.translation import ugettext_lazy
 
 
 class VodForm(forms.ModelForm):
-    """docstring for VodForm"""
+    '''docstring for VodForm'''
 
     def __init__(self, *args, **kwargs):
         super(VodForm, self).__init__(*args, **kwargs)
         if (self.instance.image.name is '' or self.instance.image.name is None) \
                 and (self.instance.video.name is '' or self.instance.video.name is None):
-            print("save path is empty")
-            self.fields["save_path"] = forms.ChoiceField(choices=save_path_choices())
+            print('save path is empty')
+            self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
         else:
-            print("save path is:", self.instance.save_path)
-            self.fields["save_path"] = forms.ChoiceField(choices=get_save_path_choice(self.instance.save_path))
-            # self.fields['save_path'].widget.attrs['disabled="disabled"'] = True
-        for instance in self.fields["category"].queryset:
+            print('save path is:', self.instance.save_path)
+            self.fields['save_path'] = forms.ChoiceField(choices=get_save_path_choice(self.instance.save_path))
+            # self.fields['save_path'].widget.attrs['disabled='disabled''] = True
+        for instance in self.fields['category'].queryset:
             create_category_path(name=instance.name)
 
     def clean_title(self):
-        print("vod form clean")
+        print('vod form clean')
         data = self.cleaned_data['title']
         return data
 
     def clean(self):
-        print("vod form clean all")
+        print('vod form clean all')
         return super(VodForm, self).clean()
 
     # def save(self, commit=True):
@@ -61,18 +61,18 @@ class VodForm(forms.ModelForm):
 
 @admin.register(Vod)
 class VodModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "image_tag", "category", "file_size", "duration", "definition", "year",
-                    "view_count", "timestamp", 'colored_active']  # image_tag
-    list_display_links = ["image_tag", "timestamp"]  # image_tag
-    list_editable = ["category", 'title', "definition", "year"]
-    list_filter = ["year", "category"]
+    list_display = ['title', 'image_tag', 'category', 'file_size', 'duration', 'definition', 'year', 'region',
+                    'view_count', 'timestamp', 'colored_active']  # image_tag
+    list_display_links = ['image_tag', 'timestamp']  # image_tag
+    list_editable = ['category', 'title', 'definition', 'year']
+    list_filter = ['year', 'category']
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
-    search_fields = ["title", "description", "search_word"]
-    actions = ["delete_hard", "copy_objects", "clear_view_count", 'activate_vod', 'deactivate_vod']
+    search_fields = ['title', 'description', 'search_word']
+    actions = ['delete_hard', 'copy_objects', 'clear_view_count', 'activate_vod', 'deactivate_vod']
     form = VodForm
     fieldsets = [
-        ('Description', {'fields': ['category', 'save_path', 'year', 'description', 'active']}),
+        ('Description', {'fields': ['category', 'save_path', 'year', 'region', 'description', 'active']}),
         ('Files', {'fields': ['image', ('local_video', 'video'), 'title']}),
         ('Advanced', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})
     ]
@@ -112,7 +112,7 @@ class VodModelAdmin(admin.ModelAdmin):
                 pass
             obj.delete()
 
-    delete_hard.short_description = "Delete  object from disk"
+    delete_hard.short_description = 'Delete  object from disk'
 
     def copy_objects(self, request, queryset):
         for obj in queryset:
@@ -122,14 +122,14 @@ class VodModelAdmin(admin.ModelAdmin):
                 # new_obj.slug = create_slug(new_obj)
                 new_obj.slug = uuslug(new_obj.title, instance=new_obj)
                 new_obj.save()
-        self.message_user(request, "%s item successfully copyed." % queryset.count()
+        self.message_user(request, '%s item successfully copyed.' % queryset.count()
                           , messages.SUCCESS)
 
     def activate_vod(self, request, queryset):
         for item in queryset:
             item.active = 1
             item.save()
-        self.message_user(request, "%s个节目成功激活." % queryset.count()
+        self.message_user(request, '%s个节目成功激活.' % queryset.count()
                           , messages.SUCCESS)
     activate_vod.short_description = '激活节目列表'
 
@@ -137,18 +137,18 @@ class VodModelAdmin(admin.ModelAdmin):
         for item in queryset:
             item.active = 0
             item.save()
-        self.message_user(request, "%s个节目成功取消激活." % queryset.count()
+        self.message_user(request, '%s个节目成功取消激活.' % queryset.count()
                           , messages.SUCCESS)
     deactivate_vod.short_description = '取消激活节目'
 
     def clear_view_count(self, request, queryset):
         queryset.update(view_count=0)
-        self.message_user(request, "%s item successfully cleared view count." % queryset.count()
+        self.message_user(request, '%s item successfully cleared view count.' % queryset.count()
                           , messages.SUCCESS)
 
     class Media:
         pass
-        # js = ("http://code.jquery.com/jquery.min.js",)
+        # js = ('http://code.jquery.com/jquery.min.js',)
         # class Meta:
         # model = Vod
 
@@ -165,8 +165,8 @@ class MyAdminForm(forms.ModelForm):
 @admin.register(VideoCategory)
 class VideoCategoryModelAdmin(admin.ModelAdmin):
     list_display = ['category_description', 'colored_level', 'type', 'isSecret']
-    list_editable = ["isSecret"]
-    search_fields = ["name"]
+    list_editable = ['isSecret']
+    search_fields = ['name']
     filter_horizontal = ['subset']
     ordering = ['level']
     form = MyAdminForm
@@ -181,16 +181,16 @@ class VideoCategoryModelAdmin(admin.ModelAdmin):
     category_description.short_description = '分类名称'
 
 class LinkModelAdmin(admin.ModelAdmin):
-    list_display = ["name", "category"]
-    list_editable = ["category"]
+    list_display = ['name', 'category']
+    list_editable = ['category']
 
 
 class MultipleUploadForm(forms.ModelForm):
-    """docstring for VodForm"""
+    '''docstring for VodForm'''
 
     def __init__(self, *args, **kwargs):
         super(MultipleUploadForm, self).__init__(*args, **kwargs)
-        self.fields["save_path"] = forms.ChoiceField(choices=save_path_choices())
+        self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
 
     class Meta:
         model = MultipleUpload
@@ -214,7 +214,7 @@ class VodListModelAdmin(admin.ModelAdmin):
         for item in queryset:
             item.active = 1
             item.save()
-        self.message_user(request, "%s个节目列表成功激活." % queryset.count()
+        self.message_user(request, '%s个节目列表成功激活.' % queryset.count()
                           , messages.SUCCESS)
     activate_vod_list.short_description = '激活节目列表'
 
@@ -222,7 +222,7 @@ class VodListModelAdmin(admin.ModelAdmin):
         for item in queryset:
             item.active = 0
             item.save()
-        self.message_user(request, "%s个节目列表成功取消激活." % queryset.count()
+        self.message_user(request, '%s个节目列表成功取消激活.' % queryset.count()
                           , messages.SUCCESS)
     deactivate_vod_list.short_description = '取消激活节目列表'
 
@@ -232,3 +232,5 @@ class VideoTagModelAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(FileDirectory)
+admin.site.register(VideoRegion)
+

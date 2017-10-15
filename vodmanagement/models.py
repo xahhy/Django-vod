@@ -155,6 +155,12 @@ SAVE_PATH = (
     ('', settings.LOCAL_MEDIA_ROOT),
 )
 
+class VideoRegion(models.Model):
+    name = models.CharField(max_length=200, verbose_name='地区', unique=True)
+
+    def __str__(self):
+        return self.name
+
 
 class VideoCategory(models.Model):
     name = models.CharField(max_length=128, verbose_name='分类名称')
@@ -254,35 +260,36 @@ class VodList(models.Model):
 # ---------------------------------------------------------------------
 
 class Vod(models.Model):
-    title = models.CharField(max_length=120)
+    title = models.CharField(max_length=120, verbose_name='标题')
     # image = models.ImageField(upload_to=upload_image_location, null=True, blank=True)
     # video = models.FileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
-    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage())
-    video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000)
-    duration = models.CharField(max_length=50, blank=True, null=True)
+    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
+    video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000, verbose_name='视频')
+    duration = models.CharField(max_length=50, blank=True, null=True, verbose_name='时长')
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT, blank=True, recursive=True)
-    definition = models.CharField(max_length=10, choices=VIDEO_QUALITY, blank=False, default='H')
+    definition = models.CharField(max_length=10, choices=VIDEO_QUALITY, blank=False, default='H', verbose_name='清晰度')
     # image = FilerImageField(null=True, blank=True,
     #                         related_name="image_name")
     # video = FilerFileField(null=True, blank=True, related_name="video_name")
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
-    category = models.ForeignKey(VideoCategory, null=True)
+    category = models.ForeignKey(VideoCategory, null=True, verbose_name='分类')
     save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
     year = models.CharField(max_length=10, blank=False, null=True,
-                            default=datetime.datetime.now().year)
+                            default=datetime.datetime.now().year, verbose_name='年份')
+    region = models.ForeignKey(VideoRegion,to_field='name', null=True,blank=True, on_delete=models.SET_NULL, verbose_name='地区')
     # type can be LINK or VOD
     # type = models.CharField(max_length=128,
     #                         choices=(('link','LINK'),('vod','VOD'),),
     #                         default='link')
-    file_size = models.CharField(max_length=128, default='0B', editable=False)
-    view_count = models.IntegerField(default=0)
+    file_size = models.CharField(max_length=128, default='0B', editable=False, verbose_name='文件大小')
+    view_count = models.IntegerField(default=0, verbose_name='观看次数')
     view_count_temp = 0
     creator = models.ForeignKey(User, null=True, blank=False, editable=False)
 
     description = models.TextField(blank=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
-    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True)  # The first time added
+    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='创建时间')  # The first time added
     slug = models.SlugField(unique=True, blank=True)
     search_word = models.CharField(max_length=10000, null=True, blank=True)
     # tags = models.ManyToManyField(VideoTag, blank=True)
@@ -304,7 +311,7 @@ class Vod(models.Model):
 
         if self.local_video != '' and self.local_video is not None:
             basename = Path(self.local_video).relative_to(Path(settings.LOCAL_MEDIA_ROOT))
-            self.video.name = Path(settings.LOCAL_MEDIA_URL)/basename
+            self.video.name = str(Path(settings.LOCAL_MEDIA_URL)/basename)
             print("save local_video to filefield done")
 
         super(Vod, self).save(*args, **kwargs)
@@ -314,7 +321,7 @@ class Vod(models.Model):
 
             #  Make sure the self.video.name is not in the LOCAL_FOLDER
             if not self.video.name.startswith(settings.LOCAL_FOLDER_NAME):
-                self.video.name = Path(self.save_path)/rel_name
+                self.video.name = str(Path(self.save_path)/rel_name)
             print("save_path:", self.save_path)
             print(self.video.name)
             print('size:', self.video.file.size)
@@ -350,7 +357,7 @@ class Vod(models.Model):
             else:
                 return mark_safe('<img src="#" width="150" height="200" />')
 
-    image_tag.short_description = 'Image'
+    image_tag.short_description = '缩略图'
 
     def get_absolute_url(self):
         # print("get absolute url:",self.slug)

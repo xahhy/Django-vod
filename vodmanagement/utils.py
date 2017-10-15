@@ -90,8 +90,8 @@ def time_formate(seconds):
     return time
 
 
-def get_vod_year_list(model, field):
-    queryset = model.objects.values_list(field).distinct().order_by(field)
+def get_vod_field_list(model, field, category):
+    queryset = model.objects.filter(category__subset__name=category).values_list(field).distinct().order_by(field)
     # for item in queryset:
     # print(item[0])
     return queryset

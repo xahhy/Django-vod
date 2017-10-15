@@ -19,7 +19,6 @@ from rest_framework.generics import (
 )
 from rest_framework.pagination import PageNumberPagination
 
-
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
@@ -87,7 +86,7 @@ def gen_categories():
     categories = {}
     for level_1 in VideoCategory.objects.filter(level=1):
         children = level_1.subset.all()
-        categories[level_1.name] = CategoryListSerializer(children, many=True).data
+        categories[level_1.name]=CategoryListSerializer(children, many=True).data
     return categories
 
 
@@ -102,17 +101,36 @@ class CategoryListAPIView(APIView):
     def get(self, request, format=None):
         return Response(gen_categories())
 
+
+# class YearListAPIView(APIView):
+#     """
+#     YearListAPIView doc
+#     """
+#     permission_classes = [AllowAny]
+#     def get(self, request, format=None):
+#         """
+#         Return a list of all years associate with 'Category'.
+#         """
+#         category = request.query_params.get('category')
+#         years = get_years(category)
+#         return Response(years)
 class YearListAPIView(APIView):
-    """
-    YearListAPIView doc
-    """
     permission_classes = [AllowAny]
-    def get(self, request, format=None):
-        """
-        Return a list of all users.
-        """
-        years = get_years()
-        return Response(years)
+
+    def get(self, *args, **kwargs):
+        category = self.request.query_params.get('category')
+        if category is None:
+            return Response('Error. The category parameter should be one of the level-1 categories', 500)
+        year_list = get_years(category)
+        return Response(year_list)
+
+
+class RegionListAPIView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RegionListSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return VideoRegion.objects.all()
 
 
 class HomeListAPIView(APIView):

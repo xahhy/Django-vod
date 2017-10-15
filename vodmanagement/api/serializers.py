@@ -67,10 +67,16 @@ class VodDetailSerializer(ModelSerializer):
 
 # Category Serializers
 class CategoryListSerializer(ModelSerializer):
-
     class Meta:
         model = VideoCategory
         fields = ['name']
+
+
+class RegionListSerializer(ModelSerializer):
+    class Meta:
+        model = VideoRegion
+        fields = ['name']
+
 
 # class HomeListSerializer(Serializer):
 #     videos = VodListSerializer()

@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 import datetime
 
-import corsheaders.middleware
 import os
 
 from django.conf import settings
@@ -30,13 +29,12 @@ SECRET_KEY = '%ur^wgur*+1c$kxk_(bkqonaebu3&f#a7v+g7j)65k=6%z*itz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# import corsheaders.middleware
 
 ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = False
-CORS_ALLOW_HEADERS = corsheaders.defaults.default_headers + (
-    'x-ijt',
-)
+
 # my settings
 THUMBNAIL_HIGH_RESOLUTION = True
 THUMBNAIL_PROCESSORS = (
