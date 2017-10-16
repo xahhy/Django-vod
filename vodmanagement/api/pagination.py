@@ -4,6 +4,9 @@ from rest_framework.pagination import *
 # PageNumberPagination,
 # )
 from vodmanagement.pagination import *
+from wrapcache import wrapcache
+
+from vodmanagement.utils import func_time
 
 
 class VodLimitOffsetPagination(LimitOffsetPagination):
@@ -14,6 +17,7 @@ class VodLimitOffsetPagination(LimitOffsetPagination):
 class VodPageNumberPagination(PageNumberPagination):
     page_size = 12
 
+    @func_time
     def get_paginated_response(self, data):
         year = self.request.query_params.get('year')
         return Response(OrderedDict([
@@ -27,11 +31,13 @@ class VodPageNumberPagination(PageNumberPagination):
             ('results', data)
         ]))
 
+    @func_time
     def paginate_queryset(self, queryset, request, view=None):
         """
         Paginate a queryset if required, either returning a
         page object, or `None` if pagination is not configured for this view.
         """
+
         page_size = self.get_page_size(request)
         if not page_size:
             return None

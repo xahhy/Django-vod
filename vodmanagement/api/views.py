@@ -33,6 +33,11 @@ from .pagination import *
 from .permissions import *
 
 
+@wrapcache(10 * 60)
+def get_all_videos():
+    return Vod.objects.all()
+
+
 class VodListAPIView(ListAPIView):
     """
     VodListAPIView doc
@@ -43,10 +48,19 @@ class VodListAPIView(ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         # queryset_list = super(PostListAPIView, self).get_queryset(*args, **kwargs)
-        queryset_list = Vod.objects.all()  # filter(user=self.request.user)
-        category = self.request.GET.get("category")
+        queryset_list = get_all_videos()
+        category = self.request.GET.get('category')
         if category:
             queryset_list = queryset_list.filter(category__name=category)
+
+        year = self.request.query_params.get('year')
+        if year:
+            queryset_list = queryset_list.filter(year=year)
+
+        region = self.request.query_params.get('region')
+        if region:
+            queryset_list = queryset_list.filter(region__name=region)
+
         # query = self.request.GET.get("q")
         # if query:
         #     queryset_list = queryset_list.filter(
@@ -86,7 +100,7 @@ def gen_categories():
     categories = {}
     for level_1 in VideoCategory.objects.filter(level=1):
         children = level_1.subset.all()
-        categories[level_1.name]=CategoryListSerializer(children, many=True).data
+        categories[level_1.name] = CategoryListSerializer(children, many=True).data
     return categories
 
 

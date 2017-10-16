@@ -1,6 +1,7 @@
 import os
 import re
 
+import time
 from django.conf import settings
 import humanfriendly
 # from vodmanagement.models import Vod
@@ -91,7 +92,10 @@ def time_formate(seconds):
 
 
 def get_vod_field_list(model, field, category):
-    queryset = model.objects.filter(category__subset__name=category).values_list(field).distinct().order_by(field)
+    if category:
+        queryset = model.objects.filter(category__subset__name=category).values_list(field).distinct().order_by(field)
+    else:
+        queryset = model.objects.values_list(field).distinct().order_by(field)
     # for item in queryset:
     # print(item[0])
     return queryset
@@ -106,3 +110,12 @@ def delete_hard(file_path):
             if re.match(re.escape(basename)+ '*', file):
                 print("matched file:", file)
                 os.remove(os.path.join(dir, file))
+
+def func_time(func):
+    def run_time(*args, **kwargs):
+        start=time.clock()#time.clock()第一次调用的时候返回的是程序运行的实际时间
+        ret = func(*args, **kwargs)
+        stop=time.clock()#time.clock()第二次调用的时候返回的是第一次调用后，到这次调用的时间间隔
+        print(func, 'run_time:',(stop-start))
+        return ret
+    return run_time
