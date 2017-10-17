@@ -33,9 +33,23 @@ from .pagination import *
 from .permissions import *
 
 
-@wrapcache(10 * 60)
-def get_all_videos():
+# @wrapcache(10 * 60)
+def get_all_videos(main_category):
+    if main_category:
+        return Vod.objects.filter(category__subset__name=main_category)
     return Vod.objects.all()
+
+
+@wrapcache(10 * 60)
+def get_filter_videos(query_set, category=None, year=None, region=None):
+    if category:query_set = query_set.filter(category__name=category)
+    if year:query_set = query_set.filter(year=year)
+    if region:query_set = query_set.filter(region__name=region)
+    return query_set
+
+
+def checked_query_param(param:str):
+    return param if (param != '全部' and param != '') else None
 
 
 class VodListAPIView(ListAPIView):
@@ -48,19 +62,12 @@ class VodListAPIView(ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         # queryset_list = super(PostListAPIView, self).get_queryset(*args, **kwargs)
-        queryset_list = get_all_videos()
-        category = self.request.GET.get('category')
-        if category:
-            queryset_list = queryset_list.filter(category__name=category)
-
-        year = self.request.query_params.get('year')
-        if year:
-            queryset_list = queryset_list.filter(year=year)
-
-        region = self.request.query_params.get('region')
-        if region:
-            queryset_list = queryset_list.filter(region__name=region)
-
+        main_category = self.request.query_params.get('main_category')
+        queryset_list = get_all_videos(main_category)
+        category = checked_query_param(self.request.query_params.get('category'))
+        year = checked_query_param(self.request.query_params.get('year'))
+        region = checked_query_param(self.request.query_params.get('region'))
+        queryset_list = get_filter_videos(queryset_list, category=category, year=year, region=region)
         # query = self.request.GET.get("q")
         # if query:
         #     queryset_list = queryset_list.filter(
@@ -70,15 +77,11 @@ class VodListAPIView(ListAPIView):
         #             Q(user__last_name__icontains=query)
         #             ).distinct()
         search = self.request.GET.get("search")
-        if search:
+        if search is not None and search != '':
             queryset_list = queryset_list.filter(
                 Q(title__icontains=search) |
                 Q(description__icontains=search)
             )
-        # search year
-        year = self.request.GET.get('year')
-        if year is not None and year != "":
-            queryset_list = queryset_list.filter(year=year)
 
         return queryset_list
 
@@ -88,10 +91,14 @@ class VodDetailAPIView(RetrieveAPIView):
     VodDetailAPIView doc
 
     """
-    queryset = Vod.objects.all()
+    # queryset = Vod.objects.all()
     lookup_field = "id"
     serializer_class = VodDetailSerializer
     permission_classes = [HasPermission]
+
+    def get_queryset(self, *args, **kwargs):
+        query_set =  Vod.objects.filter(active=1)
+        return query_set
 
 
 @wrapcache(1)

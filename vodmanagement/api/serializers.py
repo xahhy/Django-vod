@@ -37,6 +37,16 @@ class VodListSerializer(ModelSerializer):
         return thumb_url
 
 
+class VodDetailSubSetSerializer(ModelSerializer):
+    class Meta:
+        model = Vod
+        fields = [
+            'title',
+            'description',
+            'video'
+        ]
+
+
 class VodDetailSerializer(ModelSerializer):
     """
     VodDetailSerializer doc
@@ -49,7 +59,8 @@ class VodDetailSerializer(ModelSerializer):
         read_only=True,
         slug_field='name'
     )
-
+    # video_list = serializers.SerializerMethodField()
+    video_list = VodDetailSubSetSerializer(many=True)
     class Meta:
         model = Vod
         fields = [
@@ -59,6 +70,7 @@ class VodDetailSerializer(ModelSerializer):
             'category',
             'description',
             'definition',
+            'video_list'
         ]
 
     def get_category(self, obj):

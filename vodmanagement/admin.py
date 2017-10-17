@@ -66,15 +66,17 @@ class VodModelAdmin(admin.ModelAdmin):
     list_display_links = ['image_tag', 'timestamp']  # image_tag
     list_editable = ['category', 'title', 'definition', 'year']
     list_filter = ['year', 'category']
+    filter_horizontal = ['video_list']
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
     search_fields = ['title', 'description', 'search_word']
     actions = ['delete_hard', 'copy_objects', 'clear_view_count', 'activate_vod', 'deactivate_vod']
     form = VodForm
     fieldsets = [
-        ('Description', {'fields': ['category', 'save_path', 'year', 'region', 'description', 'active']}),
-        ('Files', {'fields': ['image', ('local_video', 'video'), 'title']}),
-        ('Advanced', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})
+        ('描述', {'fields': ['category', 'save_path', 'year', 'region', 'description', 'active']}),
+        ('文件', {'fields': ['image', ('local_video', 'video'), 'title']}),
+        ('视频列表',{'fields': ['video_list']}),
+        ('高级', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})
     ]
 
     change_form_template = 'vodmanagement/change_form.html'

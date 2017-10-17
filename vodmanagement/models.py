@@ -240,6 +240,7 @@ class VideoTag(models.Model):
 # ---------------------------------------------------------------------
 class VodList(models.Model):
     title = models.CharField(max_length=120)
+    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
     description = models.TextField(blank=True)
     category = models.ForeignKey(VideoCategory, null=True)
     vod_list = models.ManyToManyField('Vod')

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.views.decorators.cache import cache_page
 
 from .views import *
-cache_time = 5 * 60
+cache_time = 1
 urlpatterns = [
     url(r'^$', cache_page(cache_time)(VodListAPIView.as_view()), name='list'),
     url(r'^home/$', cache_page(cache_time)(HomeListAPIView.as_view()), name='home'),
