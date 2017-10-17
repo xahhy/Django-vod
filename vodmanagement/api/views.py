@@ -35,9 +35,10 @@ from .permissions import *
 
 # @wrapcache(10 * 60)
 def get_all_videos(main_category):
+    query_set = Vod.objects.filter(active=1)
     if main_category:
-        return Vod.objects.filter(category__subset__name=main_category)
-    return Vod.objects.all()
+        return query_set.filter(category__subset__name=main_category)
+    return query_set
 
 
 @wrapcache(10 * 60)
