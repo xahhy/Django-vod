@@ -33,7 +33,10 @@ class VodListSerializer(ModelSerializer):
         return str(obj.category)
 
     def get_image(self, obj):
-        thumb_url = get_thumbnailer(obj.image)['avatar'].url
+        try:
+            thumb_url = get_thumbnailer(obj.image)['avatar'].url
+        except:
+            thumb_url = 'Error'
         return thumb_url
 
 
@@ -89,7 +92,60 @@ class RegionListSerializer(ModelSerializer):
         model = VideoRegion
         fields = ['name']
 
+"""
+Backup Serializers
+"""
+class VideoBackupSubsetSerializer(ModelSerializer):
+    category1 = serializers.SerializerMethodField()
+    category2 = serializers.SerializerMethodField()
+    class Meta:
+        model = Vod
+        fields = [
+            'title',
+            'image',
+            'video',
+            'definition',
+            'save_path',
+            'year',
+            'description',
+            'category1',
+            'category2',
+            'region'
+        ]
 
+    def get_category1(self, obj):
+        level_1 = VideoCategory.objects.filter(subset__name=obj.category.name)
+        return level_1.first().name
+
+    def get_category2(self, obj):
+        return obj.category.name
+
+class VideoBackupSerializer(ModelSerializer):
+    video_list = VideoBackupSubsetSerializer(many=True)
+    category1 = serializers.SerializerMethodField()
+    category2 = serializers.SerializerMethodField()
+    class Meta:
+        model = Vod
+        fields = [
+            'title',
+            'image',
+            'video',
+            'definition',
+            'save_path',
+            'year',
+            'description',
+            'category1',
+            'category2',
+            'region',
+            'video_list'
+        ]
+
+    def get_category1(self, obj):
+        level_1 = VideoCategory.objects.filter(subset__name=obj.category.name)
+        return level_1.first().name
+
+    def get_category2(self, obj):
+        return obj.category.name
 # class HomeListSerializer(Serializer):
 #     videos = VodListSerializer()
 #     category = CategoryListSerializer()

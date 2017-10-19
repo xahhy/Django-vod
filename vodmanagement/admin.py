@@ -1,5 +1,9 @@
 from django.contrib import admin
 # Register your models here.
+from django.http import HttpResponse
+from rest_framework.renderers import JSONRenderer
+
+from vodmanagement.api.serializers import *
 from .models import *
 from django import forms
 from django.contrib import messages
@@ -70,7 +74,7 @@ class VodModelAdmin(admin.ModelAdmin):
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
     search_fields = ['title', 'description', 'search_word']
-    actions = ['delete_hard', 'copy_objects', 'clear_view_count', 'activate_vod', 'deactivate_vod']
+    actions = ['delete_hard', 'copy_objects', 'clear_view_count', 'activate_vod', 'deactivate_vod', 'backup']
     form = VodForm
     fieldsets = [
         ('描述', {'fields': ['category', 'save_path', 'year', 'region', 'description', 'active']}),
@@ -147,6 +151,13 @@ class VodModelAdmin(admin.ModelAdmin):
         queryset.update(view_count=0)
         self.message_user(request, '%s item successfully cleared view count.' % queryset.count()
                           , messages.SUCCESS)
+
+    def backup(self, request, queryset):
+        response = HttpResponse(content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename=backup.txt'
+        result = VideoBackupSerializer(queryset, many=True)  # you can import json to return any field
+        response.write(JSONRenderer().render(result.data))
+        return response
 
     class Media:
         pass
@@ -231,6 +242,10 @@ class VodListModelAdmin(admin.ModelAdmin):
 
 @admin.register(VideoTag)
 class VideoTagModelAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Backup)
+class BackupModelAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(FileDirectory)

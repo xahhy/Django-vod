@@ -1,3 +1,5 @@
+import json
+
 import six
 from django.db import models
 from django.utils import timezone
@@ -258,6 +260,16 @@ class VodList(models.Model):
 
     def __str__(self):
         return self.title
+# ---------------------------------------------------------------------
+class Backup(models.Model):
+    file = models.FileField(verbose_name='备份配置文件')
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        config = self.file.read()
+        config_json = json.loads(config)
+        return super(Backup, self).save()
+
 # ---------------------------------------------------------------------
 
 class Vod(models.Model):
