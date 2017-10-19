@@ -33,7 +33,8 @@ urlpatterns = [
     # url(r'^polls/',include('polls.urls')),
     # url(r'^tools/',include('tools.urls')),
     url(r'^api/auth/token/', obtain_jwt_token),
-    url(r'^api/', include("vodmanagement.api.urls", namespace='vod-api')),
+    url(r'^tv/api/', include("epg.api.urls", namespace='tv-api')),
+    url(r'^vod/api/', include("vodmanagement.api.urls", namespace='vod-api')),
     url(r'', include('vodmanagement.urls', namespace='vod')),
     # url(r'^progressbarupload/', include('progressbarupload.urls')),
 

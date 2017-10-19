@@ -71,6 +71,9 @@ INSTALLED_APPS = [
     'vodmanagement.apps.VodConfig',
     'epg.apps.EpgConfig',
     'rest_framework',
+
+    # Scheduler App
+    'django_celery_beat',
     # 'rest_framework_docs',
     # 'drf_autodocs'
     # 'rest_framework_swagger',

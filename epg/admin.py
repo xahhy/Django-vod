@@ -4,6 +4,7 @@ from django import forms
 
 from .models import *
 
+
 # Custom Form
 
 class CategoryForm(forms.ModelForm):
@@ -25,6 +26,7 @@ class ChannelModelAdmin(admin.ModelAdmin):
     list_editable = ['channel_name', 'rtmp_url']
     search_fields = ['channel_id', 'channel_name']
 
+
 @admin.register(Program)
 class ProgramModelAdmin(admin.ModelAdmin):
     """
@@ -35,14 +37,25 @@ class ProgramModelAdmin(admin.ModelAdmin):
     list_filter = ['finished', 'channel']
     search_fields = ['channel', 'title', 'start_time']
 
-    actions = ["chnage_for_record"]
+    actions = ['record', 'unrecord']
 
-    def chnage_for_record(self, request, queryset):
+    def record(self, request, queryset):
         for obj in queryset:
             obj.is_record = 1
             obj.save()
-        self.message_user(request, "%s item successfully added to record." % queryset.count()
+        self.message_user(request, '%s 个节目被成功转成点播' % queryset.count()
                           , messages.SUCCESS)
+
+    record.short_description = '转为点播'
+
+    def unrecord(self, request, queryset):
+        for obj in queryset:
+            obj.is_record = 0
+            obj.save()
+        self.message_user(request, '%s 个节目被成功取消点播' % queryset.count()
+                          , messages.SUCCESS)
+
+    unrecord.short_description = '取消点播'
 
 
 @admin.register(Category)
@@ -50,8 +63,6 @@ class CategoryModelAdmin(admin.ModelAdmin):
     filter_horizontal = ['records']
     # inlines = [RecordInLine]
     form = CategoryForm
-
-
 
 # admin.site.register(Channel, ChannelModelAdmin)
 # admin.site.register(Program, ProgramModelAdmin)

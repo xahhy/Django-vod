@@ -24,15 +24,18 @@ from django.db.models import F
 from django.contrib.auth.decorators import login_required
 from .pagination import CustomPaginator
 
+
 def direct(request):
-    path = settings.STATIC_ROOT+"\\art.html"
-    html = open(path,encoding='utf-8').read()
+    path = settings.STATIC_ROOT + "\\art.html"
+    html = open(path, encoding='utf-8').read()
     return HttpResponse(html)
+
+
 # get distinct years of the Vod ,result in a list
 # ['2014','20323',...]
 def get_years(category):
-    if category == '全部':category=None
-    _years = get_vod_field_list(Vod, 'year',category)
+    category = None if category == '全部' or category == '' else category
+    _years = get_vod_field_list(Vod, 'year', category)
     years = []
     for year in _years:
         years.append(year[0])
@@ -171,9 +174,9 @@ def listing(request, slug=None):
 
     cur_page = request.GET.get('page')
     if cur_page:
-        print("cur_page:",cur_page)
+        print("cur_page:", cur_page)
     else:
-        print("cur_page:",cur_page)
+        print("cur_page:", cur_page)
         cur_page = 1
     video_page = CustomPaginator(cur_page, 5, video_list, 12)
     # print('total pages:'+str(video_page.count))
@@ -193,7 +196,7 @@ def listing(request, slug=None):
         'categorys': categorys(),
         'title': title,
         'title_url': title_url,
-        'years': get_years(),
+        'years': get_years(None),
         'cur_year': year,
     }
     return render(request, 'vodmanagement/list.html', content)
@@ -229,7 +232,7 @@ def vod_detail(request, slug=None):
     context = {
         "video": instance.first(),
         'categorys': categorys(),
-        'years': get_years(),
+        'years': get_years(None),
 
     }
     return render(request, 'vodmanagement/detail.html', context)

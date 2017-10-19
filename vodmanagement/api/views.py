@@ -140,10 +140,10 @@ class YearListAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, *args, **kwargs):
-        category = self.request.query_params.get('category')
-        if category is None:
-            return Response('Error. The category parameter should be one of the level-1 categories', 500)
-        year_list = get_years(category)
+        main_category = self.request.query_params.get('category')
+        if main_category is None:
+            Response('Error, the year list request must contain 1 first level category parameter.')
+        year_list = get_years(main_category)
         return Response(year_list)
 
 

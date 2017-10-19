@@ -56,11 +56,15 @@ class Program(models.Model):
 #     def __str__(self):
 #         return ':'.join([str(self.channel), self.title])
 
+
+
+
 class Category(models.Model):
     name = models.CharField(max_length=200, blank=False, null=True, default='录制节目')
     description = models.TextField(max_length=2000, blank=True, null=True, default='这里填写该节目集合的介绍')
     # records      = models.ManyToManyField('Record', through=Record.category.through, related_name='+',blank=True)
     records = models.ManyToManyField('Program', blank=True)
+
 
     def __str__(self):
         return self.name
