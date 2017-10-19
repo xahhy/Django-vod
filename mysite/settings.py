@@ -263,6 +263,10 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+# Scheduler App
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+
 # FILE_UPLOAD_HANDLERS = (
 #     "progressbarupload.uploadhandler.ProgressBarUploadHandler",
 #     "django.core.files.uploadhandler.MemoryFileUploadHandler",
