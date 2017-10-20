@@ -287,34 +287,60 @@ class Restore(models.Model):
                 if not category2_obj:
                     category2_obj= VideoCategory(name=category2, level=2).save()
                     category1_obj.subset.add(category2_obj)
-
+                # Create region if not exist.
                 region = video.get('region')
                 assert region is not None
                 region_obj = VideoRegion.objects.filter(name=region).first()
                 if not region_obj:
                     region_obj = VideoRegion(name=region).save()
-
+                # Create Vod instance.
                 new_video = Vod(title=video.get('title'),
                                 image=video.get('image'),
                                 video=video.get('video'),
+                                save_path=video.get('save_path'),
                                 definition=video.get('definition'),
                                 year=video.get('year'),
                                 description=video.get('description'),
                                 category=category2_obj,
                                 region=region_obj,
-                                ).save(without_valid=True)
+                                )
+                new_video.save(without_valid=True)
                 video_list = video.get('video_list')
                 if video_list:
                     for sub_video in video_list:
-                        print(sub_video.get('title'))
-                        print(sub_video.get('image'))
-                        print(sub_video.get('video'))
-                        print(sub_video.get('definition'))
-                        print(sub_video.get('year'))
-                        print(sub_video.get('description'))
-                        print(sub_video.get('category1'))
-                        print(sub_video.get('category2'))
-                        print(sub_video.get('region'))
+                        # Create categories if not exist.
+                        category1 = sub_video.get('category1')
+                        assert category1 is not None
+                        category1_obj = VideoCategory.objects.filter(name=category1, level=1).first()
+                        if not category1_obj:
+                            category1_obj = VideoCategory(name=category1, level=1).save()
+
+                        category2 = sub_video.get('category2')
+                        assert category2 is not None
+                        category2_obj = VideoCategory.objects.filter(name=category2, level=2).first()
+                        if not category2_obj:
+                            category2_obj = VideoCategory(name=category2, level=2).save()
+                            category1_obj.subset.add(category2_obj)
+                        # Create region if not exist.
+                        region = sub_video.get('region')
+                        assert region is not None
+                        region_obj = VideoRegion.objects.filter(name=region).first()
+                        if not region_obj:
+                            region_obj = VideoRegion(name=region).save()
+                        # Create Vod instance.
+                        new_sub_video = Vod(title=sub_video.get('title'),
+                                        image=sub_video.get('image'),
+                                        video=sub_video.get('video'),
+                                        save_path=sub_video.get('save_path'),
+                                        definition=sub_video.get('definition'),
+                                        year=sub_video.get('year'),
+                                        description=sub_video.get('description'),
+                                        category=category2_obj,
+                                        region=region_obj,
+                                        )
+                        new_sub_video.save(without_valid=True)
+                        new_video.video_list.add(new_sub_video)
+                        new_video.save(without_valid=True)
         except Exception as e:
             print('解析备份配置文件失败',e)
 
@@ -378,24 +404,28 @@ class Vod(models.Model):
             print("save local_video to filefield done")
 
         if without_valid:
-            return super(Vod, self).save(*args, **kwargs)
+            ret = super(Vod, self).save(*args, **kwargs)
+            return ret
         super(Vod, self).save(*args, **kwargs)
-        if self.video != None and self.video != '':
-            basename = Path(self.video.name).name  # Djan%20go.mp4
-            rel_name = uri_to_iri(basename)  # Djan go.mp4
+        try:
+            if self.video != None and self.video != '':
+                basename = Path(self.video.name).name  # Djan%20go.mp4
+                rel_name = uri_to_iri(basename)  # Djan go.mp4
 
-            #  Make sure the self.video.name is not in the LOCAL_FOLDER
-            if not self.video.name.startswith(settings.LOCAL_FOLDER_NAME):
-                self.video.name = str(Path(self.save_path)/rel_name)
-            print("save_path:", self.save_path)
-            print(self.video.name)
-            print('size:', self.video.file.size)
-            self.file_size = humanfriendly.format_size(self.video.file.size)
-            # duration = VideoFileClip(self.video.path).duration
-            # self.duration = time_formate(duration)
-            # print(self.duration)
-        else:
-            print("video file is None")
+                #  Make sure the self.video.name is not in the LOCAL_FOLDER
+                if not self.video.name.startswith(settings.LOCAL_FOLDER_NAME):
+                    self.video.name = str(Path(self.save_path)/rel_name)
+                print("save_path:", self.save_path)
+                print(self.video.name)
+                print('size:', self.video.file.size)
+                self.file_size = humanfriendly.format_size(self.video.file.size)
+                # duration = VideoFileClip(self.video.path).duration
+                # self.duration = time_formate(duration)
+                # print(self.duration)
+            else:
+                print("video file is None")
+        except:
+            pass
 
         try:
             if self.image:
