@@ -388,7 +388,7 @@ class Vod(models.Model):
     objects = VodManager()
 
     def save(self, without_valid=False, *args, **kwargs, ):
-        print("--------------")
+        print("------- save vod -------")
         p = Pinyin()
         full_pinyin = p.get_pinyin(smart_str(self.title), '')
         first_pinyin = p.get_initials(smart_str(self.title), '').lower()

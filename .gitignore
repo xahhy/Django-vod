@@ -11,6 +11,10 @@ another_media/*
 real-media/*
 *.log
 *.rar
+video_pack/*
+*.mp4
+*.zip
+celerybeat-*
 
 !.gitignore
 !__init__.py
