@@ -1,0 +1,214 @@
+<script>
+    {% block script_head %}{% endblock %}
+    function getFileName(file) {
+        var pos = file.lastIndexOf(".");
+        return file.substring(0, pos);
+    }
+    function getFileType(file) {
+        var pos = file.lastIndexOf(".");
+        return file.substring(pos + 1);
+    }
+
+
+    (function ($) {
+        $(function () {
+            var file_names = '';
+            var save_path_sel = $('#id_save_path');
+            var confirm_sel = $('#confirm_upload');
+            var save_path = save_path_sel.val();
+            var cur_option = save_path_sel.find('[value=' + save_path + ']').text();
+            $('form').submit(function () {
+                if ($(this).hasClass('{{ name }}_disabled')) {
+                    return false;
+                }
+            });
+            if (!(new Resumable().support)) {
+                alert("No uploader support");
+            }
+            var r = new Resumable({
+                target: '{% url 'admin_resumable_restore' %}',
+                chunkSize: {{ chunkSize }},
+                query: {
+                    csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+                    field_name: '{{ field_name }}',
+                    content_type_id: '{{ content_type_id }}'
+                },
+            });
+            r.assignBrowse($('#{{ id }}_input_file'));
+            r.assignDrop($('#{{ id }}_input_file'));
+            r.on('fileAdded', function (file, event) {
+                 console.log("add file");
+            });
+            r.on('fileSuccess', function (file, message) {
+                $('#{{ id }}').val(message);
+                var before = $("#{{ id }}_uploaded_status").html();
+                $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' Uploaded');
+
+                $("form").removeClass('uploading');
+                $('#{{ id }}_upload_icon').hide();
+                console.log("upload done");
+                {% block file_success %}
+
+                {% endblock %}
+            });
+            r.on('fileError', function (file, message) {
+                $("#{{ id }}_uploaded_status").html(message);
+            });
+            r.on('progress', function (file, message) {
+                update_processbar($('#{{ id }}_progress'), r.progress(true));
+                $('#{{ id }}_upload_icon').show();
+            });
+
+            $('#{{ id }}_input_file').on('change', function (e) {
+                console.log('change');
+                setTimeout(function () {
+                    file_names = '';
+                    r.files.map(function (file) {
+                        file_names += file.fileName + '<br/>';
+                    });
+                    var msg = '<div class="text-center" style="color:green;font-weight:bold">Are you sure you want to upload:</div><b>'
+                        + file_names
+                        + "</b>"
+                        + '<div class="text-center" style="color:green;font-weight:bold">to:</div>'
+                        + '<span style="color: red;font-weight:bold">'
+                        + cur_option
+                        + '</span>';
+                    msg = '<div class="text-center">' + msg + '</div>';
+                    console.log(msg);
+                    jQuery.confirm({
+                        columnClass: 'medium',
+                        icon: 'fa fa-warning',
+                        title: 'Confirm',
+                        content: msg,
+                        type: 'green',
+                        buttons: {
+                            ok: {
+                                text: "Yes!",
+                                btnClass: 'btn-primary',
+                                keys: ['enter'],
+                                action: function () {
+                                    console.log("upload start");
+                                    r.opts.query = Object.assign(r.opts.query, {
+                                        'save_path': save_path
+                                    });
+                                    var file_name_list = [];
+                                    r.files.map(function (file) {
+                                        file_name_list.push(file.fileName);
+                                    });
+                                    console.log(file_name_list);
+                                    var content = {
+                                        'upload_to_': save_path,
+                                        field_name: '{{ field_name }}',
+                                        content_type_id: '{{ content_type_id }}',
+                                        'file_names': JSON.stringify(file_name_list)
+                                    };
+                                    $.get('{% url 'admin_resumable_set' %}', content, function (data, status) {
+                                        console.log(data);
+                                        console.log(status);
+                                        if(data.startsWith('[')){
+                                            var error_files = JSON.parse(data);
+                                            var error_message = '文件<br/><br/><span style="color: red;font-weight:bold">';
+                                            error_files.map(function (file) {
+                                                error_message += file + '<br/>';
+                                            });
+                                            error_message += '</span><br/>已经存在!';
+                                            error_message = '<div class="text-center">' + error_message + '</div>';
+                                            // Confirm to delete the existing file.
+                                            jQuery.confirm({
+                                                columnClass: 'medium',
+                                                icon: 'fa fa-warning',
+                                                title: '是否删除服务器文件',
+                                                content: error_message,
+                                                type: 'red',
+                                                buttons: {
+                                                    ok: {
+                                                        text: "Yes!",
+                                                        btnClass: 'btn-primary',
+                                                        keys: ['enter'],
+                                                        action: function () {
+                                                            console.log('start delete file');
+                                                            $.get('{% url 'admin_resumable_delete' %}', {'delete_file_names':data},function(data, status){
+                                                                r.upload();
+                                                                $("form").addClass('uploading')
+                                                            });
+                                                        }
+                                                    },
+                                                    cancel: function () {
+                                                        console.log('cancel delete file');
+                                                        r.cancel();
+                                                        file_names = '';
+                                                        console.log('Canncel upload because of file already exists.');
+                                                    }
+                                                }
+                                            });
+
+
+                                        }else {
+                                            r.upload();
+                                            $("form").addClass('uploading')
+                                        }
+                                    });
+                                }
+                            },
+                            cancel: function () {
+                                console.log("refuse upload");
+                                r.cancel();
+                                file_names = '';
+                            }
+                        }
+                    })
+                }, 500)
+            });
+        });
+        function update_processbar(bar, value) {
+            var now = value * 100;
+            if (now === 100) {
+                bar.addClass('progress-bar-success');
+                bar.find("span").html("Success");
+            } else {
+                bar.removeClass('progress-bar-success');
+
+            }
+            bar.css('width', now + '%');
+        }
+
+        function success_processbar(bar) {
+            bar.addClass('progress-bar-success');
+        }
+
+    })(jQuery);
+    {#    })(jQuery);#}
+
+
+</script>
+<div id="container">
+    <p class="file-upload">
+        {% if value %}
+            Currently:
+            {% if file_url %}
+                <a id="{{ id }}_link" target="_new" href="{{ file_url }}">{{ file_url }}</a>
+                {% if show_thumb %}
+                    <img src="{{ file_url }}" style="width:250px;">
+                {% endif %}
+            {% else %}
+                {{ value }}
+            {% endif %}
+            {{ clear_checkbox }}
+            <br>
+            Change:
+        {% endif %}
+
+        <span id="{{ id }}_uploaded_status"></span>
+        <input type="file" id="{{ id }}_input_file" style="position：absolute;">
+    </p>
+    {#    <progress id="{{ id }}_progress" value="0" max="1" style="width:500px"></progress>#}
+    <div class="progress">
+        <div id="{{ id }}_progress" class="progress-bar" role="progressbar" aria-valuenow="0"
+             aria-valuemin="0" aria-valuemax="1">
+            {#            <span class="sr-only"></span>#}
+            <span id="{{ id }}_upload_icon"><i class='fa fa-circle-o-notch fa-spin'></i>processing</span>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" name="{{ name }}" id="{{ id }}" value="{{ value }}">

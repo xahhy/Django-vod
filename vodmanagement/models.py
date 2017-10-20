@@ -23,7 +23,8 @@ import datetime
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
 from .my_storage import *
-from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField,ModelAdminResumableMultiFileField
+from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField, \
+    ModelAdminResumableMultiFileField, ModelAdminResumableRestoreFileField
 from django.utils.encoding import uri_to_iri
 from pathlib import Path
 # for pinyin search
@@ -261,14 +262,63 @@ class VodList(models.Model):
     def __str__(self):
         return self.title
 # ---------------------------------------------------------------------
-class Backup(models.Model):
-    file = models.FileField(verbose_name='备份配置文件')
+class Restore(models.Model):
+    txt_file = models.FileField(blank=True, null=True, verbose_name='备份配置文件')
+    zip_file = ModelAdminResumableRestoreFileField(null=True, blank=True, storage=VodStorage(), verbose_name='压缩包')
+    save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        config = self.file.read()
+        config = self.txt_file.read()
         config_json = json.loads(config)
-        return super(Backup, self).save()
+        # Analyze the json format restore config file
+        try:
+            for video in config_json:
+                # Create categories if not exist.
+                category1= video.get('category1')
+                assert category1 is not None
+                category1_obj = VideoCategory.objects.filter(name=category1, level=1).first()
+                if not category1_obj:
+                    category1_obj = VideoCategory(name=category1, level=1).save()
+
+                category2= video.get('category2')
+                assert category2 is not None
+                category2_obj = VideoCategory.objects.filter(name=category2, level=2).first()
+                if not category2_obj:
+                    category2_obj= VideoCategory(name=category2, level=2).save()
+                    category1_obj.subset.add(category2_obj)
+
+                region = video.get('region')
+                assert region is not None
+                region_obj = VideoRegion.objects.filter(name=region).first()
+                if not region_obj:
+                    region_obj = VideoRegion(name=region).save()
+
+                new_video = Vod(title=video.get('title'),
+                                image=video.get('image'),
+                                video=video.get('video'),
+                                definition=video.get('definition'),
+                                year=video.get('year'),
+                                description=video.get('description'),
+                                category=category2_obj,
+                                region=region_obj,
+                                ).save(without_valid=True)
+                video_list = video.get('video_list')
+                if video_list:
+                    for sub_video in video_list:
+                        print(sub_video.get('title'))
+                        print(sub_video.get('image'))
+                        print(sub_video.get('video'))
+                        print(sub_video.get('definition'))
+                        print(sub_video.get('year'))
+                        print(sub_video.get('description'))
+                        print(sub_video.get('category1'))
+                        print(sub_video.get('category2'))
+                        print(sub_video.get('region'))
+        except Exception as e:
+            print('解析备份配置文件失败',e)
+
+        return super(Restore, self).save()
 
 # ---------------------------------------------------------------------
 
@@ -311,7 +361,7 @@ class Vod(models.Model):
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
     objects = VodManager()
 
-    def save(self, *args, **kwargs):
+    def save(self, without_valid=False, *args, **kwargs, ):
         print("--------------")
         p = Pinyin()
         full_pinyin = p.get_pinyin(smart_str(self.title), '')
@@ -327,6 +377,8 @@ class Vod(models.Model):
             self.video.name = str(Path(settings.LOCAL_MEDIA_URL)/basename)
             print("save local_video to filefield done")
 
+        if without_valid:
+            return super(Vod, self).save(*args, **kwargs)
         super(Vod, self).save(*args, **kwargs)
         if self.video != None and self.video != '':
             basename = Path(self.video.name).name  # Djan%20go.mp4

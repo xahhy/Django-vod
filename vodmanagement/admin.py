@@ -200,13 +200,23 @@ class LinkModelAdmin(admin.ModelAdmin):
 
 class MultipleUploadForm(forms.ModelForm):
     '''docstring for VodForm'''
-
     def __init__(self, *args, **kwargs):
         super(MultipleUploadForm, self).__init__(*args, **kwargs)
         self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
 
     class Meta:
         model = MultipleUpload
+        fields = '__all__'
+
+
+class RestoreForm(forms.ModelForm):
+    '''docstring for VodForm'''
+    def __init__(self, *args, **kwargs):
+        super(RestoreForm, self).__init__(*args, **kwargs)
+        self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
+
+    class Meta:
+        model = Restore
         fields = '__all__'
 
 
@@ -244,9 +254,11 @@ class VodListModelAdmin(admin.ModelAdmin):
 class VideoTagModelAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(Backup)
-class BackupModelAdmin(admin.ModelAdmin):
-    pass
+@admin.register(Restore)
+class RestoreModelAdmin(admin.ModelAdmin):
+    form = RestoreForm
+    change_form_template = 'vodmanagement/change_form.html'
+    add_form_template = 'vodmanagement/change_form.html'
 
 admin.site.register(FileDirectory)
 admin.site.register(VideoRegion)

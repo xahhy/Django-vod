@@ -125,6 +125,34 @@ def admin_resumable(request):
             r.delete_chunks()
             return HttpResponse(storage.url(actual_filename))
         return HttpResponse('chunk exists')
+    return HttpResponse('Welcom to use resumable!')\
+
+
+@staff_member_required
+def admin_resumable_restore(request):
+    upload_to = get_upload_to(request)
+    field = get_field(request)
+    storage = get_storage(upload_to)
+    if request.method == 'POST':
+        chunk = request.FILES.get('file')
+        r = ResumableFile(storage, request.POST)
+        if not r.chunk_exists:
+            r.process_chunk(chunk)
+        if r.is_complete:
+            actual_filename = storage.save(r.filename, r.file)
+            r.delete_chunks()
+            r.resotre_file()
+            return HttpResponse(storage.url(actual_filename))
+        return HttpResponse('chunk uploaded')
+    elif request.method == 'GET':
+        r = ResumableFile(storage, request.GET)
+        if not r.chunk_exists:
+            return HttpResponse('chunk not found', status=204)
+        if r.is_complete:
+            actual_filename = storage.save(r.filename, r.file)
+            r.delete_chunks()
+            return HttpResponse(storage.url(actual_filename))
+        return HttpResponse('chunk exists')
     return HttpResponse('Welcom to use resumable!')
 
 

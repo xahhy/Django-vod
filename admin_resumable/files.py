@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import fnmatch
 import os
+import zipfile
+from pathlib import Path
 from django.core.files.base import File
 from django.conf import settings
 from vodmanagement import models
@@ -94,6 +96,16 @@ class ResumableFile(object):
         for chunk in self.chunk_names:
             size += self.storage.size(chunk)
         return size
+
+    def resotre_file(self):
+        zip_file = Path(self.storage.location)/Path(self.base_filename)
+        print('开始解压文件',zip_file)
+        file_zip = zipfile.ZipFile(zip_file, 'r')
+        for file in file_zip.namelist():
+            file_zip.extract(file, self.storage.location)
+        file_zip.close()
+        print('解压文件完成',self.storage.location)
+        os.remove(file_zip.filename)
 
     def save_model(self, model, save_path, request):
         category_id = request.POST['category']

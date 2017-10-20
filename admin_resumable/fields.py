@@ -104,6 +104,15 @@ class AdminFileResumableWidget(ResumableWidget):
         return forms.Media(js=[static("admin_resumable/js/%s" % path) for path in js])
 
 
+class AdminRestoreFileResumableWidget(ResumableWidget):
+    template_name = 'admin_resumable/restore_file_input.html'
+
+    @property
+    def media(self):
+        js = ["resumable.js"]
+        return forms.Media(js=[static("admin_resumable/js/%s" % path) for path in js])
+
+
 class FormResumableFileField(FileField):
     widget = ResumableWidget
 
@@ -179,3 +188,22 @@ class ModelAdminResumableMultiFileField(models.FileField):
         }
         kwargs.update(defaults)
         return super(ModelAdminResumableMultiFileField, self).formfield(**kwargs)
+
+
+class ModelAdminResumableRestoreFileField(models.FileField):
+
+    def __init__(self, verbose_name=None, name=None, upload_to='',
+                 storage=None, **kwargs):
+        super(ModelAdminResumableRestoreFileField, self).__init__(
+            verbose_name, name, 'unused', **kwargs)
+
+    def formfield(self, **kwargs):
+        content_type_id = ContentType.objects.get_for_model(self.model).id
+        defaults = {
+            'form_class': FormAdminResumableFileField,
+            'widget': AdminRestoreFileResumableWidget(attrs={
+                'content_type_id': content_type_id,
+                'field_name': self.name})
+        }
+        kwargs.update(defaults)
+        return super(ModelAdminResumableRestoreFileField, self).formfield(**kwargs)

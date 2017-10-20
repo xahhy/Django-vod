@@ -98,6 +98,8 @@ Backup Serializers
 class VideoBackupSubsetSerializer(ModelSerializer):
     category1 = serializers.SerializerMethodField()
     category2 = serializers.SerializerMethodField()
+    video = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
     class Meta:
         model = Vod
         fields = [
@@ -120,10 +122,18 @@ class VideoBackupSubsetSerializer(ModelSerializer):
     def get_category2(self, obj):
         return obj.category.name
 
+    def get_video(self, obj):
+        return uri_to_iri(obj.video)
+
+    def get_image(selfs, obj):
+        return uri_to_iri(obj.image)
+
 class VideoBackupSerializer(ModelSerializer):
     video_list = VideoBackupSubsetSerializer(many=True)
     category1 = serializers.SerializerMethodField()
     category2 = serializers.SerializerMethodField()
+    video = serializers.SerializerMethodField()
+    image = serializers.SerializerMethodField()
     class Meta:
         model = Vod
         fields = [
@@ -146,6 +156,12 @@ class VideoBackupSerializer(ModelSerializer):
 
     def get_category2(self, obj):
         return obj.category.name
+
+    def get_video(self, obj):
+        return uri_to_iri(obj.video)
+
+    def get_image(selfs, obj):
+        return uri_to_iri(obj.image)
 # class HomeListSerializer(Serializer):
 #     videos = VodListSerializer()
 #     category = CategoryListSerializer()
