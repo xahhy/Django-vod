@@ -182,7 +182,7 @@ class VideoCategory(models.Model):
     # directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
 
     def __str__(self):
-        return self.name + str(f'  (level {self.level})')
+        return self.name + str('  (level %d)'%(self.level))
 
     def save(self, *args, **kwargs):
         # print(self.directory)
@@ -414,7 +414,7 @@ class Vod(models.Model):
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
     objects = VodManager()
 
-    def save(self, without_valid=False, *args, **kwargs, ):
+    def save(self, without_valid=False, *args, **kwargs):
         print("------- save vod -------")
         p = Pinyin()
         full_pinyin = p.get_pinyin(smart_str(self.title), '')

@@ -196,7 +196,7 @@ def admin_resumable_delete(request):
     for file_name in file_list:
         file = Path(settings.MEDIA_ROOT) / Path(upload_to_global) / file_name
         if file.is_file():
-            os.remove(file)
+            os.remove(str(file))
             count += 1
             print('remove',file)
-    return HttpResponse(f'delete {count} files, total {number} files')
+    return HttpResponse('delete %d files, total %d files'%(count, number))
