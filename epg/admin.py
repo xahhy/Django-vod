@@ -1,7 +1,13 @@
+from pathlib import Path
+from urllib import parse
+
+import os
 from django.contrib import admin
 from django.contrib import messages
 from django import forms
 
+from mysite import settings
+from vodmanagement.models import Record
 from .models import *
 
 
@@ -40,9 +46,19 @@ class ProgramModelAdmin(admin.ModelAdmin):
     actions = ['record', 'unrecord']
 
     def record(self, request, queryset):
-        for obj in queryset:
-            obj.is_record = 1
-            obj.save()
+        # for obj in queryset:
+        #     obj.is_record = 1
+        #     obj.save()
+        for program in queryset:
+            m3u8_file_path = parse.urlparse(program.url).path
+            m3u8_file_path = str(Path(settings.RECORD_MEDIA_ROOT) / Path(m3u8_file_path[1:]))
+            print(m3u8_file_path)
+            new_record = Record(title=program.title,
+                                start_time=program.start_time,
+                                end_time=program.end_time,
+                                video=m3u8_file_path,
+                                channel=program.channel)
+            new_record.save()
         self.message_user(request, '%s 个节目被成功转成点播' % queryset.count()
                           , messages.SUCCESS)
 

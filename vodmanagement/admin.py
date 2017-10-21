@@ -254,6 +254,10 @@ class VodListModelAdmin(admin.ModelAdmin):
 class VideoTagModelAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(Record)
+class RecordModelAdmin(admin.ModelAdmin):
+    pass
+
 @admin.register(Restore)
 class RestoreModelAdmin(admin.ModelAdmin):
     form = RestoreForm

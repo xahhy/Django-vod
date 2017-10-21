@@ -117,6 +117,10 @@ def upload_image_location(instance, filename):
     return "%s/images/%s/%s" % (category, new_id, filename)
 
 
+def upload_record_image_location(instance, filename):
+    return "%s/images/%s" % (settings.RECORD_MEDIA_FOLDER, filename)
+
+
 def default_description(instance):
     default = instance.title
     print(default)
@@ -346,6 +350,29 @@ class Restore(models.Model):
 
         return super(Restore, self).save()
 
+# ---------------------------------------------------------------------
+class Record(models.Model):
+    title = models.CharField(max_length=120, verbose_name='标题')
+    image = models.ImageField(upload_to=upload_record_image_location, null=True, blank=True)
+    video = models.FilePathField(path=settings.RECORD_MEDIA_ROOT, match='.*\.m3u8$', blank=True, recursive=True)
+    start_time = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    end_time = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+    video_list = models.ManyToManyField('self', blank=True)
+    active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
+    channel = models.CharField(max_length=120, verbose_name='所属频道名称')
+
+    def __str__(self):
+        return self.title + '(' + str(self.video_list.count()) + ')'
+
+    def colored_active(self):
+        color_code = 'red' if self.active == 0 else 'green'
+        return format_html(
+            '<span style="color:{};">{}</span>',
+            color_code,
+            self.get_active_display()
+        )
+
+    colored_active.short_description = '是否激活'
 # ---------------------------------------------------------------------
 
 class Vod(models.Model):
