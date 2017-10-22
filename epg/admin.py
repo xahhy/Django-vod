@@ -8,6 +8,8 @@ import multiprocessing
 from django.contrib import admin
 from django.contrib import messages
 from django import forms
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 
 from epg.utils import download_m3u8_files
 from mysite import settings
@@ -59,7 +61,7 @@ class ProgramModelAdmin(admin.ModelAdmin):
                 m3u8_file_path = str(Path(settings.RECORD_MEDIA_ROOT) / Path(m3u8_file_path[1:]))
                 print(m3u8_file_path)
             except Exception as e:
-                self.message_user(request, '%s 转点播失败 请检查录制的网址是否合法'%(program.title), messages.ERROR)
+                self.message_user(request, '%s 转点播失败 请检查录播的网址是否合法'%(program.title), messages.ERROR)
                 return
             new_record = Record(title=program.title,
                                 start_time=program.start_time,
@@ -67,11 +69,14 @@ class ProgramModelAdmin(admin.ModelAdmin):
                                 video=m3u8_file_path,
                                 channel=program.channel)
             new_record.save()
-            p = threading.Thread(target=download_m3u8_files, args=(new_record.id, program.url, settings.RECORD_MEDIA_ROOT))
+            p = threading.Thread(target=download_m3u8_files, args=(new_record.id, 'http://localhost/m3u8/stream1.m3u8', settings.RECORD_MEDIA_ROOT))
             p.start()
             print('start downloading m3u8 files', program.url)
-        self.message_user(request, '%s 个节目正在转成点播,转换进度请到录制节目处查看。' % queryset.count()
+        record_url = reverse('admin:vodmanagement_record_changelist')
+        print(record_url)
+        self.message_user(request, mark_safe('%s 个节目正在转成点播,转换进度请到<a href="%s">录制节目</a>处查看。'%(queryset.count(),record_url))
                           , messages.SUCCESS)
+
 
     record.short_description = '转为点播'
 

@@ -155,6 +155,14 @@ class RegionListAPIView(ListAPIView):
         return VideoRegion.objects.all()
 
 
+class RecordListAPIView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecordListSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return Record.objects.filter(active=1)
+
+
 class HomeListAPIView(APIView):
     """
     HomeListAPIView doc

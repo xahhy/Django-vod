@@ -1,3 +1,5 @@
+from urllib.request import pathname2url
+
 from rest_framework import serializers
 from rest_framework.serializers import *
 # (
@@ -91,6 +93,26 @@ class RegionListSerializer(ModelSerializer):
     class Meta:
         model = VideoRegion
         fields = ['name']
+
+"""
+Record Serializers
+"""
+class RecordListSerializer(ModelSerializer):
+    url = SerializerMethodField()
+    class Meta:
+        model = Record
+        fields = [
+            'title',
+            'url',
+            'channel'
+        ]
+
+    def get_url(self, obj):
+        try:
+            rel_path = Path(obj.video).relative_to(Path(settings.RECORD_MEDIA_ROOT))
+            return pathname2url(str(rel_path))
+        except:
+            return 'Error URL'
 
 """
 Backup Serializers

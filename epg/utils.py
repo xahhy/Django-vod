@@ -9,25 +9,30 @@ from vodmanagement.models import Record
 
 
 def download_m3u8_files(id, url_str, dest_dir):
-    url = urlparse(url_str)
-    m3u8_root = url.path
-    m3u8_host_url = url.scheme+'://'+url.netloc
-    m3u8_full_path = Path(dest_dir)/Path(m3u8_root[1:])
-    m3u8_full_path.parent.mkdir(parents=True, exist_ok=True)
-    file_path, message=urlretrieve(url_str, str(m3u8_full_path))
-    with m3u8_full_path.open() as m3u8_file:
-        m3u8_obj = m3u8.loads(m3u8_file.read())
-        total_files = len(m3u8_obj.files)
-        for index, ts_file in enumerate(m3u8_obj.files):
-            ts_url = urljoin(m3u8_host_url, pathname2url(str(Path(m3u8_root).parent / Path(ts_file))))
-            ts_full_path = m3u8_full_path.parent / Path(ts_file)
-            ts_full_path.parent.mkdir(parents=True, exist_ok=True)
-            status = download_ts_file(ts_url, str(ts_full_path))
-            if status is not None:
-                instance = Record.objects.get(id=id)
-                instance.progress = int(index/total_files*100)
-                print(instance.progress)
-                instance.save()
+    try:
+        instance = Record.objects.get(id=id)
+        url = urlparse(url_str)
+        m3u8_root = url.path
+        m3u8_host_url = url.scheme+'://'+url.netloc
+        m3u8_full_path = Path(dest_dir)/Path(m3u8_root[1:])
+        m3u8_full_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path, message=urlretrieve(url_str, str(m3u8_full_path))
+        with m3u8_full_path.open() as m3u8_file:
+            m3u8_obj = m3u8.loads(m3u8_file.read())
+            total_files = len(m3u8_obj.files)
+            for index, ts_file in enumerate(m3u8_obj.files):
+                ts_url = urljoin(m3u8_host_url, pathname2url(str(Path(m3u8_root).parent / Path(ts_file))))
+                ts_full_path = m3u8_full_path.parent / Path(ts_file)
+                ts_full_path.parent.mkdir(parents=True, exist_ok=True)
+                status = download_ts_file(ts_url, str(ts_full_path))
+                if status is not None:
+                    instance.progress = int(index/total_files*100)
+                    print(instance.progress)
+                    instance.save()
+            instance.active = 1
+            instance.save()
+    except:
+        pass
 
 
 def download_ts_file(url, dest_path):

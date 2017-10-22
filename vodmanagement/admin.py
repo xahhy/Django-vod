@@ -256,7 +256,7 @@ class VideoTagModelAdmin(admin.ModelAdmin):
 
 @admin.register(Record)
 class RecordModelAdmin(admin.ModelAdmin):
-    list_display = ['title', 'progress']
+    list_display = ['title', 'progress', 'colored_active']
 
 @admin.register(Restore)
 class RestoreModelAdmin(admin.ModelAdmin):
