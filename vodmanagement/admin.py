@@ -256,7 +256,7 @@ class VideoTagModelAdmin(admin.ModelAdmin):
 
 @admin.register(Record)
 class RecordModelAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['title', 'progress']
 
 @admin.register(Restore)
 class RestoreModelAdmin(admin.ModelAdmin):

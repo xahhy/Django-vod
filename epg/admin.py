@@ -1,11 +1,15 @@
+import threading
 from pathlib import Path
 from urllib import parse
 
 import os
+
+import multiprocessing
 from django.contrib import admin
 from django.contrib import messages
 from django import forms
 
+from epg.utils import download_m3u8_files
 from mysite import settings
 from vodmanagement.models import Record
 from .models import *
@@ -50,16 +54,23 @@ class ProgramModelAdmin(admin.ModelAdmin):
         #     obj.is_record = 1
         #     obj.save()
         for program in queryset:
-            m3u8_file_path = parse.urlparse(program.url).path
-            m3u8_file_path = str(Path(settings.RECORD_MEDIA_ROOT) / Path(m3u8_file_path[1:]))
-            print(m3u8_file_path)
+            try:
+                m3u8_file_path = parse.urlparse(program.url).path
+                m3u8_file_path = str(Path(settings.RECORD_MEDIA_ROOT) / Path(m3u8_file_path[1:]))
+                print(m3u8_file_path)
+            except Exception as e:
+                self.message_user(request, '%s 转点播失败 请检查录制的网址是否合法'%(program.title), messages.ERROR)
+                return
             new_record = Record(title=program.title,
                                 start_time=program.start_time,
                                 end_time=program.end_time,
                                 video=m3u8_file_path,
                                 channel=program.channel)
             new_record.save()
-        self.message_user(request, '%s 个节目被成功转成点播' % queryset.count()
+            p = threading.Thread(target=download_m3u8_files, args=(new_record.id, program.url, settings.RECORD_MEDIA_ROOT))
+            p.start()
+            print('start downloading m3u8 files', program.url)
+        self.message_user(request, '%s 个节目正在转成点播,转换进度请到录制节目处查看。' % queryset.count()
                           , messages.SUCCESS)
 
     record.short_description = '转为点播'

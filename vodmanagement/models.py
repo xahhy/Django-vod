@@ -360,6 +360,7 @@ class Record(models.Model):
     video_list = models.ManyToManyField('self', blank=True)
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
     channel = models.CharField(max_length=120, verbose_name='所属频道名称')
+    progress = models.IntegerField(null=True, blank=True, default=0)
 
     def __str__(self):
         return self.title + '(' + str(self.video_list.count()) + ')'
