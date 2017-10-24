@@ -69,7 +69,7 @@ class ProgramModelAdmin(admin.ModelAdmin):
                                 video=m3u8_file_path,
                                 channel=program.channel)
             new_record.save()
-            p = threading.Thread(target=download_m3u8_files, args=(new_record.id, 'http://localhost/m3u8/stream1.m3u8', settings.RECORD_MEDIA_ROOT))
+            p = threading.Thread(target=download_m3u8_files, args=(new_record.id, program.url, settings.RECORD_MEDIA_ROOT))
             p.start()
             print('start downloading m3u8 files', program.url)
         record_url = reverse('admin:vodmanagement_record_changelist')

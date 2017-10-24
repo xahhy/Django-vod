@@ -151,7 +151,7 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'tsrtmp',
+        'NAME' : 'vod',
         'USER' : 'root',
         'PASSWORD': '123',
         'HOST': '',
@@ -159,7 +159,7 @@ DATABASES = {
     },
     'tsrtmp': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'flask',
+        'NAME': 'tsrtmp',
         'USER': 'root',
         'PASSWORD': '123',
         'HOST': '',

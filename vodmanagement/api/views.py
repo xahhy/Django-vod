@@ -93,7 +93,7 @@ class VodDetailAPIView(RetrieveAPIView):
 
     """
     # queryset = Vod.objects.all()
-    lookup_field = "id"
+    lookup_field = 'id'
     serializer_class = VodDetailSerializer
     permission_classes = [HasPermission]
 

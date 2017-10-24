@@ -31,8 +31,10 @@ def download_m3u8_files(id, url_str, dest_dir):
                     instance.save()
             instance.active = 1
             instance.save()
-    except:
-        pass
+    except Exception as e:
+        print('Quit with error!')
+        print(e)
+
 
 
 def download_ts_file(url, dest_path):
