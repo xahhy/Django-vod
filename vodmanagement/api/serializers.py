@@ -48,7 +48,8 @@ class VodDetailSubSetSerializer(ModelSerializer):
         fields = [
             'title',
             'description',
-            'video'
+            'video',
+            'select_name'
         ]
 
 

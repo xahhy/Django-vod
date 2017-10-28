@@ -74,6 +74,9 @@ INSTALLED_APPS = [
 
     # Scheduler App
     'django_celery_beat',
+
+    # Sorted Many to Many Field
+    'sortedm2m',
     # 'rest_framework_docs',
     # 'drf_autodocs'
     # 'rest_framework_swagger',

@@ -15,6 +15,7 @@ from django.db.models.signals import pre_save, post_init
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 from django.core.files import File
+from sortedm2m.fields import SortedManyToManyField
 from uuslug import uuslug
 import os
 from .utils import *
@@ -404,14 +405,16 @@ class Vod(models.Model):
     view_count_temp = 0
     creator = models.ForeignKey(User, null=True, blank=False, editable=False)
 
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, verbose_name='简介')
+    select_name = models.CharField(max_length=100, blank=False, verbose_name='选集名称', default='1')
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='创建时间')  # The first time added
     slug = models.SlugField(unique=True, blank=True)
     search_word = models.CharField(max_length=10000, null=True, blank=True)
     # tags = models.ManyToManyField(VideoTag, blank=True)
 
-    video_list = models.ManyToManyField('self', blank=True, symmetrical=False)
+    video_list = SortedManyToManyField('self', blank=True)
+    # video_list = models.ManyToManyField('self', blank=True, symmetrical=False)
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
     objects = VodManager()
 

@@ -52,3 +52,4 @@ zope.interface==4.4.2
 m3u8==0.3.4
 django-celery-beat==1.0.1
 celery==4.1.0
+django-sortedm2m==1.5.0
