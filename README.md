@@ -96,7 +96,7 @@ manage.py loaddata <data_file_name>
 the data file format is a json or yaml file.
 
 # Useful 3rd-party app
-## 1. Django Crispy Forms 
+## Django Crispy Forms 
 `pip install django-crispy-forms`
 >settings.py
 ```
@@ -106,13 +106,13 @@ INSTALLED_APPS = {
 ...
 }
 ```
-## 2. Django with Nginx-gunicorn
+## Django with Nginx-gunicorn
 
 ```shell
 pip install gunicorn
 gunicorn hello.wsgi:application --bind example.com:8001 #test gunicorn
 ```
-```sehll
+```shell
 #edite file gunicorn_start, django.conf(for nginx)
 ./gunicorn_start
 nginx -s reload
@@ -129,7 +129,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 <input class='btn btn-primary' type='submit' value='Sign Up'/>
 </form>
 ```
-## 2. Django Registration Redux
+## Django Registration Redux
 https://django-registration-redux.readthedocs.io/en/latest/quickstart.html
 
 `pip install django-registration-redux`
@@ -154,13 +154,25 @@ url(r'^accounts/',include('registration.backends.default.urls')),
 >templets
 >need to copy templates from official site
 
-## 3. django-admin-resumable-js
+## django-admin-resumable-js
 awesome django admin resumable upload file app.
 This Django-vod system customize it deeply to support dynamic upload path and multiple files upload.
 
-## 4. Awesome Jquery Confirm Plugins
+## Awesome Jquery Confirm Plugins
 http://craftpip.github.io/jquery-confirm/
 
+## django-sortedm2m
+Make ManyToManyField Sortable on admin site.
+
+https://github.com/gregmuellegger/django-sortedm2m
+
+model.ManyToManyField -> SortedManyToManyField
+
+**Migrating a ManyToManyField to be a SortedManyToManyField**
+
+If you are using Django's migration framework and want to change a ManyToManyField to be a SortedManyToManyField (or the other way around), you will find that a migration created by Django's makemigrations will not work as expected.
+
+In order to migrate a ManyToManyField to a SortedManyToManyField, you change the field in your models to be a SortedManyToManyField as appropriate and create a new migration with manage.py makemigrations. Before applying it, edit the migration file and change in the operations list migrations.AlterField to **AlterSortedManyToManyField** (import it from sortedm2m.operations). This operation will take care of changing the intermediate tables, add the ordering field and fill in default values.
 
 # TEMP
 list all files in dir:
