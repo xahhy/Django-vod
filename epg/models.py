@@ -31,7 +31,7 @@ class Program(models.Model):
     title = models.CharField(max_length=50, null=True, blank=True)
     finished = models.IntegerField(null=True, blank=True, default=0)
     event_id = models.IntegerField(null=True, blank=True)
-    is_record = models.IntegerField(null=False, blank=True, default=0)
+    # is_record = models.IntegerField(null=False, blank=True, default=0)
 
     class Meta:
         managed = False
@@ -58,13 +58,13 @@ class Program(models.Model):
 
 
 
-
-class Category(models.Model):
-    name = models.CharField(max_length=200, blank=False, null=True, default='录制节目')
-    description = models.TextField(max_length=2000, blank=True, null=True, default='这里填写该节目集合的介绍')
-    # records      = models.ManyToManyField('Record', through=Record.category.through, related_name='+',blank=True)
-    records = models.ManyToManyField('Program', blank=True)
-    channel = models.ForeignKey('Channel', blank=True, null=True)
-
-    def __str__(self):
-        return self.name
+# TODO(hhy): Remove This Category Model. Because It's Moved to vodmanagement app's Record Model.
+# class Category(models.Model):
+#     name = models.CharField(max_length=200, blank=False, null=True, default='录制节目')
+#     description = models.TextField(max_length=2000, blank=True, null=True, default='这里填写该节目集合的介绍')
+#     # records      = models.ManyToManyField('Record', through=Record.category.through, related_name='+',blank=True)
+#     records = models.ManyToManyField('Program', blank=True)
+#     channel = models.ForeignKey('Channel', blank=True, null=True)
+#
+#     def __str__(self):
+#         return self.name
