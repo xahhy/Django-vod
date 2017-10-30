@@ -418,6 +418,11 @@ class Vod(models.Model):
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
     objects = VodManager()
 
+    class Meta:
+        verbose_name = '视频'
+        verbose_name_plural = '视频'
+        ordering = ["-timestamp", "-updated"]
+
     def save(self, without_valid=False, *args, **kwargs):
         print("------- save vod -------")
         p = Pinyin()
@@ -471,9 +476,6 @@ class Vod(models.Model):
 
     def __str__(self):
         return self.title
-
-    class Meta:
-        ordering = ["-timestamp", "-updated"]
 
     def image_tag(self):
         if self.image is not None and str(self.image) != "":

@@ -227,32 +227,32 @@ class MultipleUploadModelAdmin(admin.ModelAdmin):
     add_form_template = 'vodmanagement/MultipleUpload/change_form.html'
 
 
-@admin.register(VodList)
-class VodListModelAdmin(admin.ModelAdmin):
-    filter_horizontal = ['vod_list']
-    list_display = ['title', 'colored_active']
-    actions = ['activate_vod_list', 'deactivate_vod_list']
+# @admin.register(VodList)
+# class VodListModelAdmin(admin.ModelAdmin):
+#     filter_horizontal = ['vod_list']
+#     list_display = ['title', 'colored_active']
+#     actions = ['activate_vod_list', 'deactivate_vod_list']
 
-    def activate_vod_list(self, request, queryset):
-        for item in queryset:
-            item.active = 1
-            item.save()
-        self.message_user(request, '%s个节目列表成功激活.' % queryset.count()
-                          , messages.SUCCESS)
-    activate_vod_list.short_description = '激活节目列表'
+#     def activate_vod_list(self, request, queryset):
+#         for item in queryset:
+#             item.active = 1
+#             item.save()
+#         self.message_user(request, '%s个节目列表成功激活.' % queryset.count()
+#                           , messages.SUCCESS)
+#     activate_vod_list.short_description = '激活节目列表'
 
-    def deactivate_vod_list(self, request, queryset):
-        for item in queryset:
-            item.active = 0
-            item.save()
-        self.message_user(request, '%s个节目列表成功取消激活.' % queryset.count()
-                          , messages.SUCCESS)
-    deactivate_vod_list.short_description = '取消激活节目列表'
+#     def deactivate_vod_list(self, request, queryset):
+#         for item in queryset:
+#             item.active = 0
+#             item.save()
+#         self.message_user(request, '%s个节目列表成功取消激活.' % queryset.count()
+#                           , messages.SUCCESS)
+#     deactivate_vod_list.short_description = '取消激活节目列表'
 
 
-@admin.register(VideoTag)
-class VideoTagModelAdmin(admin.ModelAdmin):
-    pass
+# @admin.register(VideoTag)
+# class VideoTagModelAdmin(admin.ModelAdmin):
+    # pass
 
 @admin.register(Record)
 class RecordModelAdmin(admin.ModelAdmin):
