@@ -275,6 +275,10 @@ class Restore(models.Model):
         verbose_name = '视频导入'
         verbose_name_plural = '视频导入'
 
+    # @staticmethod
+    # def parse_json(text):
+
+
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         config = self.txt_file.read()
@@ -284,23 +288,23 @@ class Restore(models.Model):
             for video in config_json:
                 # Create categories if not exist.
                 category1= video.get('category1')
-                assert category1 is not None
                 category1_obj = VideoCategory.objects.filter(name=category1, level=1).first()
-                if not category1_obj:
+                if category1 is not None and category1_obj is not None:
                     category1_obj = VideoCategory(name=category1, level=1).save()
 
                 category2= video.get('category2')
-                assert category2 is not None
                 category2_obj = VideoCategory.objects.filter(name=category2, level=2).first()
-                if not category2_obj:
-                    category2_obj= VideoCategory(name=category2, level=2).save()
-                    category1_obj.subset.add(category2_obj)
+                if category2 is not None and category1_obj is not None:
+                    if not category2_obj:
+                        category2_obj= VideoCategory(name=category2, level=2).save()
+                        category1_obj.subset.add(category2_obj)
+
                 # Create region if not exist.
                 region = video.get('region')
-                assert region is not None
                 region_obj = VideoRegion.objects.filter(name=region).first()
-                if not region_obj:
+                if region is not None and region_obj is not None:
                     region_obj = VideoRegion(name=region).save()
+
                 # Create Vod instance.
                 new_video = Vod(title=video.get('title'),
                                 image=video.get('image'),
@@ -318,23 +322,23 @@ class Restore(models.Model):
                     for sub_video in video_list:
                         # Create categories if not exist.
                         category1 = sub_video.get('category1')
-                        assert category1 is not None
                         category1_obj = VideoCategory.objects.filter(name=category1, level=1).first()
-                        if not category1_obj:
+                        if category1 is not None and category1_obj is not None:
                             category1_obj = VideoCategory(name=category1, level=1).save()
 
                         category2 = sub_video.get('category2')
-                        assert category2 is not None
                         category2_obj = VideoCategory.objects.filter(name=category2, level=2).first()
-                        if not category2_obj:
-                            category2_obj = VideoCategory(name=category2, level=2).save()
-                            category1_obj.subset.add(category2_obj)
+                        if category2 is not None and category1_obj is not None:
+                            if not category2_obj:
+                                category2_obj = VideoCategory(name=category2, level=2).save()
+                                category1_obj.subset.add(category2_obj)
+
                         # Create region if not exist.
                         region = sub_video.get('region')
-                        assert region is not None
                         region_obj = VideoRegion.objects.filter(name=region).first()
-                        if not region_obj:
+                        if region is not None and region_obj is not None:
                             region_obj = VideoRegion(name=region).save()
+
                         # Create Vod instance.
                         new_sub_video = Vod(title=sub_video.get('title'),
                                         image=sub_video.get('image'),

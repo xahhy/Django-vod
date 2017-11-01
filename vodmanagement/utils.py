@@ -14,7 +14,7 @@ sys_media_root = '/media/hhy'
 # return choices
 def save_path_choices():
     if 'Windows' in platform.system():
-        return (('hhy', settings.MEDIA_ROOT + '()'),)
+        return (('default', settings.MEDIA_ROOT + '()'),)
 
     root_size = get_free_size(settings.MEDIA_ROOT)
     choices = (('default', settings.MEDIA_ROOT + '(' + root_size + ')'),)
@@ -29,6 +29,7 @@ def get_save_path_choice(key):
     for choice in choices:
         if choice[0] == key:
             return (choice,)
+    return 'default'
 
 # get free size of the path in human readable
 def get_free_size(path):
