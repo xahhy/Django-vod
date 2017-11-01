@@ -18,6 +18,8 @@ class Channel(models.Model):
     class Meta:
         managed = False
         db_table = 'channel'
+        verbose_name = '频道'
+        verbose_name_plural = '频道管理'
 
     def __str__(self):
         return self.channel_name + '(' + self.channel_id + ')'
@@ -36,6 +38,8 @@ class Program(models.Model):
     class Meta:
         managed = False
         db_table = 'program'
+        verbose_name = '节目'
+        verbose_name_plural = '节目管理'
 
     def __str__(self):
         return str(self.channel) + ':' + self.title

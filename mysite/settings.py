@@ -51,8 +51,8 @@ THUMBNAIL_PROCESSORS = (
 
 INSTALLED_APPS = [
     'easy_thumbnails',
-    'filer',
-    'mptt',
+    # 'filer',
+    # 'mptt',
     # 'progressbarupload',
     'admin_resumable',
 
@@ -165,7 +165,7 @@ DATABASES = {
         'NAME': 'tsrtmp',
         'USER': 'root',
         'PASSWORD': '123',
-        'HOST': '1.8.90.63',
+        'HOST': '',
         'PORT': '',
     }
 }

@@ -136,8 +136,11 @@ def default_filedir():
 # ---------------------------------------------------------------------
 # if leave path blank,it will save it as the default file dir:settings.MEDIA_ROOT
 class FileDirectory(models.Model):
-    path = models.CharField(max_length=512,
-                            default=default_filedir, blank=True)
+    path = models.CharField(max_length=512,default=default_filedir, blank=True)
+
+    class Meta:
+        verbose_name = '视频上传路径'
+        verbose_name_plural = '视频上传路径管理'
 
     def __str__(self):
         return self.path
@@ -155,9 +158,9 @@ TYPES = (
     ('special', 'Special purpose'),
 )
 VIDEO_QUALITY = (
-    ('SD', 'Standard Definition'),
-    ('HD', 'High Definition'),
-    ('FHD', 'Full HD'),
+    ('SD', '标清'),
+    ('HD', '高清'),
+    ('FHD', '超清'),
 )
 SAVE_PATH = (
     ('', settings.LOCAL_MEDIA_ROOT),
@@ -165,6 +168,10 @@ SAVE_PATH = (
 
 class VideoRegion(models.Model):
     name = models.CharField(max_length=200, verbose_name='地区', unique=True)
+
+    class Meta:
+        verbose_name = '视频地区管理'
+        verbose_name_plural = '视频地区'
 
     def __str__(self):
         return self.name
@@ -181,6 +188,11 @@ class VideoCategory(models.Model):
     level = models.IntegerField(null=False, blank=False, default=1, choices=((1, '一级分类'), (2, '二级分类')), verbose_name='分类等级')
     subset = models.ManyToManyField('self', blank=True, verbose_name='分类关系')
     # directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
+
+    class Meta:
+        verbose_name = '视频分类'
+        # Edit Default Model Name for Human read
+        verbose_name_plural = '视频分类管理'
 
     def __str__(self):
         return self.name + str('  (level %d)'%(self.level))
@@ -202,10 +214,6 @@ class VideoCategory(models.Model):
         create_category_path(name=self.name)
         super(VideoCategory, self).save(*args, **kwargs)
 
-    class Meta:
-        # Edit Default Model Name for Human read
-        verbose_name_plural = """Video Categorys"""
-
     def colored_level(self):
         color_code = 'red' if self.level == 1 else 'green'
         return format_html(
@@ -218,59 +226,54 @@ class VideoCategory(models.Model):
 
 
 # ---------------------------------------------------------------------
-
-class Link(models.Model):
-    name = models.CharField(max_length=512)
-    url = models.TextField(max_length=10240)
-    category = models.ForeignKey(VideoCategory, null=True)
-    video = FilerFileField(null=True, blank=True, related_name="link_video")
-    image = FilerImageField(null=True, blank=True, related_name="link_image")
-    file = ModelAdminResumableFileField(blank=True, null=True)
-
-    def __str__(self):
-        return self.name
-
-
-# ---------------------------------------------------------------------
 class MultipleUpload(models.Model):
     files = ModelAdminResumableMultiFileField(null=True, blank=True, storage=VodStorage())
     save_path = models.CharField(max_length=128, blank=False, null=True)
     category = models.ForeignKey(VideoCategory, null=True)
 
+    class Meta:
+        verbose_name = '批量上传'
+        verbose_name_plural = '批量上传管理'
 
 # ---------------------------------------------------------------------
-class VideoTag(models.Model):
-    name = models.CharField(max_length=200, null=False, blank=False)
-
-    def __str__(self):
-        return self.name
+# TODO(hhy): Please Leave This Model Here. It Will Be Use In The Future.
+# class VideoTag(models.Model):
+#     name = models.CharField(max_length=200, null=False, blank=False)
+#
+#     def __str__(self):
+#         return self.name
 
 # ---------------------------------------------------------------------
-class VodList(models.Model):
-    title = models.CharField(max_length=120)
-    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
-    description = models.TextField(blank=True)
-    category = models.ForeignKey(VideoCategory, null=True)
-    vod_list = models.ManyToManyField('Vod')
-    active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
-    tags = models.ManyToManyField(VideoTag, blank=True)
-
-    def colored_active(self):
-        color_code = 'red' if self.active == 0 else 'green'
-        return format_html(
-            '<span style="color:{};">{}</span>',
-            color_code,
-            self.get_active_display()
-        )
-    colored_active.short_description = '是否激活'
-
-    def __str__(self):
-        return self.title
+# TODO(hhy):Remove VodList Model. No Longer Used.
+# class VodList(models.Model):
+#     title = models.CharField(max_length=120)
+#     image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
+#     description = models.TextField(blank=True)
+#     category = models.ForeignKey(VideoCategory, null=True)
+#     vod_list = models.ManyToManyField('Vod')
+#     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
+#     tags = models.ManyToManyField(VideoTag, blank=True)
+#
+#     def colored_active(self):
+#         color_code = 'red' if self.active == 0 else 'green'
+#         return format_html(
+#             '<span style="color:{};">{}</span>',
+#             color_code,
+#             self.get_active_display()
+#         )
+#     colored_active.short_description = '是否激活'
+#
+#     def __str__(self):
+#         return self.title
 # ---------------------------------------------------------------------
 class Restore(models.Model):
     txt_file = models.FileField(blank=True, null=True, verbose_name='备份配置文件')
     zip_file = ModelAdminResumableRestoreFileField(null=True, blank=True, storage=VodStorage(), verbose_name='压缩包')
     save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
+
+    class Meta:
+        verbose_name = '视频导入'
+        verbose_name_plural = '视频导入'
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -363,6 +366,10 @@ class Record(models.Model):
     channel = models.CharField(max_length=120, verbose_name='所属频道名称')
     progress = models.IntegerField(null=True, blank=True, default=0)
 
+    class Meta:
+        verbose_name = '录播转点播'
+        verbose_name_plural = '录播转点播'
+
     def __str__(self):
         return self.title + '(' + str(self.video_list.count()) + ')'
 
@@ -420,7 +427,7 @@ class Vod(models.Model):
 
     class Meta:
         verbose_name = '视频'
-        verbose_name_plural = '视频'
+        verbose_name_plural = '视频列表'
         ordering = ["-timestamp", "-updated"]
 
     def save(self, without_valid=False, *args, **kwargs):
