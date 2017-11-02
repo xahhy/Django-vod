@@ -23,7 +23,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_jwt.views import obtain_jwt_token
 
-admin.site.site_header = 'vod administration'
+
+admin.site.site_header = '视频点播管理系统'
 urlpatterns = [
     # url(r'^docs/', include('rest_framework_docs.urls')),
     # url(r'^', include('drf_autodocs.urls')),
@@ -35,7 +36,7 @@ urlpatterns = [
     url(r'^api/auth/token/', obtain_jwt_token),
     url(r'^tv/api/', include("epg.api.urls", namespace='tv-api')),
     url(r'^vod/api/', include("vodmanagement.api.urls", namespace='vod-api')),
-    url(r'', include('vodmanagement.urls', namespace='vod')),
+    # url(r'', include('vodmanagement.urls', namespace='vod')),
     # url(r'^progressbarupload/', include('progressbarupload.urls')),
 
     # url(r'^filer/',include('filer.urls')),

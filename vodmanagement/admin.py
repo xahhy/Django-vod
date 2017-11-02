@@ -11,8 +11,6 @@ from uuslug import uuslug
 from django.conf import settings
 from .utils import *
 import re
-
-from django.contrib.admin import AdminSite
 from django.utils.translation import ugettext_lazy
 
 

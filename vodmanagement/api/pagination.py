@@ -17,7 +17,6 @@ class VodLimitOffsetPagination(LimitOffsetPagination):
 class VodPageNumberPagination(PageNumberPagination):
     page_size = 12
 
-    @func_time
     def get_paginated_response(self, data):
         year = self.request.query_params.get('year')
         return Response(OrderedDict([
@@ -31,7 +30,6 @@ class VodPageNumberPagination(PageNumberPagination):
             ('results', data)
         ]))
 
-    @func_time
     def paginate_queryset(self, queryset, request, view=None):
         """
         Paginate a queryset if required, either returning a

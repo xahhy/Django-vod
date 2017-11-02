@@ -1,15 +1,16 @@
 #!/bin/bash
 
 NAME="mysite_app" # Name of the application
-DJANGODIR=/home/xjtu/Django-vod # Django project directory
+DJANGODIR=/home/share/vod # Django project directory
 SOCKFILE=/home/share/vod/run/gunicorn.sock # we will communicte using this unix socket
-USER=xjtu # the user to run as
-GROUP=xjtu # the group to run as
-NUM_WORKERS=3 # how many worker processes should Gunicorn spawn
+PID_FILE=/home/share/vod/run/vod.pid
+USER=tongshi # the user to run as
+GROUP=tongshi # the group to run as
+NUM_WORKERS=4 # how many worker processes should Gunicorn spawn
 TIME_OUT=900 #set time out!!!!!
 DJANGO_SETTINGS_MODULE=mysite.settings # which settings file should Django use
 DJANGO_WSGI_MODULE=mysite.wsgi # WSGI module name
-APP=/home/xjtu/Django-vod/env/bin/gunicorn
+APP=/home/share/vod/env/bin/gunicorn
 echo "Starting $NAME as `whoami`"
 
 # Activate the virtual environment
@@ -27,8 +28,11 @@ test -d $RUNDIR || mkdir -p $RUNDIR
 exec $APP ${DJANGO_WSGI_MODULE}:application \
 --name $NAME \
 --workers $NUM_WORKERS \
+--worker-class gevent \
 --timeout=$TIME_OUT \
 --user=$USER --group=$GROUP \
 --bind=unix:$SOCKFILE \
 --log-level=debug \
---log-file=-
+--log-file=- \
+--reload \
+--pid $PID_FILE \

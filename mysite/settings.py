@@ -48,7 +48,6 @@ THUMBNAIL_PROCESSORS = (
 # FILER_CANONICAL_URL = 'sharing/'
 
 # Application definition
-
 INSTALLED_APPS = [
     'easy_thumbnails',
     # 'filer',
@@ -165,7 +164,7 @@ DATABASES = {
         'NAME': 'tsrtmp',
         'USER': 'root',
         'PASSWORD': '123',
-        'HOST': '',
+        'HOST': '1.8.90.63',
         'PORT': '',
     }
 }
