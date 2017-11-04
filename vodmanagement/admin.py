@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
 
 from vodmanagement.api.serializers import *
+from vodmanagement.custom_widget import KindEditor
 from .models import *
 from django import forms
 from django.contrib import messages
@@ -59,6 +60,9 @@ class VodForm(forms.ModelForm):
             'slug',
             'search_word',
         )
+        widgets = {
+            'description': KindEditor(),
+        }
 
 
 @admin.register(Vod)
@@ -75,7 +79,7 @@ class VodModelAdmin(admin.ModelAdmin):
     actions = ['delete_hard', 'copy_objects', 'clear_view_count', 'activate_vod', 'deactivate_vod', 'backup']
     form = VodForm
     fieldsets = [
-        ('描述', {'fields': ['category', 'save_path', 'year', 'region', ('description', 'select_name'), 'active']}),
+        ('描述', {'fields': ['category', 'save_path', 'year', 'region', 'description', 'select_name', 'active']}),
         ('文件', {'fields': ['image', ('local_video', 'video'), 'title']}),
         ('视频列表',{'fields': ['video_list']}),
         ('高级', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})

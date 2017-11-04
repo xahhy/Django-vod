@@ -23,6 +23,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework_jwt.views import obtain_jwt_token
 
+from mysite.upload import upload_image
 
 admin.site.site_header = '视频点播管理系统'
 urlpatterns = [
@@ -42,6 +43,7 @@ urlpatterns = [
     # url(r'^filer/',include('filer.urls')),
     # url(r'^accounts/', include('allauth.urls')),
     # url(r'^accounts/', include('allauth.urls')),
+    url(r'^uploads/(?P<dir_name>[^/]+)$', upload_image, name='upload_image')
 ]
 # if settings.DEBUG:
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
