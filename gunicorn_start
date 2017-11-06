@@ -2,8 +2,8 @@
 
 NAME="mysite_app" # Name of the application
 DJANGODIR=/home/share/vod # Django project directory
-SOCKFILE=/home/share/vod/run/gunicorn.sock # we will communicte using this unix socket
-PID_FILE=/home/share/vod/run/vod.pid
+SOCKFILE=/run/vod/gunicorn.sock # we will communicte using this unix socket
+PID_FILE=/run/vod/vod.pid
 USER=tongshi # the user to run as
 GROUP=tongshi # the group to run as
 NUM_WORKERS=4 # how many worker processes should Gunicorn spawn

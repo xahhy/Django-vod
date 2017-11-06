@@ -163,6 +163,21 @@ class RecordListAPIView(ListAPIView):
         return Record.objects.filter(active=1)
 
 
+class RecordDetailAPIView(RetrieveAPIView):
+    """
+    VodDetailAPIView doc
+
+    """
+    # queryset = Vod.objects.all()
+    lookup_field = 'id'
+    serializer_class = RecordDetailSerializer
+    permission_classes = [AllowAny]
+
+    def get_queryset(self, *args, **kwargs):
+        query_set =  Record.objects.filter(active=1)
+        return query_set
+
+
 class HomeListAPIView(APIView):
     """
     HomeListAPIView doc

@@ -365,7 +365,7 @@ class Record(models.Model):
     video = models.FilePathField(path=settings.RECORD_MEDIA_ROOT, match='.*\.m3u8$', blank=True, recursive=True)
     start_time = models.DateTimeField(auto_now_add=False, null=True, blank=True)
     end_time = models.DateTimeField(auto_now_add=False, null=True, blank=True)
-    video_list = models.ManyToManyField('self', blank=True)
+    video_list = SortedManyToManyField('self', blank=True)
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
     channel = models.CharField(max_length=120, verbose_name='所属频道名称')
     progress = models.IntegerField(null=True, blank=True, default=0)

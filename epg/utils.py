@@ -50,4 +50,4 @@ def download_ts_file(url, dest_path):
     return None
 
 if __name__ == '__main__':
-    download_m3u8_files('http://localhost:80/m3u8/stream1.m3u8',settings.RECORD_MEDIA_ROOT)
+    download_m3u8_files(None, 'http://1.8.90.63/ZJTV1/20170709/7PHQ701574750.m3u8',settings.RECORD_MEDIA_ROOT)

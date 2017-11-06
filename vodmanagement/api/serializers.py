@@ -98,8 +98,9 @@ class RegionListSerializer(ModelSerializer):
 """
 Record Serializers
 """
-class RecordListSerializer(ModelSerializer):
+class RecordSubsetSerializer(ModelSerializer):
     url = SerializerMethodField()
+
     class Meta:
         model = Record
         fields = [
@@ -114,6 +115,48 @@ class RecordListSerializer(ModelSerializer):
             return pathname2url(str(rel_path))
         except:
             return 'Error URL'
+
+
+class RecordDetailSerializer(ModelSerializer):
+    url = SerializerMethodField()
+    video_list = RecordSubsetSerializer(many=True)
+
+    class Meta:
+        model = Record
+        fields = [
+            'title',
+            'url',
+            'channel',
+            'video_list'
+        ]
+
+    def get_url(self, obj):
+        try:
+            rel_path = Path(obj.video).relative_to(Path(settings.RECORD_MEDIA_ROOT))
+            return pathname2url(str(rel_path))
+        except:
+            return 'Error URL'
+
+
+class RecordListSerializer(ModelSerializer):
+    url = SerializerMethodField()
+
+    class Meta:
+        model = Record
+        fields = [
+            'id',
+            'title',
+            'url',
+            'channel',
+        ]
+
+    def get_url(self, obj):
+        try:
+            rel_path = Path(obj.video).relative_to(Path(settings.RECORD_MEDIA_ROOT))
+            return pathname2url(str(rel_path))
+        except:
+            return 'Error URL'
+
 
 """
 Backup Serializers
