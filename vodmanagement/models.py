@@ -369,6 +369,7 @@ class Record(models.Model):
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
     channel = models.CharField(max_length=120, verbose_name='所属频道名称')
     progress = models.IntegerField(null=True, blank=True, default=0)
+    select_name = models.CharField(max_length=100, blank=False, verbose_name='选集名称', default='1')
 
     class Meta:
         verbose_name = '录播转点播'

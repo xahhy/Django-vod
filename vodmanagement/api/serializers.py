@@ -106,7 +106,8 @@ class RecordSubsetSerializer(ModelSerializer):
         fields = [
             'title',
             'url',
-            'channel'
+            'channel',
+            'select_name'
         ]
 
     def get_url(self, obj):
@@ -147,6 +148,7 @@ class RecordListSerializer(ModelSerializer):
             'id',
             'title',
             'url',
+            'image',
             'channel',
         ]
 

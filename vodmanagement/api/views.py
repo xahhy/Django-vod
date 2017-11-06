@@ -158,6 +158,8 @@ class RegionListAPIView(ListAPIView):
 class RecordListAPIView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = RecordListSerializer
+    pagination_class = RecordPageNumberPagination
+
 
     def get_queryset(self, *args, **kwargs):
         return Record.objects.filter(active=1)
