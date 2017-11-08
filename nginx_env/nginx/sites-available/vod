@@ -1,0 +1,58 @@
+upstream vod_server {
+    # fail_timeout=0 means we always retry an upstream even if it failed
+    # to return a good HTTP response (in case the Unicorn master nukes a
+    # single worker for timing out).
+    server unix:/run/vod/gunicorn.sock fail_timeout=0;
+}
+
+server {
+
+    listen 8888;
+    server_name vod.com;
+
+    client_max_body_size 10G;
+    keepalive_timeout 5;
+
+    access_log /var/log/vod/nginx-access.log;
+    error_log /var/log/vod/nginx-error.log;
+    sendfile on;
+
+    # Add index.php to the list if you are using PHP
+    index index.html index.htm index.nginx-debian.html;
+
+    # location /static/ {
+    #     alias /home/share/vod/static/;
+    # }
+
+    # location /media/ {
+    #     alias /home/share/vod/media/;
+    # }
+
+    location / {
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' '*';
+
+        add_header 'Access-Control-Allow-Headers' '*';
+
+         # checks for static file, if not found proxy to app
+        try_files $uri @proxy_to_app;
+
+    }
+    
+    location @proxy_to_app {
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		# enable this if and only if you use HTTPS
+		# proxy_set_header X-Forwarded-Proto https;
+		proxy_set_header Host $http_host;
+		# we don't want nginx trying to do something clever with
+		# redirects, we set the Host: header above already.
+		proxy_redirect off;
+		proxy_pass http://vod_server;
+    }
+
+    # Error pages
+    error_page 500 502 503 504 /500.html;
+    location = /500.html {
+        root /home/share/vod/static/;
+    }
+}
