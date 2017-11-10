@@ -162,7 +162,15 @@ class RecordListAPIView(ListAPIView):
 
 
     def get_queryset(self, *args, **kwargs):
-        return Record.objects.filter(active=1)
+        queryset_list = Record.objects.filter(active=1)
+        search = self.request.GET.get("search")
+        if search is not None and search != '':
+            queryset_list = queryset_list.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(channel__icontains=search)
+            )
+        return queryset_list
 
 
 class RecordDetailAPIView(RetrieveAPIView):

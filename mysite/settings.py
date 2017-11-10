@@ -164,7 +164,7 @@ DATABASES = {
         'NAME': 'tsrtmp',
         'USER': 'root',
         'PASSWORD': '123',
-        'HOST': '1.8.90.63',
+        'HOST': '',
         'PORT': '',
     }
 }
