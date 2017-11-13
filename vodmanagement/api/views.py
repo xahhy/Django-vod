@@ -1,3 +1,5 @@
+import random
+
 from django.db.models import Q
 import itertools
 from rest_framework.views import APIView
@@ -188,6 +190,15 @@ class RecordDetailAPIView(RetrieveAPIView):
         return query_set
 
 
+def get_random_videos(max_length=6):
+    random_videos = get_all_videos(None)
+    videos_length = len(random_videos)
+    if videos_length <= max_length:
+        return random_videos
+    else:
+        return random.sample(random_videos, max_length)
+
+
 class HomeListAPIView(APIView):
     """
     HomeListAPIView doc
@@ -195,13 +206,19 @@ class HomeListAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, format=None):
-        preview_categories = []
-        for category in VideoCategory.objects.all():
-            videos = Vod.objects.filter(category__name=category.name)[:6]
-            preview_categories.append(
-                {
-                    'category': category.name,
-                    'videos': VodListSerializer(videos, many=True).data
-                }
-            )
+        preview_categories = {}
+        videos = get_random_videos()
+        preview_categories['count'] = len(videos)
+        preview_categories['videos'] = VodListSerializer(videos, many=True).data
         return Response(preview_categories)
+    # def get(self, request, format=None):
+    #     preview_categories = []
+    #     for category in VideoCategory.objects.all():
+    #         videos = Vod.objects.filter(category__name=category.name)[:6]
+    #         preview_categories.append(
+    #             {
+    #                 'category': category.name,
+    #                 'videos': VodListSerializer(videos, many=True).data
+    #             }
+    #         )
+    #     return Response(preview_categories)
