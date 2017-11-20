@@ -18,7 +18,7 @@ class VodListSerializer(ModelSerializer):
     #  )
     image = SerializerMethodField()
     category = SerializerMethodField()
-
+    definition = SerializerMethodField()
     class Meta:
         model = Vod
         fields = [
@@ -31,8 +31,11 @@ class VodListSerializer(ModelSerializer):
             'slug',
         ]
 
+    def get_definition(self, obj):
+        return obj.get_definition_display()
+
     def get_category(self, obj):
-        return str(obj.category)
+        return obj.category.name
 
     def get_image(self, obj):
         try:
@@ -59,7 +62,7 @@ class VodDetailSerializer(ModelSerializer):
 
     """
     # category = SerializerMethodField()
-    definition = serializers.StringRelatedField()
+    definition = SerializerMethodField()
     # category = serializers.PrimaryKeyRelatedField(read_only=True)
     category = serializers.SlugRelatedField(
         read_only=True,
@@ -82,6 +85,8 @@ class VodDetailSerializer(ModelSerializer):
     def get_category(self, obj):
         return str(obj.category)
 
+    def get_definition(self, obj):
+        return obj.get_definition_display()
 
 # Category Serializers
 class CategoryListSerializer(ModelSerializer):
@@ -168,6 +173,7 @@ class VideoBackupSubsetSerializer(ModelSerializer):
     category2 = serializers.SerializerMethodField()
     video = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
+    definition = SerializerMethodField()
     class Meta:
         model = Vod
         fields = [
@@ -182,6 +188,9 @@ class VideoBackupSubsetSerializer(ModelSerializer):
             'category2',
             'region'
         ]
+
+    def get_definition(self, obj):
+        return obj.get_definition_display()
 
     def get_category1(self, obj):
         level_1 = VideoCategory.objects.filter(subset__name=obj.category.name)
@@ -202,6 +211,8 @@ class VideoBackupSerializer(ModelSerializer):
     category2 = serializers.SerializerMethodField()
     video = serializers.SerializerMethodField()
     image = serializers.SerializerMethodField()
+    definition = serializers.SerializerMethodField()
+
     class Meta:
         model = Vod
         fields = [
@@ -217,6 +228,9 @@ class VideoBackupSerializer(ModelSerializer):
             'region',
             'video_list'
         ]
+
+    def get_definition(self, obj):
+        return obj.get_definition_display()
 
     def get_category1(self, obj):
         level_1 = VideoCategory.objects.filter(subset__name=obj.category.name)

@@ -7,6 +7,7 @@ cache_time = 1
 urlpatterns = [
     url(r'^$', cache_page(cache_time)(VodListAPIView.as_view()), name='list'),
     url(r'^home/$', cache_page(cache_time)(HomeListAPIView.as_view()), name='home'),
+    url(r'^home/overview$', cache_page(cache_time)(HomeOverViewAPIView.as_view()), name='home_overview'),
     # url(r'^category/$', cache_page(60)(CategoryListAPIView.as_view()), name='category'),
     url(r'^category/$', cache_page(cache_time)(CategoryListAPIView.as_view()), name='category'),
     url(r'^year/$', cache_page(cache_time)(YearListAPIView.as_view()), name='year'),

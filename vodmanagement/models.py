@@ -157,11 +157,11 @@ TYPES = (
     ('common', 'Common'),
     ('special', 'Special purpose'),
 )
-VIDEO_QUALITY = (
+VIDEO_QUALITY = [
     ('SD', '标清'),
     ('HD', '高清'),
     ('FHD', '超清'),
-)
+]
 SAVE_PATH = (
     ('', settings.LOCAL_MEDIA_ROOT),
 )

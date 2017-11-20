@@ -190,7 +190,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 THUMBNAIL_ALIASES = {
     '': {
-        'avatar': {'size': (200, 300), 'crop': True},
+        'avatar': {'size': (160, 100), 'crop': True},
     },
 }
 REST_FRAMEWORK = {
