@@ -11,7 +11,9 @@ from django.contrib import admin
 from django.conf import settings
 import humanfriendly
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save, post_init
+from django.db.models.signals import pre_save, post_init, post_save
+from django.dispatch import receiver
+
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 from django.core.files import File
@@ -28,6 +30,8 @@ from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResum
     ModelAdminResumableMultiFileField, ModelAdminResumableRestoreFileField
 from django.utils.encoding import uri_to_iri
 from pathlib import Path
+from django.core.management import call_command
+
 # for pinyin search
 from xpinyin import Pinyin
 if six.PY3:
@@ -281,82 +285,11 @@ class Restore(models.Model):
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
-        config = self.txt_file.read()
-        config_json = json.loads(config)
-        # Analyze the json format restore config file
-        try:
-            for video in config_json:
-                # Create categories if not exist.
-                category1= video.get('category1')
-                category1_obj = VideoCategory.objects.filter(name=category1, level=1).first()
-                if category1 is not None and category1_obj is not None:
-                    category1_obj = VideoCategory(name=category1, level=1).save()
+        result = super(Restore, self).save()
+        file_path = self.txt_file.path
+        call_command('loaddata', file_path)
+        return result
 
-                category2= video.get('category2')
-                category2_obj = VideoCategory.objects.filter(name=category2, level=2).first()
-                if category2 is not None and category1_obj is not None:
-                    if not category2_obj:
-                        category2_obj= VideoCategory(name=category2, level=2).save()
-                        category1_obj.subset.add(category2_obj)
-
-                # Create region if not exist.
-                region = video.get('region')
-                region_obj = VideoRegion.objects.filter(name=region).first()
-                if region is not None and region_obj is not None:
-                    region_obj = VideoRegion(name=region).save()
-
-                # Create Vod instance.
-                new_video = Vod(title=video.get('title'),
-                                image=video.get('image'),
-                                video=video.get('video'),
-                                save_path=video.get('save_path'),
-                                definition=video.get('definition'),
-                                year=video.get('year'),
-                                description=video.get('description'),
-                                category=category2_obj,
-                                region=region_obj,
-                                )
-                new_video.save(without_valid=True)
-                video_list = video.get('video_list')
-                if video_list:
-                    for sub_video in video_list:
-                        # Create categories if not exist.
-                        category1 = sub_video.get('category1')
-                        category1_obj = VideoCategory.objects.filter(name=category1, level=1).first()
-                        if category1 is not None and category1_obj is not None:
-                            category1_obj = VideoCategory(name=category1, level=1).save()
-
-                        category2 = sub_video.get('category2')
-                        category2_obj = VideoCategory.objects.filter(name=category2, level=2).first()
-                        if category2 is not None and category1_obj is not None:
-                            if not category2_obj:
-                                category2_obj = VideoCategory(name=category2, level=2).save()
-                                category1_obj.subset.add(category2_obj)
-
-                        # Create region if not exist.
-                        region = sub_video.get('region')
-                        region_obj = VideoRegion.objects.filter(name=region).first()
-                        if region is not None and region_obj is not None:
-                            region_obj = VideoRegion(name=region).save()
-
-                        # Create Vod instance.
-                        new_sub_video = Vod(title=sub_video.get('title'),
-                                        image=sub_video.get('image'),
-                                        video=sub_video.get('video'),
-                                        save_path=sub_video.get('save_path'),
-                                        definition=sub_video.get('definition'),
-                                        year=sub_video.get('year'),
-                                        description=sub_video.get('description'),
-                                        category=category2_obj,
-                                        region=region_obj,
-                                        )
-                        new_sub_video.save(without_valid=True)
-                        new_video.video_list.add(new_sub_video)
-                        new_video.save(without_valid=True)
-        except Exception as e:
-            print('解析备份配置文件失败',e)
-
-        return super(Restore, self).save()
 
 # ---------------------------------------------------------------------
 class Record(models.Model):

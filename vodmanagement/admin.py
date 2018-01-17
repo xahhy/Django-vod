@@ -46,7 +46,6 @@ class VodForm(forms.ModelForm):
     #     self.save_m2m()
     #     return instance
 
-
     class Meta:
         model = Vod
         fields = (
@@ -81,7 +80,7 @@ class VodModelAdmin(admin.ModelAdmin):
     fieldsets = [
         ('描述', {'fields': ['category', 'save_path', 'year', 'region', 'description', 'select_name', 'active']}),
         ('文件', {'fields': ['image', ('local_video', 'video'), 'title']}),
-        ('视频列表',{'fields': ['video_list']}),
+        ('视频列表', {'fields': ['video_list']}),
         ('高级', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})
     ]
 
@@ -139,6 +138,7 @@ class VodModelAdmin(admin.ModelAdmin):
             item.save()
         self.message_user(request, '%s个节目成功激活.' % queryset.count()
                           , messages.SUCCESS)
+
     activate_vod.short_description = '激活节目列表'
 
     def deactivate_vod(self, request, queryset):
@@ -147,6 +147,7 @@ class VodModelAdmin(admin.ModelAdmin):
             item.save()
         self.message_user(request, '%s个节目成功取消激活.' % queryset.count()
                           , messages.SUCCESS)
+
     deactivate_vod.short_description = '取消激活节目'
 
     def clear_view_count(self, request, queryset):
@@ -156,9 +157,17 @@ class VodModelAdmin(admin.ModelAdmin):
 
     def backup(self, request, queryset):
         response = HttpResponse(content_type='text/plain')
-        response['Content-Disposition'] = 'attachment; filename=backup.txt'
-        result = VideoBackupSerializer(queryset, many=True)  # you can import json to return any field
-        response.write(JSONRenderer().render(result.data))
+        file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.json'
+        response['Content-Disposition'] = 'attachment; filename=%s' % file_name
+        from django.core.management import call_command
+        directory = './backup'
+        full_file_name = os.path.join(directory, file_name)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        with open(full_file_name, 'w') as f:
+            f.write('')
+        call_command('dumpdata', 'vodmanagement', '-o', full_file_name)
+        response.write(open(full_file_name, 'rb').read())
         return response
 
     class Media:
@@ -195,6 +204,7 @@ class VideoCategoryModelAdmin(admin.ModelAdmin):
 
     category_description.short_description = '分类名称'
 
+
 class LinkModelAdmin(admin.ModelAdmin):
     list_display = ['name', 'category']
     list_editable = ['category']
@@ -202,6 +212,7 @@ class LinkModelAdmin(admin.ModelAdmin):
 
 class MultipleUploadForm(forms.ModelForm):
     '''docstring for VodForm'''
+
     def __init__(self, *args, **kwargs):
         super(MultipleUploadForm, self).__init__(*args, **kwargs)
         self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
@@ -213,6 +224,7 @@ class MultipleUploadForm(forms.ModelForm):
 
 class RestoreForm(forms.ModelForm):
     '''docstring for VodForm'''
+
     def __init__(self, *args, **kwargs):
         super(RestoreForm, self).__init__(*args, **kwargs)
         self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
@@ -229,36 +241,10 @@ class MultipleUploadModelAdmin(admin.ModelAdmin):
     add_form_template = 'vodmanagement/MultipleUpload/change_form.html'
 
 
-# @admin.register(VodList)
-# class VodListModelAdmin(admin.ModelAdmin):
-#     filter_horizontal = ['vod_list']
-#     list_display = ['title', 'colored_active']
-#     actions = ['activate_vod_list', 'deactivate_vod_list']
-
-#     def activate_vod_list(self, request, queryset):
-#         for item in queryset:
-#             item.active = 1
-#             item.save()
-#         self.message_user(request, '%s个节目列表成功激活.' % queryset.count()
-#                           , messages.SUCCESS)
-#     activate_vod_list.short_description = '激活节目列表'
-
-#     def deactivate_vod_list(self, request, queryset):
-#         for item in queryset:
-#             item.active = 0
-#             item.save()
-#         self.message_user(request, '%s个节目列表成功取消激活.' % queryset.count()
-#                           , messages.SUCCESS)
-#     deactivate_vod_list.short_description = '取消激活节目列表'
-
-
-# @admin.register(VideoTag)
-# class VideoTagModelAdmin(admin.ModelAdmin):
-    # pass
-
 @admin.register(Record)
 class RecordModelAdmin(admin.ModelAdmin):
     list_display = ['title', 'progress', 'colored_active']
+
 
 @admin.register(Restore)
 class RestoreModelAdmin(admin.ModelAdmin):
@@ -266,6 +252,6 @@ class RestoreModelAdmin(admin.ModelAdmin):
     change_form_template = 'vodmanagement/change_form.html'
     add_form_template = 'vodmanagement/change_form.html'
 
+
 admin.site.register(FileDirectory)
 admin.site.register(VideoRegion)
-
