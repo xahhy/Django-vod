@@ -5,12 +5,11 @@ import m3u8
 from urllib.parse import urlparse, urljoin
 from urllib.request import urlretrieve, pathname2url
 from mysite import settings
-from vodmanagement.models import Record
-
+from vodmanagement.models import Vod
 
 def download_m3u8_files(id, url_str, dest_dir):
     try:
-        instance = Record.objects.get(id=id)
+        instance = Vod.objects.get(id=id)
         url = urlparse(url_str)
         m3u8_root = url.path
         m3u8_host_url = url.scheme+'://'+url.netloc

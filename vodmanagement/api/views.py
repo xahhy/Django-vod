@@ -159,38 +159,6 @@ class RegionListAPIView(ListAPIView):
         return VideoRegion.objects.all()
 
 
-class RecordListAPIView(ListAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = RecordListSerializer
-    pagination_class = RecordPageNumberPagination
-
-
-    def get_queryset(self, *args, **kwargs):
-        queryset_list = Record.objects.filter(active=1)
-        search = self.request.GET.get("search")
-        if search is not None and search != '':
-            queryset_list = queryset_list.filter(
-                Q(title__icontains=search) |
-                Q(description__icontains=search) |
-                Q(channel__icontains=search)
-            )
-        return queryset_list
-
-
-class RecordDetailAPIView(RetrieveAPIView):
-    """
-    VodDetailAPIView doc
-
-    """
-    lookup_field = 'id'
-    serializer_class = RecordDetailSerializer
-    permission_classes = [AllowAny]
-
-    def get_queryset(self, *args, **kwargs):
-        query_set =  Record.objects.filter(active=1)
-        return query_set
-
-
 def get_random_videos(max_length=6):
     random_videos = get_all_videos(None)
     videos_length = len(random_videos)

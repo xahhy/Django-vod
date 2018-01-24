@@ -296,39 +296,6 @@ class Restore(models.Model):
         call_command('loaddata', file_path)
         return result
 
-
-# ---------------------------------------------------------------------
-class Record(models.Model):
-    title = models.CharField(max_length=120, verbose_name='标题')
-    image = models.ImageField(upload_to=upload_record_image_location, null=True, blank=True)
-    video = models.FilePathField(path=settings.RECORD_MEDIA_ROOT, match='.*\.m3u8$', blank=True, recursive=True)
-    start_time = models.DateTimeField(auto_now_add=False, null=True, blank=True)
-    end_time = models.DateTimeField(auto_now_add=False, null=True, blank=True)
-    video_list = SortedManyToManyField('self', blank=True)
-    active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
-    channel = models.CharField(max_length=120, verbose_name='所属频道名称')
-    progress = models.IntegerField(null=True, blank=True, default=0)
-    select_name = models.CharField(max_length=100, blank=False, verbose_name='选集名称', default='1')
-    description = models.TextField(blank=True, verbose_name='简介')
-
-    class Meta:
-        verbose_name = '录播转点播'
-        verbose_name_plural = '录播转点播'
-
-    def __str__(self):
-        return self.title + '(' + str(self.video_list.count()) + ')'
-
-    def colored_active(self):
-        color_code = 'red' if self.active == 0 else 'green'
-        return format_html(
-            '<span style="color:{};">{}</span>',
-            color_code,
-            self.get_active_display()
-        )
-
-    colored_active.short_description = '是否激活'
-
-
 # ---------------------------------------------------------------------
 
 class Vod(models.Model):

@@ -241,11 +241,6 @@ class MultipleUploadModelAdmin(admin.ModelAdmin):
     add_form_template = 'vodmanagement/MultipleUpload/change_form.html'
 
 
-@admin.register(Record)
-class RecordModelAdmin(admin.ModelAdmin):
-    list_display = ['title', 'progress', 'colored_active']
-
-
 @admin.register(Restore)
 class RestoreModelAdmin(admin.ModelAdmin):
     form = RestoreForm
