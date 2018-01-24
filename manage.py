@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
-import pymysql
+# import pymysql
 import django
 
 # pymysql.install_as_MySQLdb()

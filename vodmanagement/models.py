@@ -34,6 +34,7 @@ from django.core.management import call_command
 
 # for pinyin search
 from xpinyin import Pinyin
+
 if six.PY3:
     from django.utils.encoding import smart_str
 else:
@@ -50,6 +51,7 @@ for i in range(0,10):
 >>>
 This script will copy 10 objs[0] in database
 """
+
 
 class UserPermission(models.Model):
     user = models.OneToOneField(User)
@@ -140,7 +142,7 @@ def default_filedir():
 # ---------------------------------------------------------------------
 # if leave path blank,it will save it as the default file dir:settings.MEDIA_ROOT
 class FileDirectory(models.Model):
-    path = models.CharField(max_length=512,default=default_filedir, blank=True)
+    path = models.CharField(max_length=512, default=default_filedir, blank=True)
 
     class Meta:
         verbose_name = '视频上传路径'
@@ -170,6 +172,7 @@ SAVE_PATH = (
     ('', settings.LOCAL_MEDIA_ROOT),
 )
 
+
 class VideoRegion(models.Model):
     name = models.CharField(max_length=200, verbose_name='地区', unique=True)
 
@@ -189,8 +192,10 @@ class VideoCategory(models.Model):
                             verbose_name='类型'
                             )
     isSecret = models.BooleanField(default=False, verbose_name='是否加密')
-    level = models.IntegerField(null=False, blank=False, default=1, choices=((1, '一级分类'), (2, '二级分类')), verbose_name='分类等级')
+    level = models.IntegerField(null=False, blank=False, default=1, choices=((1, '一级分类'), (2, '二级分类')),
+                                verbose_name='分类等级')
     subset = models.ManyToManyField('self', blank=True, verbose_name='分类关系')
+
     # directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
 
     class Meta:
@@ -199,7 +204,7 @@ class VideoCategory(models.Model):
         verbose_name_plural = '视频分类管理'
 
     def __str__(self):
-        return self.name + str('  (level %d)'%(self.level))
+        return self.name + str('  (level %d)' % (self.level))
 
     def save(self, *args, **kwargs):
         # print(self.directory)
@@ -238,6 +243,7 @@ class MultipleUpload(models.Model):
     class Meta:
         verbose_name = '批量上传'
         verbose_name_plural = '批量上传管理'
+
 
 # ---------------------------------------------------------------------
 # TODO(hhy): Please Leave This Model Here. It Will Be Use In The Future.
@@ -321,6 +327,8 @@ class Record(models.Model):
         )
 
     colored_active.short_description = '是否激活'
+
+
 # ---------------------------------------------------------------------
 
 class Vod(models.Model):
@@ -328,7 +336,8 @@ class Vod(models.Model):
     # image = models.ImageField(upload_to=upload_image_location, null=True, blank=True)
     # video = models.FileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
     image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
-    video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000, verbose_name='视频')
+    video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000,
+                                         verbose_name='视频')
     duration = models.CharField(max_length=50, blank=True, null=True, verbose_name='时长')
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT, blank=True, recursive=True)
     definition = models.CharField(max_length=10, choices=VIDEO_QUALITY, blank=False, default='H', verbose_name='清晰度')
@@ -338,14 +347,12 @@ class Vod(models.Model):
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
     category = models.ForeignKey(VideoCategory, null=True, verbose_name='分类')
-    save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
+    save_path = models.CharField(max_length=128, blank=False, null=True,
+                                 default='default')  # ,default=FileDirectory.objects.first())
     year = models.CharField(max_length=10, blank=False, null=True,
                             default=datetime.datetime.now().year, verbose_name='年份')
-    region = models.ForeignKey(VideoRegion,to_field='name', null=True,blank=True, on_delete=models.SET_NULL, verbose_name='地区')
-    # type can be LINK or VOD
-    # type = models.CharField(max_length=128,
-    #                         choices=(('link','LINK'),('vod','VOD'),),
-    #                         default='link')
+    region = models.ForeignKey(VideoRegion, to_field='name', null=True, blank=True, on_delete=models.SET_NULL,
+                               verbose_name='地区')
     file_size = models.CharField(max_length=128, default='0B', editable=False, verbose_name='文件大小')
     view_count = models.IntegerField(default=0, verbose_name='观看次数')
     view_count_temp = 0
@@ -362,6 +369,7 @@ class Vod(models.Model):
     video_list = SortedManyToManyField('self', blank=True)
     # video_list = models.ManyToManyField('self', blank=True, symmetrical=False)
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
+    progress = models.IntegerField(null=True, blank=True, default=0)
     objects = VodManager()
 
     class Meta:
@@ -382,7 +390,7 @@ class Vod(models.Model):
 
         if self.local_video != '' and self.local_video is not None:
             basename = Path(self.local_video).relative_to(Path(settings.LOCAL_MEDIA_ROOT))
-            self.video.name = str(Path(settings.LOCAL_MEDIA_URL)/basename)
+            self.video.name = str(Path(settings.LOCAL_MEDIA_URL) / basename)
             print("save local_video to filefield done")
 
         if without_valid:
@@ -395,8 +403,9 @@ class Vod(models.Model):
                 rel_name = uri_to_iri(basename)  # Djan go.mp4
 
                 #  Make sure the self.video.name is not in the LOCAL_FOLDER
-                if not self.video.name.startswith(settings.LOCAL_FOLDER_NAME):
-                    self.video.name = str(Path(self.save_path)/rel_name)
+                if not self.video.name.startswith(settings.LOCAL_FOLDER_NAME) and \
+                        not self.video.name.startswith(settings.RECORD_MEDIA_FOLDER):
+                    self.video.name = str(Path(self.save_path) / rel_name)
                 print("save_path:", self.save_path)
                 print(self.video.name)
                 print('size:', self.video.file.size)
@@ -412,7 +421,7 @@ class Vod(models.Model):
         try:
             if self.image:
                 # self.image.name = os.path.join(self.save_path, os.path.basename(uri_to_iri(self.image.name)))
-                self.image.name = Path(self.save_path)/Path(uri_to_iri(self.image.name)).name
+                self.image.name = Path(self.save_path) / Path(uri_to_iri(self.image.name)).name
         except:
             pass
         return super(Vod, self).save(*args, **kwargs)

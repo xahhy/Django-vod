@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 
 from epg.utils import download_m3u8_files
 from mysite import settings
-from vodmanagement.models import Record
+from vodmanagement.models import Vod
 from .models import *
 
 
@@ -54,22 +54,17 @@ class ProgramModelAdmin(admin.ModelAdmin):
         return super(ProgramModelAdmin, self).get_queryset(request).filter(finished=1)
 
     def record(self, request, queryset):
-        # for obj in queryset:
-        #     obj.is_record = 1
-        #     obj.save()
         for program in queryset:
             try:
-                m3u8_file_path = parse.urlparse(program.url).path
-                m3u8_file_path = str(Path(settings.RECORD_MEDIA_ROOT) / Path(m3u8_file_path[1:]))
+                m3u8_file_path = parse.urlparse(program.url).path  # /CCTV1/20180124/123456.m3u8
                 print(m3u8_file_path)
             except Exception as e:
                 self.message_user(request, '%s 转点播失败 请检查录播的网址是否合法'%(program.title), messages.ERROR)
                 return
-            new_record = Record(title=program.title,
-                                start_time=program.start_time,
-                                end_time=program.end_time,
-                                video=m3u8_file_path,
-                                channel=program.channel)
+            new_record = Vod(
+                title=program.title,
+                video=settings.RECORD_MEDIA_FOLDER + m3u8_file_path
+                )
             new_record.save()
             p = threading.Thread(target=download_m3u8_files, args=(new_record.id, program.url, settings.RECORD_MEDIA_ROOT))
             p.start()

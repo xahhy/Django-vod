@@ -39,7 +39,9 @@ from .permissions import *
 def get_all_videos(main_category):
     query_set = Vod.objects.filter(active=1)
     if main_category:
-        return query_set.filter(category__subset__name=main_category)
+        result = query_set.filter(category__subset__name=main_category)
+        result |= query_set.filter(category__name=main_category)
+        return result.distinct()
     return query_set
 
 
@@ -180,7 +182,6 @@ class RecordDetailAPIView(RetrieveAPIView):
     VodDetailAPIView doc
 
     """
-    # queryset = Vod.objects.all()
     lookup_field = 'id'
     serializer_class = RecordDetailSerializer
     permission_classes = [AllowAny]

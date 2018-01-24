@@ -2,16 +2,17 @@ from django.contrib import admin
 # Register your models here.
 from django.http import HttpResponse
 from rest_framework.renderers import JSONRenderer
-
+from django.core.management import call_command
 from vodmanagement.api.serializers import *
 from vodmanagement.custom_widget import KindEditor
-from .models import *
 from django import forms
 from django.contrib import messages
 from uuslug import uuslug
-from django.conf import settings
-from .utils import *
 import re
+
+from django.conf import settings
+from .models import *
+from .utils import *
 from django.utils.translation import ugettext_lazy
 
 
@@ -119,7 +120,7 @@ class VodModelAdmin(admin.ModelAdmin):
                 pass
             obj.delete()
 
-    delete_hard.short_description = 'Delete  object from disk'
+    delete_hard.short_description = '删除硬盘上的文件'
 
     def copy_objects(self, request, queryset):
         for obj in queryset:
@@ -159,14 +160,13 @@ class VodModelAdmin(admin.ModelAdmin):
         response = HttpResponse(content_type='text/plain')
         file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.json'
         response['Content-Disposition'] = 'attachment; filename=%s' % file_name
-        from django.core.management import call_command
         directory = './backup'
         full_file_name = os.path.join(directory, file_name)
         if not os.path.exists(directory):
             os.makedirs(directory)
         with open(full_file_name, 'w') as f:
             f.write('')
-        call_command('dumpdata', 'vodmanagement', '-o', full_file_name)
+        call_command('dumpdata', 'vodmanagement', '-o', full_file_name) #使用Django提供的命令行工具备份数据
         response.write(open(full_file_name, 'rb').read())
         return response
 

@@ -32,7 +32,7 @@ def download_m3u8_files(id, url_str, dest_dir):
             instance.active = 1
             instance.save()
     except Exception as e:
-        print('Quit with error!')
+        print('Download m3u8 files with error!')
         print(e)
 
 
