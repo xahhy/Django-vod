@@ -49,8 +49,8 @@ THUMBNAIL_PROCESSORS = (
 
 # Application definition
 INSTALLED_APPS = [
-    'easy_thumbnails',
     'filer',
+    'easy_thumbnails',
     'mptt',
     # 'progressbarupload',
     # 'admin_resumable',
@@ -72,7 +72,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # Scheduler App
-    'django_celery_beat',
+    # 'django_celery_beat',
 
     # Sorted Many to Many Field
     'sortedm2m',
@@ -91,9 +91,10 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.weixin',
 
 ]
-
+import django.middleware.locale
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -218,7 +219,7 @@ REST_FRAMEWORK = {
 LANGUAGE_CODE = 'zh-Hans'
 # LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
