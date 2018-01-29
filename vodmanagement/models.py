@@ -26,8 +26,6 @@ import datetime
 from filer.fields.file import FilerFileField
 from filer.fields.image import FilerImageField
 from .my_storage import *
-from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField, \
-    ModelAdminResumableMultiFileField, ModelAdminResumableRestoreFileField
 from django.utils.encoding import uri_to_iri
 from pathlib import Path
 from django.core.management import call_command
@@ -236,7 +234,7 @@ class VideoCategory(models.Model):
 
 # ---------------------------------------------------------------------
 class MultipleUpload(models.Model):
-    files = ModelAdminResumableMultiFileField(null=True, blank=True, storage=VodStorage())
+    # files = ModelAdminResumableMultiFileField(null=True, blank=True, storage=VodStorage())
     save_path = models.CharField(max_length=128, blank=False, null=True)
     category = models.ForeignKey(VideoCategory, null=True)
 
@@ -278,7 +276,7 @@ class MultipleUpload(models.Model):
 # ---------------------------------------------------------------------
 class Restore(models.Model):
     txt_file = models.FileField(blank=True, null=True, verbose_name='备份配置文件')
-    zip_file = ModelAdminResumableRestoreFileField(null=True, blank=True, storage=VodStorage(), verbose_name='压缩包')
+    # zip_file = ModelAdminResumableRestoreFileField(null=True, blank=True, storage=VodStorage(), verbose_name='压缩包')
     save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
 
     class Meta:
@@ -302,11 +300,12 @@ class Vod(models.Model):
     title = models.CharField(max_length=120, verbose_name='标题')
     # image = models.ImageField(upload_to=upload_image_location, null=True, blank=True)
     # video = models.FileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
-    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
-    video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000,
-                                         verbose_name='视频')
+    image = FilerImageField(null=True, blank=True, related_name="vod_image")
+    video = FilerFileField(null=True, blank=True, related_name="vod_video")
+    # image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
+    # video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000,
+    #                                      verbose_name='视频')
     duration = models.CharField(max_length=50, blank=True, null=True, verbose_name='时长')
-    local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT, blank=True, recursive=True)
     definition = models.CharField(max_length=10, choices=VIDEO_QUALITY, blank=False, default='H', verbose_name='清晰度')
     # image = FilerImageField(null=True, blank=True,
     #                         related_name="image_name")
@@ -346,6 +345,8 @@ class Vod(models.Model):
 
     def save(self, without_valid=False, *args, **kwargs):
         print("------- save vod -------")
+        return super(Vod, self).save(*args, **kwargs)
+
         p = Pinyin()
         full_pinyin = p.get_pinyin(smart_str(self.title), '')
         first_pinyin = p.get_initials(smart_str(self.title), '').lower()

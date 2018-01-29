@@ -21,16 +21,16 @@ class VodForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(VodForm, self).__init__(*args, **kwargs)
-        if (self.instance.image.name is '' or self.instance.image.name is None) \
-                and (self.instance.video.name is '' or self.instance.video.name is None):
-            print('save path is empty')
-            self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
-        else:
-            print('save path is:', self.instance.save_path)
-            self.fields['save_path'] = forms.ChoiceField(choices=get_save_path_choice(self.instance.save_path))
-            # self.fields['save_path'].widget.attrs['disabled='disabled''] = True
-        for instance in self.fields['category'].queryset:
-            create_category_path(name=instance.name)
+        # if (self.instance.image.name is '' or self.instance.image.name is None) \
+        #         and (self.instance.video.name is '' or self.instance.video.name is None):
+        #     print('save path is empty')
+        #     self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
+        # else:
+        #     print('save path is:', self.instance.save_path)
+        #     self.fields['save_path'] = forms.ChoiceField(choices=get_save_path_choice(self.instance.save_path))
+        #     # self.fields['save_path'].widget.attrs['disabled='disabled''] = True
+        # for instance in self.fields['category'].queryset:
+        #     create_category_path(name=instance.name)
 
     def clean_title(self):
         print('vod form clean')
@@ -80,7 +80,7 @@ class VodModelAdmin(admin.ModelAdmin):
     form = VodForm
     fieldsets = [
         ('描述', {'fields': ['category', 'save_path', 'year', 'region', 'description', 'select_name', 'active']}),
-        ('文件', {'fields': ['image', ('local_video', 'video'), 'title']}),
+        ('文件', {'fields': ['image', 'video', 'title']}),
         ('视频列表', {'fields': ['video_list']}),
         ('高级', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})
     ]

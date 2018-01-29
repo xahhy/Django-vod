@@ -50,10 +50,10 @@ THUMBNAIL_PROCESSORS = (
 # Application definition
 INSTALLED_APPS = [
     'easy_thumbnails',
-    # 'filer',
-    # 'mptt',
+    'filer',
+    'mptt',
     # 'progressbarupload',
-    'admin_resumable',
+    # 'admin_resumable',
 
     "djangocms_admin_style",
     'django.contrib.admin',
@@ -246,7 +246,7 @@ FILER_STORAGES = {
             'ENGINE': 'filer.storage.PublicFileSystemStorage',
             'OPTIONS': {
                 'location': MEDIA_ROOT,
-                'base_url': '/media/filer/',
+                'base_url': '/media/',
             },
             'UPLOAD_TO': 'filer.utils.generate_filename.by_date',
             # 'UPLOAD_TO': 'filer.utils.generate_filename.upload_video_location',
@@ -255,6 +255,8 @@ FILER_STORAGES = {
         },
     },
 }
+FILER_DUMP_PAYLOAD = True
+
 ADMIN_RESUMABLE_CHUNKSIZE = 1024 * 1024 * 10
 ADMIN_RESUMABLE_STORAGE = 'vodmanagement.my_storage.VodStorage'
 

@@ -19,6 +19,7 @@ class VodListSerializer(ModelSerializer):
     image = SerializerMethodField()
     category = SerializerMethodField()
     definition = SerializerMethodField()
+
     class Meta:
         model = Vod
         fields = [
@@ -46,6 +47,8 @@ class VodListSerializer(ModelSerializer):
 
 
 class VodDetailSubSetSerializer(ModelSerializer):
+    video = SerializerMethodField()
+
     class Meta:
         model = Vod
         fields = [
@@ -55,6 +58,9 @@ class VodDetailSubSetSerializer(ModelSerializer):
             'select_name'
         ]
 
+    def get_video(self, obj):
+        return obj.video.url
+
 
 class VodDetailSerializer(ModelSerializer):
     """
@@ -63,6 +69,8 @@ class VodDetailSerializer(ModelSerializer):
     """
     # category = SerializerMethodField()
     definition = SerializerMethodField()
+    image = SerializerMethodField()
+    video = SerializerMethodField()
     # category = serializers.PrimaryKeyRelatedField(read_only=True)
     category = serializers.SlugRelatedField(
         read_only=True,
@@ -70,6 +78,7 @@ class VodDetailSerializer(ModelSerializer):
     )
     # video_list = serializers.SerializerMethodField()
     video_list = VodDetailSubSetSerializer(many=True)
+
     class Meta:
         model = Vod
         fields = [
@@ -88,6 +97,13 @@ class VodDetailSerializer(ModelSerializer):
     def get_definition(self, obj):
         return obj.get_definition_display()
 
+    def get_image(self, obj):
+        return obj.image.url
+
+    def get_video(self, obj):
+        return obj.video.url
+
+
 # Category Serializers
 class CategoryListSerializer(ModelSerializer):
     class Meta:
@@ -99,87 +115,3 @@ class RegionListSerializer(ModelSerializer):
     class Meta:
         model = VideoRegion
         fields = ['name']
-
-
-"""
-Backup Serializers
-"""
-class VideoBackupSubsetSerializer(ModelSerializer):
-    category1 = serializers.SerializerMethodField()
-    category2 = serializers.SerializerMethodField()
-    video = serializers.SerializerMethodField()
-    image = serializers.SerializerMethodField()
-    definition = SerializerMethodField()
-    class Meta:
-        model = Vod
-        fields = [
-            'title',
-            'image',
-            'video',
-            'definition',
-            'save_path',
-            'year',
-            'description',
-            'category1',
-            'category2',
-            'region'
-        ]
-
-    def get_definition(self, obj):
-        return obj.get_definition_display()
-
-    def get_category1(self, obj):
-        level_1 = VideoCategory.objects.filter(subset__name=obj.category.name)
-        return level_1.first().name
-
-    def get_category2(self, obj):
-        return obj.category.name
-
-    def get_video(self, obj):
-        return uri_to_iri(obj.video)
-
-    def get_image(selfs, obj):
-        return uri_to_iri(obj.image)
-
-class VideoBackupSerializer(ModelSerializer):
-    video_list = VideoBackupSubsetSerializer(many=True)
-    category1 = serializers.SerializerMethodField()
-    category2 = serializers.SerializerMethodField()
-    video = serializers.SerializerMethodField()
-    image = serializers.SerializerMethodField()
-    definition = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Vod
-        fields = [
-            'title',
-            'image',
-            'video',
-            'definition',
-            'save_path',
-            'year',
-            'description',
-            'category1',
-            'category2',
-            'region',
-            'video_list'
-        ]
-
-    def get_definition(self, obj):
-        return obj.get_definition_display()
-
-    def get_category1(self, obj):
-        level_1 = VideoCategory.objects.filter(subset__name=obj.category.name)
-        return level_1.first().name
-
-    def get_category2(self, obj):
-        return obj.category.name
-
-    def get_video(self, obj):
-        return uri_to_iri(obj.video)
-
-    def get_image(selfs, obj):
-        return uri_to_iri(obj.image)
-# class HomeListSerializer(Serializer):
-#     videos = VodListSerializer()
-#     category = CategoryListSerializer()
