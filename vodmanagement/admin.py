@@ -110,14 +110,16 @@ class VodModelAdmin(admin.ModelAdmin):
 
     def delete_hard(self, request, queryset):
         for obj in queryset:
-            try:
-                delete_hard(obj.image.path)
-            except:
-                pass
-            try:
-                delete_hard(obj.video.path)
-            except:
-                pass
+            # try:
+            #     delete_hard(obj.image.path)
+            # except:
+            #     pass
+            # try:
+            #     delete_hard(obj.video.path)
+            # except:
+            #     pass
+            obj.image.delete()
+            obj.video.delete()
             obj.delete()
 
     delete_hard.short_description = '删除硬盘上的文件'
@@ -158,15 +160,19 @@ class VodModelAdmin(admin.ModelAdmin):
 
     def backup(self, request, queryset):
         response = HttpResponse(content_type='text/plain')
-        file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.json'
+        file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.dump'
         response['Content-Disposition'] = 'attachment; filename=%s' % file_name
-        directory = './backup'
-        full_file_name = os.path.join(directory, file_name)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        with open(full_file_name, 'w') as f:
-            f.write('')
-        call_command('dumpdata', 'vodmanagement', '-o', full_file_name) #使用Django提供的命令行工具备份数据
+        # directory = './backup'
+        full_file_name = os.path.join(settings.BACKUP_LOCATION, file_name)
+        call_command('dbbackup', '-o', file_name)
+        # if not os.path.exists(directory):
+        #     os.makedirs(directory)
+        # with open(full_file_name, 'w') as f:
+        #     f.write('')
+        # args = tuple(settings.BACKUP_APPS) + ('--natural-foreign',) + ('-o', full_file_name)
+        # call_command('dumpdata', *args) #使用Django提供的命令行工具备份数据
+        # call_command('dumpdata', 'filer.file', '-o', full_file_name) #使用Django提供的命令行工具备份数据
+
         response.write(open(full_file_name, 'rb').read())
         return response
 
@@ -227,7 +233,7 @@ class RestoreForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RestoreForm, self).__init__(*args, **kwargs)
-        self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
+        # self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
 
     class Meta:
         model = Restore
@@ -243,10 +249,20 @@ class MultipleUploadModelAdmin(admin.ModelAdmin):
 
 @admin.register(Restore)
 class RestoreModelAdmin(admin.ModelAdmin):
+    actions = ['restore_db']
     form = RestoreForm
-    change_form_template = 'vodmanagement/change_form.html'
-    add_form_template = 'vodmanagement/change_form.html'
 
+    # change_form_template = 'vodmanagement/change_form.html'
+    # add_form_template = 'vodmanagement/change_form.html'
+
+    def restore_db(self, request, queryset):
+        if len(queryset) > 1:
+            self.message_user(request, '只能选择一个数据来恢复！', messages.ERROR)
+        for item in queryset:
+            call_command('dbrestore', '--database', 'default', '-i', Path(item.txt_file).name)
+        self.message_user(request, '成功恢复数据', messages.SUCCESS)
+
+    restore_db.short_description = '恢复数据'
 
 admin.site.register(FileDirectory)
 admin.site.register(VideoRegion)

@@ -1,0 +1,59 @@
+{% load i18n filer_admin_tags staticfiles %}
+
+{% spaceless %}
+    <div class="dz-preview dz-file-preview hidden js-filer-dropzone-template">
+        <span class="filerFile">
+            <div class="dz-thumbnail"><img class="quiet" data-dz-thumbnail></div>
+            <span data-dz-name class="dz-name"></span>
+            <img class="filerClearer" src="{% static admin_icon_delete %}" width="10" height="10" alt="{% trans 'Clear' %}" title="{% trans 'Clear' %}"
+                 data-dz-remove data-no-icon-file="{% static 'filer/icons/nofile_48x48.png' %}">
+            <div class="dz-progress js-filer-dropzone-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+        </span>
+    </div>
+
+    <div class="js-filer-dropzone filer-dropzone{% if object %} js-object-attached{% endif %}" data-url="{% url 'admin:filer-ajax_upload' %}" data-max-file-size="20">
+        <div class="z-index-fix"></div>
+        <div class="dz-default dz-message js-filer-dropzone-message{% if object %} hidden{% endif %}">
+            <span class="icon fa fa-arrow-down"></span><span>{% trans "or drop your file here" %}</span>
+        </div>
+
+        <span class="filerFile js-file-selector">
+            {% if object %}
+                {% if object.icons.32 %}
+                    <a href="{{ object.url }}" target="_blank"><img class="thumbnail_img" src="{{ object.icons.48 }}" alt="{{ object.label }}"></a>
+                    &nbsp;<span class="description_text" title="{{ object.label }}">{{ object.label }}</span>
+                {% else %}
+                    <img class="thumbnail_img" src="{% static 'filer/icons/missingfile_48x48.png' %}" alt="{% trans 'file missing' %}">
+                    &nbsp;<span class="description_text" title="{% trans 'file missing' %}">{% trans 'file missing' %}</span>
+                {% endif %}
+            {% else %}
+                <img class="thumbnail_img hidden quiet" alt="{% trans 'no file selected' %}">
+                &nbsp;<span class="description_text"></span>
+            {% endif %}
+
+            <img class="filerClearer {% if not object %}hidden{% endif %}" src="{% static admin_icon_delete %}"
+                 width="10" height="10" alt="{% trans 'Clear' %}" title="{% trans 'Clear' %}"
+                 data-no-icon-file="{% static 'filer/icons/nofile_48x48.png' %}">
+
+            <a href="{{ lookup_url }}" class="js-related-lookup related-lookup {% if object %}related-lookup-change{% endif %} lookup" id="{{ id }}_lookup"
+               title="{% trans 'Lookup' %}">
+                <span class="choose-file"><span class="fa fa-picture-o"></span>{% trans 'Choose File' %}</span>
+                <span class="edit-file"><span class="fa fa-pencil"></span></span>
+            </a>
+
+            <br>
+
+            {{ hidden_input }}
+            <script type="text/javascript" id="{{id}}_javascript">
+                django.jQuery(document).ready(function(){
+                    var plus = django.jQuery('#add_{{ id }}');
+                    if (plus.length){
+                        plus.remove();
+                    }
+                    // Delete this javascript once loaded to avoid the "add new" link duplicates it
+                    django.jQuery('#{{id}}_javascript').remove();
+                });
+            </script>
+        </span>
+    </div>
+{% endspaceless %}

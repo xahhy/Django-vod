@@ -1,0 +1,1058 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Translators:
+# Translators:
+# Oleg Fish <okfish@yandex.ru>, 2017
+# Pavel <neoascetic@gmail.com>, 2012
+# Pavel <neoascetic@gmail.com>, 2012
+msgid ""
+msgstr ""
+"Project-Id-Version: django Filer\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-01 14:41-0500\n"
+"PO-Revision-Date: 2017-02-07 18:30+0000\n"
+"Last-Translator: Oleg Fish <okfish@yandex.ru>\n"
+"Language-Team: Russian (http://www.transifex.com/divio/django-filer/language/ru/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: admin/fileadmin.py:53 templates/admin/filer/tools/detail_info.html:166
+msgid "Advanced"
+msgstr "Дополнительно"
+
+#: admin/fileadmin.py:165
+msgid "canonical URL"
+msgstr "канонический URL"
+
+#: admin/folderadmin.py:386 admin/folderadmin.py:553
+msgid ""
+"Items must be selected in order to perform actions on them. No items have "
+"been changed."
+msgstr "Для выполнения действий нужно выбрать хотя бы один объект. Не произведено никаких изменений."
+
+#: admin/folderadmin.py:406
+#, python-format
+msgid "%(total_count)s selected"
+msgid_plural "All %(total_count)s selected"
+msgstr[0] "%(total_count)s выбран"
+msgstr[1] "%(total_count)s выбрано"
+msgstr[2] "Все %(total_count)s выбраны"
+msgstr[3] "Все %(total_count)s выбраны"
+
+#: admin/folderadmin.py:445
+#, python-format
+msgid "0 of %(cnt)s selected"
+msgstr "0 из %(cnt)s выбрано"
+
+#: admin/folderadmin.py:583
+msgid "No action selected."
+msgstr "Действие не выбрано."
+
+#: admin/folderadmin.py:628
+#, python-format
+msgid "Successfully moved %(count)d files to clipboard."
+msgstr "Успешно перемещено %(count)d файлов в буфер обмена."
+
+#: admin/folderadmin.py:634
+msgid "Move selected files to clipboard"
+msgstr "Переместить выбранные файлы в буфер обмена"
+
+#: admin/folderadmin.py:672
+#, python-format
+msgid "Successfully disabled permissions for %(count)d files."
+msgstr "Разрешения успешно отключены для %(count)d файлов."
+
+#: admin/folderadmin.py:674
+#, python-format
+msgid "Successfully enabled permissions for %(count)d files."
+msgstr "Разрешения успешно применены для %(count)d файлов."
+
+#: admin/folderadmin.py:683
+msgid "Enable permissions for selected files"
+msgstr "Включить разрешения для выбранных файлов"
+
+#: admin/folderadmin.py:690
+msgid "Disable permissions for selected files"
+msgstr "Отключить разрешения для выбранных файлов"
+
+#: admin/folderadmin.py:755
+#, python-format
+msgid "Successfully deleted %(count)d files and/or folders."
+msgstr "Успешно удалено %(count)d файлов/папок."
+
+#: admin/folderadmin.py:760
+msgid "Cannot delete files and/or folders"
+msgstr "Невозможно удалить файлы/папки"
+
+#: admin/folderadmin.py:762
+msgid "Are you sure?"
+msgstr "Вы уверены?"
+
+#: admin/folderadmin.py:768
+msgid "Delete files and/or folders"
+msgstr "Удалить файлы/папки"
+
+#: admin/folderadmin.py:790
+msgid "Delete selected files and/or folders"
+msgstr "Удалить выбранные файлы/папки"
+
+#: admin/folderadmin.py:905
+#, python-format
+msgid "Folders with names %s already exist at the selected destination"
+msgstr "Папки с именами %s уже существуют в указанном месте"
+
+#: admin/folderadmin.py:909
+#, python-format
+msgid ""
+"Successfully moved %(count)d files and/or folders to folder "
+"'%(destination)s'."
+msgstr "Успешно перемещено %(count)d файлов/папок в папку '%(destination)s'."
+
+#: admin/folderadmin.py:917 admin/folderadmin.py:919
+msgid "Move files and/or folders"
+msgstr "Переместить файлы/папки"
+
+#: admin/folderadmin.py:934
+msgid "Move selected files and/or folders"
+msgstr "Переместить выбранные файлы/папки"
+
+#: admin/folderadmin.py:991
+#, python-format
+msgid "Successfully renamed %(count)d files."
+msgstr "Успешно переименовано %(count)d файлов."
+
+#: admin/folderadmin.py:1000 admin/folderadmin.py:1002
+#: admin/folderadmin.py:1017
+msgid "Rename files"
+msgstr "Переименовать файлы"
+
+#: admin/folderadmin.py:1112
+#, python-format
+msgid ""
+"Successfully copied %(count)d files and/or folders to folder "
+"'%(destination)s'."
+msgstr "Успешно скопировано %(count)d файлов/папок в папку '%(destination)s'."
+
+#: admin/folderadmin.py:1130 admin/folderadmin.py:1132
+msgid "Copy files and/or folders"
+msgstr "Скопировать файлы/папки"
+
+#: admin/folderadmin.py:1149
+msgid "Copy selected files and/or folders"
+msgstr "Скопировать выбранные файлы/папки"
+
+#: admin/folderadmin.py:1254
+#, python-format
+msgid "Successfully resized %(count)d images."
+msgstr "Успешно изменен размер %(count)d изображений."
+
+#: admin/folderadmin.py:1261 admin/folderadmin.py:1263
+msgid "Resize images"
+msgstr "Изменить размер изображений"
+
+#: admin/folderadmin.py:1279
+msgid "Resize selected images"
+msgstr "Изменить размер выбранных изображений"
+
+#: admin/forms.py:27
+msgid "Suffix which will be appended to filenames of copied files."
+msgstr "Окончание, которое будет добавлено к именам скопированных файлов."
+
+#: admin/forms.py:34
+#, python-format
+msgid ""
+"Suffix should be a valid, simple and lowercase filename part, like "
+"\"%(valid)s\"."
+msgstr "Окончание должно быть правильной, простой и в нижнем регистре частью имени файла, например \"%(valid)s\"."
+
+#: admin/forms.py:55
+#, python-format
+msgid "Unknown rename format value key \"%(key)s\"."
+msgstr "Неизвестный ключ форматирования \"%(key)s\"."
+
+#: admin/forms.py:57
+#, python-format
+msgid "Invalid rename format: %(error)s."
+msgstr "Неверный формат переименования: %(error)s."
+
+#: admin/forms.py:63 models/thumbnailoptionmodels.py:23
+msgid "thumbnail option"
+msgstr "опция миниатюры"
+
+#: admin/forms.py:64 models/thumbnailoptionmodels.py:15
+msgid "width"
+msgstr "ширина"
+
+#: admin/forms.py:65 models/thumbnailoptionmodels.py:16
+msgid "height"
+msgstr "высота"
+
+#: admin/forms.py:66 models/thumbnailoptionmodels.py:17
+msgid "crop"
+msgstr "обрезать"
+
+#: admin/forms.py:67 models/thumbnailoptionmodels.py:18
+msgid "upscale"
+msgstr "увеличивать"
+
+#: admin/forms.py:72
+msgid "Thumbnail option or resize parameters must be choosen."
+msgstr "Опция миниатюры или параметры изменения размера должны быть указаны."
+
+#: admin/forms.py:74
+msgid "Resize parameters must be choosen."
+msgstr "Параметры изменения размеры должны быть указаны."
+
+#: admin/imageadmin.py:16 admin/imageadmin.py:94
+msgid "Subject location"
+msgstr "Расположение объекта"
+
+#: admin/imageadmin.py:17
+msgid "Location of the main subject of the scene. Format: \"x,y\"."
+msgstr "Расположение главного объекта сцены. Формат: \"x,y\"."
+
+#: admin/imageadmin.py:54
+msgid "Invalid subject location format. "
+msgstr "Неверный формат расположения объекта."
+
+#: admin/imageadmin.py:60
+msgid "Subject location is outside of the image. "
+msgstr "Расположение объекта указано за пределами изображения."
+
+#: admin/imageadmin.py:69
+#, python-brace-format
+msgid "Your input: \"{subject_location}\". "
+msgstr "Вы ввели: \"{subject_location}\". "
+
+#: admin/views.py:57
+msgid "Folder with this name already exists."
+msgstr "Папка с таким именем уже существует"
+
+#: apps.py:10 templates/admin/filer/breadcrumbs.html:5
+#: templates/admin/filer/folder/change_form.html:7
+#: templates/admin/filer/folder/directory_listing.html:47
+msgid "Filer"
+msgstr "Filer"
+
+#: contrib/django_cms/cms_toolbars.py:47
+msgid "Media library"
+msgstr "Медиа-библиотека"
+
+#: models/abstract.py:40
+msgid "default alt text"
+msgstr "альтернативный текст"
+
+#: models/abstract.py:41
+msgid "default caption"
+msgstr "описание"
+
+#: models/abstract.py:43
+msgid "subject location"
+msgstr "расположение объекта"
+
+#: models/abstract.py:181 models/imagemodels.py:32
+msgid "image"
+msgstr "изображение"
+
+#: models/abstract.py:182 models/imagemodels.py:33
+msgid "images"
+msgstr "изображения"
+
+#: models/clipboardmodels.py:17 models/foldermodels.py:270
+msgid "user"
+msgstr "пользователь"
+
+#: models/clipboardmodels.py:19 models/filemodels.py:351
+msgid "files"
+msgstr "файлы"
+
+#: models/clipboardmodels.py:37 models/clipboardmodels.py:43
+msgid "clipboard"
+msgstr "буфер обмена"
+
+#: models/clipboardmodels.py:38
+msgid "clipboards"
+msgstr "буферы обмена"
+
+#: models/clipboardmodels.py:42 models/filemodels.py:52
+#: models/filemodels.py:350
+msgid "file"
+msgstr "файл"
+
+#: models/clipboardmodels.py:47
+msgid "clipboard item"
+msgstr "элемент буфера обмена"
+
+#: models/clipboardmodels.py:48
+msgid "clipboard items"
+msgstr "элементы буфера обмена"
+
+#: models/filemodels.py:50 templates/admin/filer/folder/change_form.html:8
+#: templates/admin/filer/folder/directory_listing.html:118
+#: templates/admin/filer/folder/new_folder_form.html:5
+#: templates/admin/filer/tools/clipboard/clipboard.html:27
+msgid "folder"
+msgstr "папка"
+
+#: models/filemodels.py:53
+msgid "file size"
+msgstr "размер файла"
+
+#: models/filemodels.py:55
+msgid "sha1"
+msgstr "sha1"
+
+#: models/filemodels.py:57
+msgid "has all mandatory data"
+msgstr "это обязательные данные"
+
+#: models/filemodels.py:59
+msgid "original filename"
+msgstr "оригинальное имя файла"
+
+#: models/filemodels.py:61 models/foldermodels.py:104
+#: models/thumbnailoptionmodels.py:14
+msgid "name"
+msgstr "имя"
+
+#: models/filemodels.py:63
+msgid "description"
+msgstr "описание"
+
+#: models/filemodels.py:67 models/foldermodels.py:106
+msgid "owner"
+msgstr "владелец"
+
+#: models/filemodels.py:69 models/foldermodels.py:110
+msgid "uploaded at"
+msgstr "загружено"
+
+#: models/filemodels.py:70 models/foldermodels.py:113
+msgid "modified at"
+msgstr "изменено"
+
+#: models/filemodels.py:74
+msgid "Permissions disabled"
+msgstr "Разрешения отключены"
+
+#: models/filemodels.py:75
+msgid ""
+"Disable any permission checking for this file. File will be publicly "
+"accessible to anyone."
+msgstr "Отменить все проверки разрешений для этого файла. Файл будет доступен публично для каждого."
+
+#: models/foldermodels.py:112
+msgid "created at"
+msgstr "создан"
+
+#: models/foldermodels.py:235
+#: templates/admin/filer/widgets/admin_folder.html:7
+#: templates/admin/filer/widgets/admin_folder.html:33
+msgid "Folder"
+msgstr "Папка"
+
+#: models/foldermodels.py:236
+msgid "Folders"
+msgstr "Папки"
+
+#: models/foldermodels.py:255
+msgid "all items"
+msgstr "все элементы"
+
+#: models/foldermodels.py:256
+msgid "this item only"
+msgstr "только этот элемент"
+
+#: models/foldermodels.py:257
+msgid "this item and all children"
+msgstr "этот элемент и потомки"
+
+#: models/foldermodels.py:261
+msgid "allow"
+msgstr "разрешить"
+
+#: models/foldermodels.py:262
+msgid "deny"
+msgstr "запретить"
+
+#: models/foldermodels.py:267
+msgid "type"
+msgstr "тип"
+
+#: models/foldermodels.py:273
+msgid "group"
+msgstr "группа"
+
+#: models/foldermodels.py:274
+msgid "everybody"
+msgstr "все"
+
+#: models/foldermodels.py:276
+msgid "can edit"
+msgstr "могут редактировать"
+
+#: models/foldermodels.py:277
+msgid "can read"
+msgstr "могут читать"
+
+#: models/foldermodels.py:278
+msgid "can add children"
+msgstr "могут добавлять потомков"
+
+#: models/foldermodels.py:320
+msgid "folder permission"
+msgstr "разрешение папки"
+
+#: models/foldermodels.py:321
+msgid "folder permissions"
+msgstr "разрешения папки"
+
+#: models/imagemodels.py:24
+msgid "date taken"
+msgstr "дата создания"
+
+#: models/imagemodels.py:26
+msgid "author"
+msgstr "автор"
+
+#: models/imagemodels.py:27
+msgid "must always publish author credit"
+msgstr "необходимо всегда указывать авторство"
+
+#: models/imagemodels.py:28
+msgid "must always publish copyright"
+msgstr "необходимо всегда указывать copyright"
+
+#: models/thumbnailoptionmodels.py:15
+msgid "width in pixel."
+msgstr "ширина в пикселях."
+
+#: models/thumbnailoptionmodels.py:16
+msgid "height in pixel."
+msgstr "высота в пикселях."
+
+#: models/thumbnailoptionmodels.py:24
+msgid "thumbnail options"
+msgstr "опции миниатюры"
+
+#: models/virtualitems.py:50
+#: templates/admin/filer/folder/directory_table.html:4
+#: templates/admin/filer/folder/directory_table.html:157
+#: templates/admin/filer/tools/clipboard/clipboard.html:27
+msgid "Unsorted Uploads"
+msgstr "Несортированные загрузки"
+
+#: models/virtualitems.py:65
+msgid "files with missing metadata"
+msgstr "файлы с отсутсвующими метаданными"
+
+#: models/virtualitems.py:79 templates/admin/filer/breadcrumbs.html:7
+#: templates/admin/filer/folder/change_form.html:8
+#: templates/admin/filer/folder/directory_listing.html:51
+#: templates/admin/filer/folder/directory_listing.html:118
+msgid "root"
+msgstr "корень"
+
+#: templates/admin/filer/actions.html:5
+msgid "Run the selected action"
+msgstr "Выполнить выбранное действие"
+
+#: templates/admin/filer/actions.html:5
+msgid "Go"
+msgstr "Выполнить"
+
+#: templates/admin/filer/actions.html:14
+#: templates/admin/filer/folder/directory_table.html:218
+msgid "Click here to select the objects across all pages"
+msgstr "Нажмите здесь, чтобы выбрать объекты на всех страницах"
+
+#: templates/admin/filer/actions.html:14
+#, python-format
+msgid "Select all %(total_count)s files and/or folders"
+msgstr "Выбрать все %(total_count)s файлов/папок"
+
+#: templates/admin/filer/actions.html:16
+#: templates/admin/filer/folder/directory_table.html:220
+msgid "Clear selection"
+msgstr "Очистить выбор"
+
+#: templates/admin/filer/breadcrumbs.html:4
+#: templates/admin/filer/folder/directory_listing.html:42
+msgid "Go back to admin homepage"
+msgstr "Вернуться на главную страницу администрирования"
+
+#: templates/admin/filer/breadcrumbs.html:4
+#: templates/admin/filer/folder/change_form.html:6
+#: templates/admin/filer/folder/directory_listing.html:43
+msgid "Home"
+msgstr "Домой"
+
+#: templates/admin/filer/breadcrumbs.html:5
+#: templates/admin/filer/folder/directory_listing.html:46
+msgid "Go back to Filer app"
+msgstr "Вернуться на главную Filer'а"
+
+#: templates/admin/filer/breadcrumbs.html:7
+#: templates/admin/filer/folder/directory_listing.html:51
+msgid "Go back to root folder"
+msgstr "Вернуться в корневую папку"
+
+#: templates/admin/filer/breadcrumbs.html:10
+#: templates/admin/filer/breadcrumbs.html:20
+#: templates/admin/filer/folder/change_form.html:10
+#: templates/admin/filer/folder/directory_listing.html:56
+#: templates/admin/filer/folder/directory_listing.html:63
+#, python-format
+msgid "Go back to '%(folder_name)s' folder"
+msgstr "Вернуться в папку \"%(folder_name)s\""
+
+#: templates/admin/filer/change_form.html:25
+msgid "Duplicates"
+msgstr "Дубликаты"
+
+#: templates/admin/filer/delete_selected_files_confirmation.html:11
+msgid ""
+"Deleting the selected files and/or folders would result in deleting related "
+"objects, but your account doesn't have permission to delete the following "
+"types of objects:"
+msgstr "Удаление выбранных файлов/папок приведет к удалению связанных объектов, но у вас нет прав удалять следующие объекты:"
+
+#: templates/admin/filer/delete_selected_files_confirmation.html:19
+msgid ""
+"Deleting the selected files and/or folders would require deleting the "
+"following protected related objects:"
+msgstr "Удаление выбранных файлов/папок потребует удаления следующих защищенных связанных объектов:"
+
+#: templates/admin/filer/delete_selected_files_confirmation.html:27
+msgid ""
+"Are you sure you want to delete the selected files and/or folders? All of "
+"the following objects and their related items will be deleted:"
+msgstr "Вы уверены, что хотите удалить выбранные файлы/папки? Следующие объекты вместе со связанными объектами будут удалены:"
+
+#: templates/admin/filer/delete_selected_files_confirmation.html:46
+#: templates/admin/filer/folder/choose_copy_destination.html:77
+#: templates/admin/filer/folder/choose_move_destination.html:73
+msgid "No, take me back"
+msgstr "Нет, пустите меня обратно"
+
+#: templates/admin/filer/delete_selected_files_confirmation.html:47
+msgid "Yes, I&#39;m sure"
+msgstr "Да, я уверен"
+
+#: templates/admin/filer/file/change_form.html:37
+#: templates/admin/filer/folder/change_form.html:21
+#: templates/admin/filer/image/change_form.html:36
+msgid "History"
+msgstr "История"
+
+#: templates/admin/filer/file/change_form.html:39
+#: templates/admin/filer/folder/change_form.html:23
+#: templates/admin/filer/image/change_form.html:38
+msgid "View on site"
+msgstr "Посмотреть на сайте"
+
+#: templates/admin/filer/folder/change_form.html:6
+#: templates/admin/filer/folder/change_form.html:7
+#: templates/admin/filer/folder/change_form.html:8
+#: templates/admin/filer/folder/directory_listing.html:118
+msgid "Go back to"
+msgstr "Вернуться к"
+
+#: templates/admin/filer/folder/change_form.html:6
+msgid "admin homepage"
+msgstr "главная страница администрирования"
+
+#: templates/admin/filer/folder/change_form.html:37
+#: templates/admin/filer/folder/directory_listing.html:111
+#: templates/admin/filer/folder/directory_listing.html:119
+#: templates/admin/filer/folder/directory_table.html:26
+#: templates/admin/filer/folder/directory_table.html:56
+#: templates/admin/filer/folder/directory_table.html:164
+msgid "Folder Icon"
+msgstr "Иконка папки"
+
+#: templates/admin/filer/folder/choose_copy_destination.html:36
+msgid ""
+"Your account doesn't have permissions to copy all of the selected files "
+"and/or folders."
+msgstr "У вас нет прав на копирование выбранных файлов/папок"
+
+#: templates/admin/filer/folder/choose_copy_destination.html:38
+#: templates/admin/filer/folder/choose_copy_destination.html:44
+#: templates/admin/filer/folder/choose_copy_destination.html:50
+#: templates/admin/filer/folder/choose_move_destination.html:38
+#: templates/admin/filer/folder/choose_move_destination.html:44
+#: templates/admin/filer/folder/choose_move_destination.html:50
+msgid "Take me back"
+msgstr "Пустите меня обратно"
+
+#: templates/admin/filer/folder/choose_copy_destination.html:42
+#: templates/admin/filer/folder/choose_move_destination.html:42
+msgid "There are no destination folders available."
+msgstr "Нет доступной целевой папки."
+
+#: templates/admin/filer/folder/choose_copy_destination.html:48
+msgid "There are no files and/or folders available to copy."
+msgstr "Нет файлов для копирования."
+
+#: templates/admin/filer/folder/choose_copy_destination.html:53
+msgid ""
+"The following files and/or folders will be copied to a destination folder "
+"(retaining their tree structure):"
+msgstr "Эти файлы/папки будут скопированы в целевую папку (с сохранением иерархичности):"
+
+#: templates/admin/filer/folder/choose_copy_destination.html:67
+#: templates/admin/filer/folder/choose_move_destination.html:65
+msgid "Destination folder:"
+msgstr "Целевая папка:"
+
+#: templates/admin/filer/folder/choose_copy_destination.html:78
+#: templates/admin/filer/folder/choose_copy_destination.html:81
+#: templates/admin/filer/folder/directory_listing.html:194
+msgid "Copy"
+msgstr "Копировать"
+
+#: templates/admin/filer/folder/choose_copy_destination.html:80
+msgid "It is not allowed to copy files into same folder"
+msgstr "Копирование файлов в ту же самую папку запрещено"
+
+#: templates/admin/filer/folder/choose_images_resize_options.html:15
+msgid ""
+"Your account doesn't have permissions to resize all of the selected images."
+msgstr "Вы не имеете прав для изменения размеров выбранных изображений."
+
+#: templates/admin/filer/folder/choose_images_resize_options.html:18
+msgid "There are no images available to resize."
+msgstr "Нет доступных изображений для изменения размеров."
+
+#: templates/admin/filer/folder/choose_images_resize_options.html:20
+msgid "The following images will be resized:"
+msgstr "У этих изображений будет изменен размер:"
+
+#: templates/admin/filer/folder/choose_images_resize_options.html:33
+msgid "Choose an existing thumbnail option or enter resize parameters:"
+msgstr "Выберите опцию миниатюры или введите параметры изменения размеров:"
+
+#: templates/admin/filer/folder/choose_images_resize_options.html:35
+msgid "Choose resize parameters:"
+msgstr "Выбрите параметры изменения размеров:"
+
+#: templates/admin/filer/folder/choose_images_resize_options.html:38
+msgid ""
+"Warning: Images will be resized in-place and originals will be lost. Maybe "
+"first make a copy of them to retain the originals."
+msgstr "Внимание: изображения будут изменены в размерах с заменой оригиналов. Возможно, лучше будет сперва сделать копии."
+
+#: templates/admin/filer/folder/choose_images_resize_options.html:41
+msgid "Resize"
+msgstr "Изменить размеры"
+
+#: templates/admin/filer/folder/choose_move_destination.html:36
+msgid ""
+"Your account doesn't have permissions to move all of the selected files "
+"and/or folders."
+msgstr "Вы не имеете прав для перемещения выбранных файлов/папок."
+
+#: templates/admin/filer/folder/choose_move_destination.html:48
+msgid "There are no files and/or folders available to move."
+msgstr "Нет файлов/папок для перемещения."
+
+#: templates/admin/filer/folder/choose_move_destination.html:53
+msgid ""
+"The following files and/or folders will be moved to a destination folder "
+"(retaining their tree structure):"
+msgstr "Следующие файлы/папки будут перемещены в целевую папку (сохраняя иерархичность):"
+
+#: templates/admin/filer/folder/choose_move_destination.html:74
+#: templates/admin/filer/folder/choose_move_destination.html:77
+#: templates/admin/filer/folder/directory_listing.html:197
+msgid "Move"
+msgstr "Переместить"
+
+#: templates/admin/filer/folder/choose_move_destination.html:76
+msgid "It is not allowed to move files into same folder"
+msgstr "Перемещение файлов в ту же самую папку запрещено"
+
+#: templates/admin/filer/folder/choose_rename_format.html:15
+msgid ""
+"Your account doesn't have permissions to rename all of the selected files."
+msgstr "У вас нет прав на переименование выбранных файлов."
+
+#: templates/admin/filer/folder/choose_rename_format.html:18
+msgid "There are no files available to rename."
+msgstr "Нет файлов для переименовывания."
+
+#: templates/admin/filer/folder/choose_rename_format.html:20
+msgid ""
+"The following files will be renamed (they will stay in their folders and "
+"keep original filename, only displayed filename will be changed):"
+msgstr "Эти файлы будут переименованы (они остануться в их папках и сохранят имена оригинальных файлов, только отображаемое имя измениться):"
+
+#: templates/admin/filer/folder/choose_rename_format.html:59
+msgid "Rename"
+msgstr "Переименовать"
+
+#: templates/admin/filer/folder/directory_listing.html:110
+msgid "Go back to the parent folder"
+msgstr "Возвратиться к родительской папке"
+
+#: templates/admin/filer/folder/directory_listing.html:147
+msgid "Change current folder details"
+msgstr "Изменить текущую папку"
+
+#: templates/admin/filer/folder/directory_listing.html:147
+msgid "Change"
+msgstr "Изменить"
+
+#: templates/admin/filer/folder/directory_listing.html:157
+msgid "Click here to run search for entered phrase"
+msgstr "Нажмите здесь для поиска по введенной фразе"
+
+#: templates/admin/filer/folder/directory_listing.html:160
+msgid "Search"
+msgstr "Поиск"
+
+#: templates/admin/filer/folder/directory_listing.html:167
+msgid "Close"
+msgstr "Закрыть"
+
+#: templates/admin/filer/folder/directory_listing.html:169
+msgid "Limit"
+msgstr "Ограничить"
+
+#: templates/admin/filer/folder/directory_listing.html:174
+msgid "Check it to limit the search to current folder"
+msgstr "Отметьте, чтобы ограничить поиск текущей папкой"
+
+#: templates/admin/filer/folder/directory_listing.html:175
+msgid "Limit the search to current folder"
+msgstr "Ограничить поиск текущей папкой"
+
+#: templates/admin/filer/folder/directory_listing.html:191
+#: templates/admin/filer/tools/detail_info.html:213
+msgid "Delete"
+msgstr "Удалить"
+
+#: templates/admin/filer/folder/directory_listing.html:214
+msgid "Adds a new Folder"
+msgstr "Добавляет новую папку"
+
+#: templates/admin/filer/folder/directory_listing.html:217
+msgid "New Folder"
+msgstr "Новая папка"
+
+#: templates/admin/filer/folder/directory_listing.html:222
+#: templates/admin/filer/folder/directory_listing.html:226
+#: templates/admin/filer/folder/directory_listing.html:229
+#: templates/admin/filer/folder/directory_listing.html:233
+#: templates/admin/filer/folder/directory_listing.html:240
+msgid "Upload Files"
+msgstr "Загрузить файлы"
+
+#: templates/admin/filer/folder/directory_listing.html:238
+msgid "You have to select a folder first"
+msgstr "Сначала надо выбрать папку"
+
+#: templates/admin/filer/folder/directory_table.html:13
+msgid "Name"
+msgstr "Имя"
+
+#: templates/admin/filer/folder/directory_table.html:14
+#: templates/admin/filer/tools/detail_info.html:59
+#: templates/admin/filer/tools/detail_info.html:150
+msgid "Owner"
+msgstr "Владелец"
+
+#: templates/admin/filer/folder/directory_table.html:15
+#: templates/admin/filer/tools/detail_info.html:38
+#: templates/admin/filer/tools/detail_info.html:102
+msgid "Size"
+msgstr "Размер"
+
+#: templates/admin/filer/folder/directory_table.html:16
+msgid "Action"
+msgstr "Действие"
+
+#: templates/admin/filer/folder/directory_table.html:25
+#: templates/admin/filer/folder/directory_table.html:32
+#: templates/admin/filer/folder/directory_table.html:55
+#: templates/admin/filer/folder/directory_table.html:62
+#, python-format
+msgid "Change '%(item_label)s' folder details"
+msgstr "Изменить данные папки \"%(item_label)s\""
+
+#: templates/admin/filer/folder/directory_table.html:73
+#: templates/admin/filer/tools/search_form.html:5
+#, python-format
+msgid "%(counter)s folder"
+msgid_plural "%(counter)s folders"
+msgstr[0] "%(counter)s папка"
+msgstr[1] "%(counter)s папки"
+msgstr[2] "%(counter)s папок"
+msgstr[3] "%(counter)s папок"
+
+#: templates/admin/filer/folder/directory_table.html:74
+#: templates/admin/filer/tools/search_form.html:6
+#, python-format
+msgid "%(counter)s file"
+msgid_plural "%(counter)s files"
+msgstr[0] "%(counter)s файл"
+msgstr[1] "%(counter)s файла"
+msgstr[2] "%(counter)s файлов"
+msgstr[3] "%(counter)s файлов"
+
+#: templates/admin/filer/folder/directory_table.html:80
+msgid "Change folder details"
+msgstr "Изменить свойства папки"
+
+#: templates/admin/filer/folder/directory_table.html:81
+msgid "Remove folder"
+msgstr "Удалить папку"
+
+#: templates/admin/filer/folder/directory_table.html:93
+#: templates/admin/filer/folder/directory_table.html:101
+#: templates/admin/filer/folder/directory_table.html:116
+msgid "Select this file"
+msgstr "Выбрать этот файл"
+
+#: templates/admin/filer/folder/directory_table.html:104
+#: templates/admin/filer/folder/directory_table.html:119
+#: templates/admin/filer/folder/directory_table.html:143
+#, python-format
+msgid "Change '%(item_label)s' details"
+msgstr "Изменить данные \"%(item_label)s\""
+
+#: templates/admin/filer/folder/directory_table.html:128
+msgid "Permissions"
+msgstr "Разрешения"
+
+#: templates/admin/filer/folder/directory_table.html:128
+msgid "disabled"
+msgstr "отключены"
+
+#: templates/admin/filer/folder/directory_table.html:128
+msgid "enabled"
+msgstr "включены"
+
+#: templates/admin/filer/folder/directory_table.html:139
+#, python-format
+#| msgid "Change '%(item_label)s' details"
+msgid "Canonical url '%(item_label)s'"
+msgstr "Канонический URL '%(item_label)s'"
+
+#: templates/admin/filer/folder/directory_table.html:141
+#, python-format
+#| msgid "Change '%(item_label)s' details"
+msgid "Download '%(item_label)s'"
+msgstr "Скачать '%(item_label)s'"
+
+#: templates/admin/filer/folder/directory_table.html:144
+msgid "Remove file"
+msgstr "Удалить файл"
+
+#: templates/admin/filer/folder/directory_table.html:151
+msgid "Drop files here or use the \"Upload Files\" button"
+msgstr "\"Скиньте\" сюда файлы или используйте кнопку \"Загрузить файлы\""
+
+#: templates/admin/filer/folder/directory_table.html:161
+msgid "Drop your file to upload into:"
+msgstr "\"Скиньте\" ваши файлы сюда для загрузки в:"
+
+#: templates/admin/filer/folder/directory_table.html:171
+msgid "Upload"
+msgstr "Загрузить"
+
+#: templates/admin/filer/folder/directory_table.html:183
+msgid "cancel"
+msgstr "отмена"
+
+#: templates/admin/filer/folder/directory_table.html:187
+msgid "Upload success!"
+msgstr "Загрузка успешно завершена!"
+
+#: templates/admin/filer/folder/directory_table.html:191
+msgid "Upload canceled!"
+msgstr "Загрузка отменена!"
+
+#: templates/admin/filer/folder/directory_table.html:198
+msgid "previous"
+msgstr "предыдущая"
+
+#: templates/admin/filer/folder/directory_table.html:203
+#, python-format
+msgid "Page %(number)s of %(num_pages)s."
+msgstr "Страница %(number)s из %(num_pages)s."
+
+#: templates/admin/filer/folder/directory_table.html:208
+msgid "next"
+msgstr "следующая"
+
+#: templates/admin/filer/folder/directory_table.html:218
+#, python-format
+msgid "Select all %(total_count)s"
+msgstr "Выбрать все %(total_count)s"
+
+#: templates/admin/filer/folder/new_folder_form.html:5
+msgid "Add new"
+msgstr "Добавить новую"
+
+#: templates/admin/filer/folder/new_folder_form.html:13
+msgid "Please correct the error below."
+msgid_plural "Please correct the errors below."
+msgstr[0] "Пожалуйста, исправьте указанную ошибку."
+msgstr[1] "Пожалуйста, исправьте указанные ошибки."
+msgstr[2] "Пожалуйста, исправьте указанные ошибки."
+msgstr[3] "Пожалуйста, исправьте указанные ошибки."
+
+#: templates/admin/filer/folder/new_folder_form.html:28
+msgid "Save"
+msgstr "Сохранить"
+
+#: templates/admin/filer/tools/clipboard/clipboard.html:9
+msgid "Clipboard"
+msgstr "Буфер обмена"
+
+#: templates/admin/filer/tools/clipboard/clipboard.html:21
+msgid "Paste all items here"
+msgstr "Вставить все элементы здесь"
+
+#: templates/admin/filer/tools/clipboard/clipboard.html:27
+msgid "Move all clipboard files to"
+msgstr "Переместить элементы буфера обмена в"
+
+#: templates/admin/filer/tools/clipboard/clipboard.html:27
+msgid "Empty Clipboard"
+msgstr "Пустой буфер обмена"
+
+#: templates/admin/filer/tools/clipboard/clipboard.html:50
+msgid "the clipboard is empty"
+msgstr "буфер обмена пуст"
+
+#: templates/admin/filer/tools/clipboard/clipboard_item_rows.html:16
+msgid "upload failed"
+msgstr "загрузка не удалась"
+
+#: templates/admin/filer/tools/detail_info.html:22
+msgid "Open file"
+msgstr "Открыть файл"
+
+#: templates/admin/filer/tools/detail_info.html:24
+#: templates/admin/filer/tools/detail_info.html:86
+msgid "Full size preview"
+msgstr "Посмотреть в полном размере"
+
+#: templates/admin/filer/tools/detail_info.html:34
+#: templates/admin/filer/tools/detail_info.html:93
+msgid "Type"
+msgstr "Тип"
+
+#: templates/admin/filer/tools/detail_info.html:42
+#: templates/admin/filer/tools/detail_info.html:111
+msgid "File-size"
+msgstr "Размер файла"
+
+#: templates/admin/filer/tools/detail_info.html:46
+#: templates/admin/filer/tools/detail_info.html:120
+msgid "Modified"
+msgstr "Изменен"
+
+#: templates/admin/filer/tools/detail_info.html:50
+#: templates/admin/filer/tools/detail_info.html:129
+msgid "Created"
+msgstr "Создан"
+
+#: templates/admin/filer/tools/detail_info.html:158
+msgid "Add Description"
+msgstr "Добавить описание"
+
+#: templates/admin/filer/tools/detail_info.html:176
+msgid "Author"
+msgstr "Автор"
+
+#: templates/admin/filer/tools/detail_info.html:183
+msgid "Add Alt-Text"
+msgstr "Добавить альтернативный текст"
+
+#: templates/admin/filer/tools/detail_info.html:190
+msgid "Add caption"
+msgstr "Добавить заглавие"
+
+#: templates/admin/filer/tools/detail_info.html:197
+msgid "Add Tags"
+msgstr "Добавить теги"
+
+#: templates/admin/filer/tools/detail_info.html:204
+msgid "Change File"
+msgstr "Изменить файл"
+
+#: templates/admin/filer/tools/search_form.html:5
+msgid "found"
+msgstr "найдено"
+
+#: templates/admin/filer/tools/search_form.html:5
+msgid "and"
+msgstr "и"
+
+#: templates/admin/filer/tools/search_form.html:7
+msgid "cancel search"
+msgstr "закрыть поиск"
+
+#: templates/admin/filer/widgets/admin_file.html:8
+#: templates/admin/filer/widgets/admin_file.html:35
+#: templates/admin/filer/widgets/admin_folder.html:18
+msgid "Clear"
+msgstr "Очистить"
+
+#: templates/admin/filer/widgets/admin_file.html:17
+msgid "or drop your file here"
+msgstr "или \"скиньте\" ваш файл сюда"
+
+#: templates/admin/filer/widgets/admin_file.html:26
+#: templates/admin/filer/widgets/admin_file.html:27
+msgid "file missing"
+msgstr "файл не найден"
+
+#: templates/admin/filer/widgets/admin_file.html:30
+msgid "no file selected"
+msgstr "файл не выбран"
+
+#: templates/admin/filer/widgets/admin_file.html:39
+#: templates/admin/filer/widgets/admin_folder.html:14
+msgid "Lookup"
+msgstr "Выбрать"
+
+#: templates/admin/filer/widgets/admin_file.html:40
+msgid "Choose File"
+msgstr "Выбрать файл"
+
+#: templates/admin/filer/widgets/admin_folder.html:11
+#: templates/admin/filer/widgets/admin_folder.html:33
+msgid "none selected"
+msgstr "ничего не выбрано"
+
+#: templates/admin/filer/widgets/admin_folder.html:15
+msgid "Add Folder"
+msgstr "Добавить папку"
+
+#~ msgid "Subject Location"
+#~ msgstr "Subject location"
+
+#~ msgid ""
+#~ "\n"
+#~ "            %(counter)s file"
+#~ msgid_plural ""
+#~ "%(counter)s files\n"
+#~ "        "
+#~ msgstr[0] "15c0f2d28d6dab1af1f6d94906beb627_pl_0"
+#~ msgstr[1] "15c0f2d28d6dab1af1f6d94906beb627_pl_1"
+#~ msgstr[2] "15c0f2d28d6dab1af1f6d94906beb627_pl_2"
+#~ msgstr[3] "15c0f2d28d6dab1af1f6d94906beb627_pl_3"
+
+#~ msgid "Upload File"
+#~ msgstr "Upload File"

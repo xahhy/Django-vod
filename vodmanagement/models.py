@@ -275,24 +275,27 @@ class MultipleUpload(models.Model):
 #         return self.title
 # ---------------------------------------------------------------------
 class Restore(models.Model):
-    txt_file = models.FileField(blank=True, null=True, verbose_name='备份配置文件')
+    txt_file = models.FilePathField(blank=True, null=True, verbose_name='备份配置文件', path=settings.BACKUP_LOCATION)
+    timestamp = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='创建时间')  # The first time added
+
     # zip_file = ModelAdminResumableRestoreFileField(null=True, blank=True, storage=VodStorage(), verbose_name='压缩包')
-    save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
+    # save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
 
     class Meta:
         verbose_name = '视频导入'
         verbose_name_plural = '视频导入'
 
-    # @staticmethod
-    # def parse_json(text):
-
-
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         result = super(Restore, self).save()
-        file_path = self.txt_file.path
-        call_command('loaddata', file_path)
+        # call_command('dbrestore', '--database', 'default', '-i', Path(self.txt_file).name)
+        # file_path = self.txt_file.path
+        # try:
+        # call_command('loaddata', '-i', file_path)
+        # except Exception as e:
+        #     pass
         return result
+
 
 # ---------------------------------------------------------------------
 
@@ -300,7 +303,7 @@ class Vod(models.Model):
     title = models.CharField(max_length=120, verbose_name='标题')
     # image = models.ImageField(upload_to=upload_image_location, null=True, blank=True)
     # video = models.FileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
-    image = FilerImageField(null=True, blank=True, related_name="vod_image")
+    image = FilerFileField(null=True, blank=True, related_name="vod_image")
     video = FilerFileField(null=True, blank=True, related_name="vod_video")
     # image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
     # video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000,
@@ -457,6 +460,12 @@ def pre_save_post_receiver(sender, instance, *args, **kwargs):
 def post_init_receiver(sender, instance, *args, **kwargs):
     # print("post_init!")
     pass
+
+
+# @receiver(pre_save, sender=Restore)
+def excute_dbrestore_before_model_saved(sender, instance, *args, **kwargs):
+    call_command('dbrestore', '--database', 'default', '-i', Path(instance.txt_file).name)
+    print('restore done!', instance.txt_file)
 
 
 pre_save.connect(pre_save_post_receiver, sender=Vod)

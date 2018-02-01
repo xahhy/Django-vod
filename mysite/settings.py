@@ -15,10 +15,8 @@ import os
 
 from django.conf import settings
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from mysite.router import DatabaseAppsRouter
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -70,6 +68,7 @@ INSTALLED_APPS = [
     'vodmanagement.apps.VodConfig',
     'epg.apps.EpgConfig',
     'rest_framework',
+    'dbbackup',
 
     # Scheduler App
     # 'django_celery_beat',
@@ -79,7 +78,6 @@ INSTALLED_APPS = [
     # 'rest_framework_docs',
     # 'drf_autodocs'
     # 'rest_framework_swagger',
-
 
     # The following apps are required:
 
@@ -91,7 +89,7 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.weixin',
 
 ]
-import django.middleware.locale
+
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -154,11 +152,11 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 
         'ENGINE': 'django.db.backends.mysql',
-        'NAME' : 'vod',
-        'USER' : 'root',
+        'NAME': 'vod',
+        'USER': 'root',
         'PASSWORD': '123',
         'HOST': '',
-        'PORT': '',#'3306',
+        'PORT': '',  # '3306',
     },
     'tsrtmp': {
         'ENGINE': 'django.db.backends.mysql',
@@ -169,8 +167,6 @@ DATABASES = {
         'PORT': '',
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -240,6 +236,16 @@ RECORD_MEDIA_ROOT = os.path.join(MEDIA_ROOT, RECORD_MEDIA_FOLDER)
 LOCAL_FOLDER_NAME = 'local_file'
 LOCAL_MEDIA_URL = LOCAL_FOLDER_NAME + '/'
 LOCAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT, LOCAL_FOLDER_NAME)
+BACKUP_LOCATION = os.path.join(MEDIA_ROOT, 'backups')
+DBBACKUP_STORAGE_OPTIONS = {'location': BACKUP_LOCATION}
+
+
+BACKUP_APPS = [
+    'easy_thumbnails',
+    'mptt',
+    'filer',
+    'vodmanagement',
+]
 
 FILER_STORAGES = {
     'public': {
@@ -256,14 +262,14 @@ FILER_STORAGES = {
         },
     },
 }
-FILER_DUMP_PAYLOAD = True
+# FILER_DUMP_PAYLOAD = True
 
 ADMIN_RESUMABLE_CHUNKSIZE = 1024 * 1024 * 10
 ADMIN_RESUMABLE_STORAGE = 'vodmanagement.my_storage.VodStorage'
 
 # Memory Cache
 CACHES = {
-    'default':{
+    'default': {
         # 'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         # 'LOCATION': '127.0.0.1:11211',
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',

@@ -1,0 +1,43 @@
+{% load i18n filer_admin_tags staticfiles %}
+
+{% spaceless %}
+    <div class="filer-dropzone filer-dropzone-folder">
+        <span class="filerFile">
+            <span id="{{ span_id }}">
+                {% trans "Folder" %}:
+                {% if object %}
+                    {{ object.pretty_logical_path }}
+                {% else %}
+                    {% trans "none selected" %}
+                {% endif %}
+            </span>
+            <a href="{{ lookup_url }}" class="related-lookup{% if object %} hidden{% endif %}" id="{{ lookup_name }}" title="{% trans 'Lookup' %}">
+                {% trans "Add Folder" %}
+            </a>
+
+            <img id="{{ clear_id }}" src="{% static 'admin/img/icon_deletelink.gif' %}" width="10" height="10" alt="{% trans 'Clear' %}" title="{% trans 'Clear' %}" class="filerClearer{% if not object %} hidden{% endif %}">
+            {{ hidden_input }}
+        </span>
+    </div>
+    <script type="text/javascript">
+        'use strict';
+        /* globals django */
+
+        (function ($) {
+            var clearButton = $('#{{ clear_id }}');
+            var input = $('#{{ id }}');
+            var folderName = $('#{{ descid }}');
+            var addFolderButton = $('#{{ lookup_name }}');
+
+            clearButton.on('click', function () {
+                folderName.text('{% trans "Folder" %}: {% trans "none selected" %}');
+                input.removeAttr('value');
+
+                clearButton.addClass('hidden');
+                addFolderButton.removeClass('hidden');
+            });
+        }(django.jQuery));
+    </script>
+{% endspaceless %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'filer/css/admin_filer.css' %}">
