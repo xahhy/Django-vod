@@ -158,24 +158,6 @@ class VodModelAdmin(admin.ModelAdmin):
         self.message_user(request, '%s item successfully cleared view count.' % queryset.count()
                           , messages.SUCCESS)
 
-    def backup(self, request, queryset):
-        response = HttpResponse(content_type='text/plain')
-        file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.dump'
-        response['Content-Disposition'] = 'attachment; filename=%s' % file_name
-        # directory = './backup'
-        full_file_name = os.path.join(settings.BACKUP_LOCATION, file_name)
-        call_command('dbbackup', '-o', file_name)
-        # if not os.path.exists(directory):
-        #     os.makedirs(directory)
-        # with open(full_file_name, 'w') as f:
-        #     f.write('')
-        # args = tuple(settings.BACKUP_APPS) + ('--natural-foreign',) + ('-o', full_file_name)
-        # call_command('dumpdata', *args) #使用Django提供的命令行工具备份数据
-        # call_command('dumpdata', 'filer.file', '-o', full_file_name) #使用Django提供的命令行工具备份数据
-
-        response.write(open(full_file_name, 'rb').read())
-        return response
-
     class Media:
         pass
         # js = ('http://code.jquery.com/jquery.min.js',)
@@ -251,15 +233,20 @@ class MultipleUploadModelAdmin(admin.ModelAdmin):
 class RestoreModelAdmin(admin.ModelAdmin):
     actions = ['restore_db']
     form = RestoreForm
-
+    list_display = ['filename', 'timestamp']
+    list_display_links = ['timestamp']
+    readonly_fields = ['dump_file']
     # change_form_template = 'vodmanagement/change_form.html'
     # add_form_template = 'vodmanagement/change_form.html'
 
     def restore_db(self, request, queryset):
         if len(queryset) > 1:
-            self.message_user(request, '只能选择一个数据来恢复！', messages.ERROR)
+            return self.message_user(request, '只能选择一个数据来恢复！', messages.ERROR)
         for item in queryset:
-            call_command('dbrestore', '--database', 'default', '-i', Path(item.txt_file).name)
+            try:
+                call_command('dbrestore', '--database', 'default', '-i', Path(item.dump_file).name)
+            except Exception as e:
+                return self.message_user(request, '数据库未备份完成，请稍后再试!', messages.ERROR)
         self.message_user(request, '成功恢复数据', messages.SUCCESS)
 
     restore_db.short_description = '恢复数据'

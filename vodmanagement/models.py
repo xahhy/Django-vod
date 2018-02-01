@@ -1,4 +1,5 @@
 import json
+import threading
 
 import six
 from django.db import models
@@ -11,7 +12,7 @@ from django.contrib import admin
 from django.conf import settings
 import humanfriendly
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save, post_init, post_save
+from django.db.models.signals import pre_save, post_init, post_save, post_delete
 from django.dispatch import receiver
 
 from django.utils.text import slugify
@@ -275,15 +276,19 @@ class MultipleUpload(models.Model):
 #         return self.title
 # ---------------------------------------------------------------------
 class Restore(models.Model):
-    txt_file = models.FilePathField(blank=True, null=True, verbose_name='备份配置文件', path=settings.BACKUP_LOCATION)
+    filename = models.CharField(max_length=100, blank=True, null=True, verbose_name='备份文件前缀标识')
+    dump_file = models.FilePathField(blank=True, null=True, path=settings.BACKUP_LOCATION, verbose_name='数据恢复文件')
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='创建时间')  # The first time added
 
     # zip_file = ModelAdminResumableRestoreFileField(null=True, blank=True, storage=VodStorage(), verbose_name='压缩包')
     # save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
 
     class Meta:
-        verbose_name = '视频导入'
-        verbose_name_plural = '视频导入'
+        verbose_name = '数据库备份'
+        verbose_name_plural = '数据库备份/恢复'
+
+    def __str__(self):
+        return str(Path(self.dump_file).name)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -462,10 +467,21 @@ def post_init_receiver(sender, instance, *args, **kwargs):
     pass
 
 
-# @receiver(pre_save, sender=Restore)
-def excute_dbrestore_before_model_saved(sender, instance, *args, **kwargs):
-    call_command('dbrestore', '--database', 'default', '-i', Path(instance.txt_file).name)
-    print('restore done!', instance.txt_file)
+def generate_dbbackup_file(file_name):
+    call_command('dbbackup', '-o', file_name)
+
+
+@receiver(pre_save, sender=Restore)
+def dbbackup_before_model_saved(sender, instance, *args, **kwargs):
+    file_name = instance.filename + datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S') + '.dump'
+    full_file_name = os.path.join(settings.BACKUP_LOCATION, file_name)
+    threading.Timer(10.0, generate_dbbackup_file, (file_name,)).start()
+    instance.dump_file = full_file_name
+
+
+@receiver(post_delete, sender=Restore)
+def delete_backup_file_after_delete_model(sender, instance, *args, **kwargs):
+    os.remove(instance.dump_file)
 
 
 pre_save.connect(pre_save_post_receiver, sender=Vod)
