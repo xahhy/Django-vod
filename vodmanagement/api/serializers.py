@@ -39,8 +39,10 @@ class VodListSerializer(ModelSerializer):
         return obj.category.name
 
     def get_image(self, obj):
-        return obj.image.thumbnails['user_preview']
-
+        try:
+            return obj.image.thumbnails['user_preview']
+        except Exception as e:
+            return str(e)
 
 
 class VodDetailSubSetSerializer(ModelSerializer):
@@ -95,7 +97,10 @@ class VodDetailSerializer(ModelSerializer):
         return obj.get_definition_display()
 
     def get_image(self, obj):
-        return obj.image.url
+        try:
+            return obj.image.url
+        except Exception as e:
+            return str(e)
 
     def get_video(self, obj):
         return obj.video.url

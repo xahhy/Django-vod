@@ -4,6 +4,10 @@ from time import sleep
 import m3u8
 from urllib.parse import urlparse, urljoin
 from urllib.request import urlretrieve, pathname2url
+
+from filer.models import File
+from django.core.files import File as DjangoFile
+
 from mysite import settings
 from vodmanagement.models import Vod
 
@@ -16,6 +20,10 @@ def download_m3u8_files(id, url_str, dest_dir):
         m3u8_full_path = Path(dest_dir)/Path(m3u8_root[1:])
         m3u8_full_path.parent.mkdir(parents=True, exist_ok=True)
         file_path, message=urlretrieve(url_str, str(m3u8_full_path))
+        with open(file_path, 'rb') as f:
+            video_file = File.objects.create(original_filename=Path(file_path).name, file=DjangoFile(f, name=Path(file_path).name))
+            instance.video = video_file
+            m3u8_full_path = Path(video_file.path)
         with m3u8_full_path.open() as m3u8_file:
             m3u8_obj = m3u8.loads(m3u8_file.read())
             total_files = len(m3u8_obj.files)
@@ -25,9 +33,10 @@ def download_m3u8_files(id, url_str, dest_dir):
                 ts_full_path.parent.mkdir(parents=True, exist_ok=True)
                 status = download_ts_file(ts_url, str(ts_full_path))
                 if status is not None:
-                    instance.progress = int(index/total_files*100)
-                    print(instance.progress)
-                    instance.save()
+                    # instance.progress = int(index/total_files*100)
+                    # print(instance.progress)
+                    # instance.save()
+                    pass
             instance.active = 1
             instance.save()
     except Exception as e:

@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from epg.utils import download_m3u8_files
+from filer.models import File
 from mysite import settings
 from vodmanagement.models import Vod
 from .models import *
@@ -61,15 +62,16 @@ class ProgramModelAdmin(admin.ModelAdmin):
             except Exception as e:
                 self.message_user(request, '%s 转点播失败 请检查录播的网址是否合法'%(program.title), messages.ERROR)
                 return
+
             new_record = Vod(
-                title=program.title,
-                video=settings.RECORD_MEDIA_FOLDER + m3u8_file_path
+                title=program.title
+                # video=File(path=settings.RECORD_MEDIA_FOLDER + m3u8_file_path)
                 )
             new_record.save()
             p = threading.Thread(target=download_m3u8_files, args=(new_record.id, program.url, settings.RECORD_MEDIA_ROOT))
             p.start()
             print('start downloading m3u8 files', program.url)
-        record_url = reverse('admin:vodmanagement_record_changelist')
+        record_url = reverse('admin:vodmanagement_vod_changelist')
         print(record_url)
         self.message_user(request, mark_safe('%s 个节目正在转成点播,转换进度请到<a href="%s">录制节目</a>处查看。'%(queryset.count(),record_url))
                           , messages.SUCCESS)
