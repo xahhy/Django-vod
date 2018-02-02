@@ -279,7 +279,7 @@ class Restore(models.Model):
     filename = models.CharField(max_length=100, blank=True, null=True, verbose_name='备份文件前缀标识')
     dump_file = models.FilePathField(blank=True, null=True, path=settings.BACKUP_LOCATION, verbose_name='数据恢复文件')
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='创建时间')  # The first time added
-    upload_restore_file = models.FileField(blank=True, null=True, upload_to=settings.BACKUP_LOCATION, verbose_name='上传备份文件')
+    upload_restore_file = models.FileField(blank=True, null=True, upload_to=settings.BACKUP_FOLDER, verbose_name='上传备份文件')
     # zip_file = ModelAdminResumableRestoreFileField(null=True, blank=True, storage=VodStorage(), verbose_name='压缩包')
     # save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
 
