@@ -236,6 +236,11 @@ class RestoreModelAdmin(admin.ModelAdmin):
     list_display = ['filename', 'timestamp']
     list_display_links = ['timestamp']
     readonly_fields = ['dump_file']
+    fieldsets = [
+        ('基本', {'fields': ['filename']}),
+        ('高级', {'fields': ['dump_file', 'upload_restore_file'], 'classes': ['collapse']})
+    ]
+    # readonly_fields = ['dump_file']
     # change_form_template = 'vodmanagement/change_form.html'
     # add_form_template = 'vodmanagement/change_form.html'
 

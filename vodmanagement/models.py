@@ -279,19 +279,22 @@ class Restore(models.Model):
     filename = models.CharField(max_length=100, blank=True, null=True, verbose_name='备份文件前缀标识')
     dump_file = models.FilePathField(blank=True, null=True, path=settings.BACKUP_LOCATION, verbose_name='数据恢复文件')
     timestamp = models.DateTimeField(auto_now=False, auto_now_add=True, verbose_name='创建时间')  # The first time added
-
+    upload_restore_file = models.FileField(blank=True, null=True, upload_to=settings.BACKUP_LOCATION, verbose_name='上传备份文件')
     # zip_file = ModelAdminResumableRestoreFileField(null=True, blank=True, storage=VodStorage(), verbose_name='压缩包')
     # save_path = models.CharField(max_length=128, blank=False, null=True)  # ,default=FileDirectory.objects.first())
 
     class Meta:
         verbose_name = '数据库备份'
         verbose_name_plural = '数据库备份/恢复'
+        ordering = ['-timestamp']
 
     def __str__(self):
         return str(Path(self.dump_file).name)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
+        if self.upload_restore_file:
+            self.dump_file = self.upload_restore_file.path
         result = super(Restore, self).save()
         # call_command('dbrestore', '--database', 'default', '-i', Path(self.txt_file).name)
         # file_path = self.txt_file.path
@@ -472,16 +475,22 @@ def generate_dbbackup_file(file_name):
 
 
 @receiver(pre_save, sender=Restore)
-def dbbackup_before_model_saved(sender, instance, *args, **kwargs):
-    file_name = instance.filename + datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S') + '.dump'
-    full_file_name = os.path.join(settings.BACKUP_LOCATION, file_name)
-    threading.Timer(10.0, generate_dbbackup_file, (file_name,)).start()
-    instance.dump_file = full_file_name
+def dbbackup_before_model_saved(sender, instance:Restore, *args, **kwargs):
+    if not instance.dump_file and not instance.upload_restore_file:
+        file_name = instance.filename + datetime.datetime.now().strftime('%Y-%m-%d-%H%M%S') + '.sql'
+        full_file_name = os.path.join(settings.BACKUP_LOCATION, file_name)
+        threading.Timer(10.0, generate_dbbackup_file, (file_name,)).start()
+        instance.dump_file = full_file_name
+    if not instance.filename:
+        instance.filename = Path(instance.dump_file).name.__str__()
 
 
 @receiver(post_delete, sender=Restore)
 def delete_backup_file_after_delete_model(sender, instance, *args, **kwargs):
-    os.remove(instance.dump_file)
+    try:
+        os.remove(instance.dump_file)
+    except Exception as e:
+        pass
 
 
 pre_save.connect(pre_save_post_receiver, sender=Vod)
