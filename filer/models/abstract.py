@@ -26,6 +26,7 @@ class BaseImage(File):
         'admin_directory_listing_icon': {'size': (48, 48),
                                          'crop': True, 'upscale': True},
         'admin_tiny_icon': {'size': (32, 32), 'crop': True, 'upscale': True},
+        'user_preview': {'size': (180, 236), 'crop': True, 'upscale': True},
     }
     file_type = 'Image'
     _icon = "image"

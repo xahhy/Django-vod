@@ -39,11 +39,8 @@ class VodListSerializer(ModelSerializer):
         return obj.category.name
 
     def get_image(self, obj):
-        try:
-            thumb_url = get_thumbnailer(obj.image)['avatar'].url
-        except:
-            thumb_url = 'Error'
-        return thumb_url
+        return obj.image.thumbnails['user_preview']
+
 
 
 class VodDetailSubSetSerializer(ModelSerializer):

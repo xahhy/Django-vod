@@ -1,8 +1,9 @@
 #!/bin/bash
-
+set -e
 NAME="mysite_app" # Name of the application
-DJANGODIR=/home/share/vod # Django project directory
-SOCKFILE=/run/vod/gunicorn.sock # we will communicte using this unix socket
+DJANGODIR=/home/share/Django-vod # Django project directory
+#SOCKFILE=/run/vod/gunicorn.sock # we will communicte using this unix socket
+BIND_ADDR=0.0.0.0:8000
 PID_FILE=/run/vod/vod.pid
 USER=tongshi # the user to run as
 GROUP=tongshi # the group to run as
@@ -10,7 +11,7 @@ NUM_WORKERS=4 # how many worker processes should Gunicorn spawn
 TIME_OUT=900 #set time out!!!!!
 DJANGO_SETTINGS_MODULE=mysite.settings # which settings file should Django use
 DJANGO_WSGI_MODULE=mysite.wsgi # WSGI module name
-APP=/home/share/vod/env/bin/gunicorn
+APP=$DJANGODIR/env/bin/gunicorn
 echo "Starting $NAME as `whoami`"
 
 # Activate the virtual environment
@@ -20,8 +21,8 @@ export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 
 # Create the run directory if it doesn't exist
-RUNDIR=$(dirname $SOCKFILE)
-test -d $RUNDIR || mkdir -p $RUNDIR
+PIDDIR=$(dirname $PID_FILE)
+test -d $PIDDIR || mkdir -p $PIDDIR
 
 # Start your Django Unicorn
 # Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
@@ -31,7 +32,7 @@ exec $APP ${DJANGO_WSGI_MODULE}:application \
 --worker-class gevent \
 --timeout=$TIME_OUT \
 --user=$USER --group=$GROUP \
---bind=unix:$SOCKFILE \
+--bind=$BIND_ADDR \
 --log-level=debug \
 --log-file=- \
 --reload \

@@ -311,7 +311,7 @@ class Vod(models.Model):
     title = models.CharField(max_length=120, verbose_name='标题')
     # image = models.ImageField(upload_to=upload_image_location, null=True, blank=True)
     # video = models.FileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
-    image = FilerFileField(null=True, blank=True, related_name="vod_image")
+    image = FilerImageField(null=True, blank=True, related_name="vod_image")
     video = FilerFileField(null=True, blank=True, related_name="vod_video")
     # image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
     # video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000,
