@@ -366,15 +366,15 @@ class Vod(models.Model):
         super(Vod, self).save(*args, **kwargs)
         try:
             if self.video != None and self.video != '':
-                basename = Path(self.video.name).name  # Djan%20go.mp4
-                rel_name = uri_to_iri(basename)  # Djan go.mp4
+                relative_path = Path(self.video.name).relative_to(settings.MEDIA_URL)  # Djan%20go.mp4
+                rel_name = uri_to_iri(relative_path)  # Djan go.mp4
 
                 #  Make sure the self.video.name is not in the LOCAL_FOLDER
                 if not self.video.name.startswith(settings.LOCAL_FOLDER_NAME) and \
                         not self.video.name.startswith(settings.RECORD_MEDIA_FOLDER):
-                    self.video.name = str(Path(self.save_path) / rel_name)
+                    self.video.name = str(rel_name)
                 print("save_path:", self.save_path)
-                print(self.video.name)
+                print('video.name:', self.video.name)
                 print('size:', self.video.file.size)
                 self.file_size = humanfriendly.format_size(self.video.file.size)
                 # duration = VideoFileClip(self.video.path).duration
@@ -388,7 +388,7 @@ class Vod(models.Model):
         try:
             if self.image:
                 # self.image.name = os.path.join(self.save_path, os.path.basename(uri_to_iri(self.image.name)))
-                self.image.name = Path(self.save_path) / Path(uri_to_iri(self.image.name)).name
+                self.image.name = str(uri_to_iri(Path(self.image.name).relative_to(settings.MEDIA_URL)))
         except:
             pass
         return super(Vod, self).save(*args, **kwargs)

@@ -8,6 +8,7 @@ from django.core.files.storage import get_storage_class
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
+from django.utils.timezone import now
 
 from admin_resumable.files import ResumableFile
 from vodmanagement import models
@@ -48,8 +49,9 @@ def get_storage(upload_to):
     init parameter.
     """
     if upload_to:
-        location = os.path.join(settings.MEDIA_ROOT, upload_to)
-        url_path = os.path.join(settings.MEDIA_URL, upload_to)
+        datepart = now().strftime("%Y/%m/%d")
+        location = os.path.join(settings.MEDIA_ROOT, upload_to, datepart)
+        url_path = os.path.join(settings.MEDIA_URL, upload_to, datepart)
         ensure_dir(location)
     else:
         url_path = os.path.join(settings.MEDIA_URL, get_chunks_subdir())
