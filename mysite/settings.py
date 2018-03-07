@@ -190,7 +190,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 THUMBNAIL_ALIASES = {
     '': {
-        'avatar': {'size': (160, 100), 'crop': True},
+        'avatar': {'size': (160, 90), 'crop': True},
     },
 }
 REST_FRAMEWORK = {
@@ -239,6 +239,7 @@ RECORD_MEDIA_ROOT = os.path.join(MEDIA_ROOT, RECORD_MEDIA_FOLDER)
 LOCAL_FOLDER_NAME = 'local_file'
 LOCAL_MEDIA_URL = LOCAL_FOLDER_NAME + '/'
 LOCAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT, LOCAL_FOLDER_NAME)
+DEFAULT_IMAGE_SRC = STATIC_URL + 'missing.jpg'
 
 FILER_STORAGES = {
     'public': {
