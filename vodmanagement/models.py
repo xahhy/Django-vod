@@ -406,6 +406,8 @@ class Vod(models.Model):
                 return mark_safe('<img src="%s" width="150" height="200" />' % (self.image.url))
             else:
                 return mark_safe('<img src="#" width="150" height="200" />')
+        else:
+            return mark_safe('<img src="%s" width="150" height="200" />' % (settings.DEFAULT_IMAGE_SRC))
 
     image_tag.short_description = '缩略图'
 
