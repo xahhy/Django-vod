@@ -1,13 +1,16 @@
 #!/bin/bash
+set -e
 
 NAME="mysite_app" # Name of the application
 DJANGODIR=/home/share/vod # Django project directory
-SOCKFILE=/run/vod/gunicorn.sock # we will communicte using this unix socket
+ADDRESS=127.0.0.1:8000
+ERROR_LOG=/var/log/vod/error.log
+# SOCKFILE=/run/vod/gunicorn.sock # we will communicte using this unix socket
 PID_FILE=/run/vod/vod.pid
 USER=tongshi # the user to run as
 GROUP=tongshi # the group to run as
 NUM_WORKERS=4 # how many worker processes should Gunicorn spawn
-TIME_OUT=900 #set time out!!!!!
+TIME_OUT=900000 #set time out!!!!!
 DJANGO_SETTINGS_MODULE=mysite.settings # which settings file should Django use
 DJANGO_WSGI_MODULE=mysite.wsgi # WSGI module name
 APP=/home/share/vod/env/bin/gunicorn
@@ -20,8 +23,10 @@ export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 
 # Create the run directory if it doesn't exist
-RUNDIR=$(dirname $SOCKFILE)
+RUNDIR=$(dirname $PID_FILE)
 test -d $RUNDIR || mkdir -p $RUNDIR
+LOGDIR=$(dirname $ERROR_LOG)
+test -d $LOGDIR||mkdir -p $LOGDIR
 
 # Start your Django Unicorn
 # Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)
@@ -31,8 +36,8 @@ exec $APP ${DJANGO_WSGI_MODULE}:application \
 --worker-class gevent \
 --timeout=$TIME_OUT \
 --user=$USER --group=$GROUP \
---bind=unix:$SOCKFILE \
+--bind $ADDRESS \
 --log-level=debug \
---log-file=- \
+--log-file=$ERROR_LOG \
 --reload \
 --pid $PID_FILE \
