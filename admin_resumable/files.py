@@ -113,7 +113,7 @@ class ResumableFile(object):
             category_id = models.VideoCategory.objects.first().id
         print("multiple category is ", category_id)
         (short_name, extension) = os.path.splitext(os.path.basename(self.base_filename))
-        file_url = os.path.join(save_path, self.base_filename)
+        file_url = Path(self.storage.base_url).relative_to(settings.MEDIA_URL) / self.base_filename
         obj = model.objects.filter(title=short_name)
         if extension in self.video_allow:
             if obj:
