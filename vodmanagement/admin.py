@@ -1,6 +1,7 @@
 from django.contrib import admin
 # Register your models here.
 from django.http import HttpResponse
+from django.core import serializers as django_serializers
 from rest_framework.renderers import JSONRenderer
 from django.core.management import call_command
 from vodmanagement.api.serializers import *
@@ -76,11 +77,11 @@ class VodModelAdmin(admin.ModelAdmin):
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
     search_fields = ['title', 'description', 'search_word']
-    actions = ['delete_hard', 'copy_objects', 'clear_view_count', 'activate_vod', 'deactivate_vod', 'backup']
+    actions = ['delete_hard', 'copy_objects', 'clear_view_count', 'activate_vod', 'deactivate_vod', 'backup', 'backup_all']
     form = VodForm
     fieldsets = [
         ('描述', {'fields': ['category', 'save_path', 'year', 'region', 'description', 'select_name', 'active']}),
-        ('文件', {'fields': ['image', ('local_video', 'video'), 'title']}),
+        ('文件', {'fields': ['image', 'video', 'title']}),
         ('视频列表', {'fields': ['video_list']}),
         ('高级', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})
     ]
@@ -157,6 +158,20 @@ class VodModelAdmin(admin.ModelAdmin):
                           , messages.SUCCESS)
 
     def backup(self, request, queryset):
+        response = HttpResponse(content_type='text/plain')
+        file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.json'
+        response['Content-Disposition'] = 'attachment; filename=%s' % file_name
+        directory = './backup'
+        full_file_name = os.path.join(directory, file_name)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        with open(full_file_name, 'w') as f:
+            data = django_serializers.serialize('json', queryset)
+            f.write(data)
+        response.write(open(full_file_name, 'rb').read())
+        return response
+
+    def backup_all(self, request, queryset):
         response = HttpResponse(content_type='text/plain')
         file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.json'
         response['Content-Disposition'] = 'attachment; filename=%s' % file_name

@@ -1,0 +1,13 @@
+[Unit]
+Description=vod daemon
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/home/share/vod
+ExecStart=/home/share/vod/gunicorn_start
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

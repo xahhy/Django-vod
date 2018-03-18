@@ -8,6 +8,7 @@ from django.core.files.storage import get_storage_class
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
+from django.utils.timezone import now
 
 from admin_resumable.files import ResumableFile
 from vodmanagement import models
@@ -48,8 +49,9 @@ def get_storage(upload_to):
     init parameter.
     """
     if upload_to:
-        location = os.path.join(settings.MEDIA_ROOT, upload_to)
-        url_path = os.path.join(settings.MEDIA_URL, upload_to)
+        datepart = now().strftime("%Y/%m/%d")
+        location = os.path.join(settings.MEDIA_ROOT, upload_to, datepart)
+        url_path = os.path.join(settings.MEDIA_URL, upload_to, datepart)
         ensure_dir(location)
     else:
         url_path = os.path.join(settings.MEDIA_URL, get_chunks_subdir())
@@ -160,7 +162,7 @@ def check_file_names(file_names, upload_to):
     file_list = json.loads(file_names)
     exist_file_list = []
     for file_name in file_list:
-        file = Path(settings.MEDIA_ROOT) / Path(upload_to) / file_name
+        file = Path(upload_to) / file_name
         if file.is_file():
             exist_file_list.append(file_name)
     if exist_file_list:
@@ -180,7 +182,8 @@ def admin_resumable_set(request):
     # Get file name list
     file_names = request.GET.get('file_names')
     print(file_names)
-    ret = check_file_names(file_names, upload_to_)
+    storage = get_storage(upload_to_)
+    ret = check_file_names(file_names, storage.base_location)
     if ret is not None:
         return HttpResponse(json.dumps(ret))
     return HttpResponse(upload_to_)
@@ -193,8 +196,9 @@ def admin_resumable_delete(request):
     file_list = json.loads(file_names)
     number = len(file_list)
     count = 0
+    storage = get_storage(upload_to_global)
     for file_name in file_list:
-        file = Path(settings.MEDIA_ROOT) / Path(upload_to_global) / file_name
+        file = Path(storage.base_location) / file_name
         if file.is_file():
             os.remove(str(file))
             count += 1
