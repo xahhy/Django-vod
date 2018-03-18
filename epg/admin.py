@@ -1,7 +1,7 @@
 import threading
 from pathlib import Path
 from urllib import parse
-
+from urllib.request import urlopen
 import os
 
 import multiprocessing
@@ -54,13 +54,15 @@ class ProgramModelAdmin(admin.ModelAdmin):
         return super(ProgramModelAdmin, self).get_queryset(request).filter(finished=1)
 
     def record(self, request, queryset):
+        legal_program_cnt = 0
         for program in queryset:
             try:
                 m3u8_file_path = parse.urlparse(program.url).path  # /CCTV1/20180124/123456.m3u8
+                urlopen(program.url, timeout=5)
                 print(m3u8_file_path)
             except Exception as e:
-                self.message_user(request, '%s 转点播失败 请检查录播的网址是否合法'%(program.title), messages.ERROR)
-                return
+                self.message_user(request, '%s 转点播失败 请检查录播的网址是否可以访问'%(program.title), messages.ERROR)
+                continue
             new_record = Vod(
                 title=program.title,
                 video=settings.RECORD_MEDIA_FOLDER + m3u8_file_path
@@ -68,10 +70,11 @@ class ProgramModelAdmin(admin.ModelAdmin):
             new_record.save()
             p = threading.Thread(target=download_m3u8_files, args=(new_record.id, program.url, settings.RECORD_MEDIA_ROOT))
             p.start()
+            legal_program_cnt += 1
             print('start downloading m3u8 files', program.url)
         record_url = reverse('admin:vodmanagement_vod_changelist')
         print(record_url)
-        self.message_user(request, mark_safe('%s 个节目正在转成点播,转换进度请到<a href="%s">录制节目</a>处查看。'%(queryset.count(),record_url))
+        self.message_user(request, mark_safe('%s/%s 个节目正在转成点播,转换进度请到<a href="%s">录制节目</a>处查看。'%(legal_program_cnt,queryset.count(),record_url))
                           , messages.SUCCESS)
 
 
