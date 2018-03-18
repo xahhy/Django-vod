@@ -69,7 +69,7 @@ class ProgramModelAdmin(admin.ModelAdmin):
             p = threading.Thread(target=download_m3u8_files, args=(new_record.id, program.url, settings.RECORD_MEDIA_ROOT))
             p.start()
             print('start downloading m3u8 files', program.url)
-        record_url = reverse('admin:vodmanagement_record_changelist')
+        record_url = reverse('admin:vodmanagement_vod_changelist')
         print(record_url)
         self.message_user(request, mark_safe('%s 个节目正在转成点播,转换进度请到<a href="%s">录制节目</a>处查看。'%(queryset.count(),record_url))
                           , messages.SUCCESS)
