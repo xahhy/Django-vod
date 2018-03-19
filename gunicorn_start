@@ -3,6 +3,7 @@ set -e
 
 NAME="mysite_app" # Name of the application
 DJANGODIR=/home/share/vod # Django project directory
+VOD_VIRTUAL_ENV=/home/share/virtualenvs/vod
 ADDRESS=127.0.0.1:8000
 ERROR_LOG=/var/log/vod/error.log
 # SOCKFILE=/run/vod/gunicorn.sock # we will communicte using this unix socket
@@ -18,7 +19,7 @@ echo "Starting $NAME as `whoami`"
 
 # Activate the virtual environment
 cd $DJANGODIR
-source ./env/bin/activate
+source $VOD_VIRTUAL_ENV/bin/activate
 export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGODIR:$PYTHONPATH
 
