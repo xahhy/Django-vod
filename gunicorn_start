@@ -14,7 +14,7 @@ NUM_WORKERS=4 # how many worker processes should Gunicorn spawn
 TIME_OUT=900000 #set time out!!!!!
 DJANGO_SETTINGS_MODULE=mysite.settings # which settings file should Django use
 DJANGO_WSGI_MODULE=mysite.wsgi # WSGI module name
-APP=/home/share/vod/env/bin/gunicorn
+APP=$VOD_VIRTUAL_ENV/bin/gunicorn
 echo "Starting $NAME as `whoami`"
 
 # Activate the virtual environment
