@@ -165,7 +165,7 @@ def get_random_videos(max_length=6):
     if videos_length <= max_length:
         return random_videos
     else:
-        return random.sample(random_videos, max_length)
+        return random.sample(list(random_videos), max_length)
 
 
 class HomeListAPIView(APIView):
