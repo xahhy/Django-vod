@@ -165,7 +165,7 @@ def get_random_videos(max_length=6):
     if videos_length <= max_length:
         return random_videos
     else:
-        return random.sample(random_videos, max_length)
+        return random.sample(list(random_videos), max_length)
 
 
 class HomeListAPIView(APIView):
@@ -204,7 +204,7 @@ class HomeOverViewAPIView(APIView):
         try:
             if category is not None:
                 if length is None:length = 4
-                videos = Vod.objects.filter(category__subset__name=category)[:int(length)]
+                videos = get_all_videos(None).filter(category__subset__name=category)[:int(length)]
                 if not videos:
                     raise ValueError('视频列表为空,请检查分类名称')
                 overview_videos = VodListSerializer(videos, many=True).data
