@@ -47,7 +47,7 @@ class ProgramModelAdmin(admin.ModelAdmin):
     list_display = ['channel', 'title', 'start_time', 'end_time', 'url']
     list_display_links = ['channel']
     list_filter = ['finished', 'channel']
-    search_fields = ['channel', 'title', 'start_time']
+    search_fields = ['title']
     actions = ['record', 'unrecord']
 
     def get_queryset(self, request):

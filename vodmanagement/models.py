@@ -204,7 +204,11 @@ class VideoCategory(models.Model):
         verbose_name_plural = '视频分类管理'
 
     def __str__(self):
-        return self.name + str('  (level %d)' % (self.level))
+        base_name = self.name + str('  (level %d)' % (self.level))
+        if self.subset.first() and self.level == 2:
+            return '--'.join([self.subset.first().name, base_name])
+        else:
+            return base_name
 
     def save(self, *args, **kwargs):
         # print(self.directory)
