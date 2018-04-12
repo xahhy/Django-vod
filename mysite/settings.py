@@ -193,6 +193,7 @@ THUMBNAIL_ALIASES = {
         'avatar': {'size': (160, 90), 'crop': True},
     },
 }
+THUMBNAIL_BASEDIR="thumbnail"
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
