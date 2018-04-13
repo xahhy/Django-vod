@@ -317,7 +317,7 @@ class Vod(models.Model):
     # video = FilerFileField(null=True, blank=True, related_name="video_name")
     # height_field = models.IntegerField(default=0)
     # width_field = models.IntegerField(default=0)
-    category = models.ForeignKey(VideoCategory, null=True, verbose_name='分类')
+    category = models.ForeignKey(VideoCategory, null=True, blank=True, verbose_name='分类')
     save_path = models.CharField(max_length=128, blank=False, null=True,
                                  default='default')  # ,default=FileDirectory.objects.first())
     year = models.CharField(max_length=10, blank=False, null=True,
