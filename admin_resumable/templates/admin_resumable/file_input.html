@@ -45,7 +45,9 @@
             r.on('fileSuccess', function (file, message) {
                 $('#{{ id }}').val(message);
                 var before = $("#{{ id }}_uploaded_status").html();
-                $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' Uploaded');
+                $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' 上传成功');
+                $("#{{ id }}_uploaded_status").after('<img src="' + message +
+                '" style="width:250px;">');
 
 {#                if (video_allow.toString().indexOf(getFileType(file.fileName)) > -1) {#}
                 $("form").removeClass('uploading');
