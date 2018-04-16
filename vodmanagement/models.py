@@ -306,8 +306,8 @@ class Vod(models.Model):
     title = models.CharField(max_length=120, verbose_name='标题')
     # image = models.ImageField(upload_to=upload_image_location, null=True, blank=True)
     # video = models.FileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
-    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
-    video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000,
+    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), max_length=10000, verbose_name='缩略图')
+    video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=10000,
                                          verbose_name='视频')
     duration = models.CharField(max_length=50, blank=True, null=True, verbose_name='时长')
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT, blank=True, recursive=True)
