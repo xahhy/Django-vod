@@ -18,6 +18,7 @@
             var save_path = save_path_sel.val();
             var cur_option = save_path_sel.find('[value=' + save_path + ']').text();
             var video_allow = ['mp4', 'm3u8'];
+            var $video_file_loading;
             $('form').submit(function () {
                 if ($(this).hasClass('{{ name }}_disabled')) {
                     return false;
@@ -40,6 +41,7 @@
             r.on('fileAdded', function (file, event) {
                 {% block vod_title %}{% endblock %}
                  console.log("add file");
+                 reset_processbar($('#{{ id }}_progress'));
                 {#                file_names += file.fileName + '<br/>';#}
             });
             r.on('fileSuccess', function (file, message) {
@@ -51,8 +53,8 @@
                 $("form").removeClass('uploading');
 {#                }#}
                 {#            $("[name='_save'").click();#}
-                $('#{{ id }}_upload_icon').hide();
-{#                r.removeFile(file);#}
+                {# $('#{{ id }}_upload_icon').hide();#}
+                r.removeFile(file);
                 console.log("upload done");
                 {% block file_success %}
 
@@ -175,16 +177,25 @@
             var now = value * 100;
             if (now === 100) {
                 bar.addClass('progress-bar-success');
-                bar.find("span").html("Success");
+                bar.find("span").html("上传成功");
+                {% block file_loading %}
+
+                {% endblock %}
             } else {
                 bar.removeClass('progress-bar-success');
 
             }
             bar.css('width', now + '%');
+            
         }
 
         function success_processbar(bar) {
             bar.addClass('progress-bar-success');
+        }
+
+        function reset_processbar(bar){
+            bar.removeClass('progress-bar-success');
+            bar.find("span").html("上传中...");
         }
 
     })(jQuery);
@@ -214,10 +225,10 @@
     </p>
     {#    <progress id="{{ id }}_progress" value="0" max="1" style="width:500px"></progress>#}
     <div class="progress">
-        <div id="{{ id }}_progress" class="progress-bar" role="progressbar" aria-valuenow="0"
+        <div id="{{ id }}_progress" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0"
              aria-valuemin="0" aria-valuemax="1">
             {#            <span class="sr-only"></span>#}
-            <span id="{{ id }}_upload_icon"><i class='fa fa-circle-o-notch fa-spin'></i>processing</span>
+            <span id="{{ id }}_upload_icon"><i class='fa fa-circle-o-notch fa-spin'></i>上传中...</span>
         </div>
     </div>
 </div>

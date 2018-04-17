@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block file_success %}
-    $.confirm({
+$.confirm({
     title: 'Save?',
     content: 'Upload complete, you will be automatically save in 5 seconds.',
     autoClose: 'Save|5000',
@@ -28,4 +28,8 @@
     }
     }
     });
+{% endblock %}
+
+{% block file_loading %}
+isLoading().loading();
 {% endblock %}
