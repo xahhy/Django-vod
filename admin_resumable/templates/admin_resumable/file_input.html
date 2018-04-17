@@ -1,9 +1,11 @@
 <script>
     {% block script_head %}{% endblock %}
+
     function getFileName(file) {
         var pos = file.lastIndexOf(".");
         return file.substring(0, pos);
     }
+
     function getFileType(file) {
         var pos = file.lastIndexOf(".");
         return file.substring(pos + 1);
@@ -18,6 +20,8 @@
             var save_path = save_path_sel.val();
             var cur_option = save_path_sel.find('[value=' + save_path + ']').text();
             var video_allow = ['mp4', 'm3u8'];
+            var $process_bar = $('#{{ id }}_progress');
+
             $('form').submit(function () {
                 if ($(this).hasClass('{{ name }}_disabled')) {
                     return false;
@@ -39,7 +43,8 @@
             r.assignDrop($('#{{ id }}_input_file'));
             r.on('fileAdded', function (file, event) {
                 {% block vod_title %}{% endblock %}
-                 console.log("add file");
+                console.log("add file");
+                reset_processbar();
                 {#                file_names += file.fileName + '<br/>';#}
             });
             r.on('fileSuccess', function (file, message) {
@@ -47,13 +52,14 @@
                 var before = $("#{{ id }}_uploaded_status").html();
                 $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' Uploaded');
 
-{#                if (video_allow.toString().indexOf(getFileType(file.fileName)) > -1) {#}
+                {#                if (video_allow.toString().indexOf(getFileType(file.fileName)) > -1) {#}
                 $("form").removeClass('uploading');
-{#                }#}
+                {#                }#}
                 {#            $("[name='_save'").click();#}
-                $('#{{ id }}_upload_icon').hide();
-{#                r.removeFile(file);#}
+                {# $('#{{ id }}_upload_icon').hide();#}
+                r.removeFile(file);
                 console.log("upload done");
+                success_processbar();
                 {% block file_success %}
 
                 {% endblock %}
@@ -63,7 +69,7 @@
             });
             r.on('progress', function (file, message) {
                 {#                $('#{{ id }}_progress').val(r.progress());#}
-                update_processbar($('#{{ id }}_progress'), r.progress(true));
+                update_processbar(r.progress(true));
                 $('#{{ id }}_upload_icon').show();
 
             });
@@ -116,7 +122,7 @@
                                     $.get('{% url 'admin_resumable_set' %}', content, function (data, status) {
                                         console.log(data);
                                         console.log(status);
-                                        if(data.startsWith('[')){
+                                        if (data.startsWith('[')) {
                                             var error_files = JSON.parse(data);
                                             var error_message = '文件<br/><br/><span style="color: red;font-weight:bold">';
                                             error_files.map(function (file) {
@@ -138,7 +144,7 @@
                                                         keys: ['enter'],
                                                         action: function () {
                                                             console.log('start delete file');
-                                                            $.get('{% url 'admin_resumable_delete' %}', {'delete_file_names':data},function(data, status){
+                                                            $.get('{% url 'admin_resumable_delete' %}', {'delete_file_names': data}, function (data, status) {
                                                                 r.upload();
                                                                 $("form").addClass('uploading')
                                                             });
@@ -154,7 +160,7 @@
                                             });
 
 
-                                        }else {
+                                        } else {
                                             r.upload();
                                             $("form").addClass('uploading')
                                         }
@@ -170,22 +176,32 @@
                     })
                 }, 500)
             });
-        });
-        function update_processbar(bar, value) {
-            var now = value * 100;
-            if (now === 100) {
-                bar.addClass('progress-bar-success');
-                bar.find("span").html("Success");
-            } else {
-                bar.removeClass('progress-bar-success');
+
+
+            function update_processbar(value) {
+                var now = value * 100;
+                if (now === 100) {
+                    $process_bar.addClass('progress-bar-warning');
+                    $process_bar.find("span").html("处理中...");
+                } else {
+                    $process_bar.removeClass('progress-bar-success');
+
+                }
+                $process_bar.css('width', now + '%');
 
             }
-            bar.css('width', now + '%');
-        }
 
-        function success_processbar(bar) {
-            bar.addClass('progress-bar-success');
-        }
+            function success_processbar() {
+                $process_bar.removeClass('progress-bar-warning');
+                $process_bar.addClass('progress-bar-success');
+                $process_bar.find("span").html("上传成功");
+            }
+
+            function reset_processbar() {
+                $process_bar.removeClass('progress-bar-success');
+                $process_bar.find("span").html("上传中...");
+            }
+        });
 
     })(jQuery);
     {#    })(jQuery);#}
@@ -193,6 +209,7 @@
 
 </script>
 <div id="container">
+    {#    <p id="{{ id }}_file_upload">#}
     <p class="file-upload">
         {% if value %}
             Currently:
@@ -214,10 +231,11 @@
     </p>
     {#    <progress id="{{ id }}_progress" value="0" max="1" style="width:500px"></progress>#}
     <div class="progress">
-        <div id="{{ id }}_progress" class="progress-bar" role="progressbar" aria-valuenow="0"
+        <div id="{{ id }}_progress" class="progress-bar progress-bar-striped active" role="progressbar"
+             aria-valuenow="0"
              aria-valuemin="0" aria-valuemax="1">
             {#            <span class="sr-only"></span>#}
-            <span id="{{ id }}_upload_icon"><i class='fa fa-circle-o-notch fa-spin'></i>processing</span>
+            <span id="{{ id }}_upload_icon"><i class='fa fa-circle-o-notch fa-spin'></i>上传中...</span>
         </div>
     </div>
 </div>
