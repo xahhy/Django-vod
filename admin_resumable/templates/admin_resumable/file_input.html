@@ -50,7 +50,7 @@
             r.on('fileSuccess', function (file, message) {
                 $('#{{ id }}').val(message);
                 var before = $("#{{ id }}_uploaded_status").html();
-                $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' Uploaded');
+                $("#{{ id }}_uploaded_status").html(before + '<br/>' + message + ' 上传成功');
 
                 {#                if (video_allow.toString().indexOf(getFileType(file.fileName)) > -1) {#}
                 $("form").removeClass('uploading');

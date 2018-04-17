@@ -12,20 +12,23 @@
 {% endblock %}
 
 {% block file_success %}
-$.confirm({
-    title: 'Save?',
-    content: 'Upload complete, you will be automatically save in 5 seconds.',
-    autoClose: 'Save|5000',
-    buttons: {
-    Save: {
-    text: 'Save',
-    action: function () {
-    $("[name='_save']").click();
-    }
-    },
-    cancel: function () {
-    $.alert('canceled');
-    }
-    }
+    $.confirm({
+        title: '是否自动保存?',
+        content: '上传完成, 将在5秒后自动保存!',
+        autoClose: 'Save|5000',
+            buttons: {
+            Save: {
+            text: '保存',
+            action: function () {
+            $("[name='_save']").click();
+            }
+            },
+            cancel: {
+                text: '取消',
+                action: function () {
+                    $.alert('已取消自动保存,请在编辑完成后手动点击保存按钮!');
+                }
+            }
+        }
     });
 {% endblock %}
