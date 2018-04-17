@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 
@@ -120,3 +121,14 @@ def func_time(func):
         print(func, 'run_time:',(stop-start))
         return ret
     return run_time
+
+
+def try_or_error(func):
+    def result(*args, **kwargs):
+        ret = 'Error'
+        try:
+            ret = func(*args, **kwargs)
+        except Exception as e:
+            logging.exception('Field is not available')
+        return ret
+    return result
