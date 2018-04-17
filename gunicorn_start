@@ -38,7 +38,8 @@ exec $APP ${DJANGO_WSGI_MODULE}:application \
 --timeout=$TIME_OUT \
 --user=$USER --group=$GROUP \
 --bind $ADDRESS \
---log-level=debug \
+--log-level=info \
 --log-file=$ERROR_LOG \
+--capture-output 
 --reload \
 --pid $PID_FILE \

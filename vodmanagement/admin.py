@@ -68,10 +68,10 @@ class VodForm(forms.ModelForm):
 
 @admin.register(Vod)
 class VodModelAdmin(admin.ModelAdmin):
-    list_display = ['title', 'image_tag', 'category', 'file_size', 'duration', 'definition', 'year', 'region',
+    list_display = ['title', 'select_name', 'image_tag', 'category', 'duration', 'definition', 'year', 'region',
                     'view_count', 'timestamp', 'colored_active']  # image_tag
     list_display_links = ['image_tag', 'timestamp']  # image_tag
-    list_editable = ['category', 'title', 'definition', 'year']
+    list_editable = ['category', 'title', 'select_name', 'definition', 'year']
     list_filter = ['year', 'category']
     # filter_horizontal = ['video_list']
     # fields = ('image_tag',)

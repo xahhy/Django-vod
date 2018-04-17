@@ -21,7 +21,6 @@
             var cur_option = save_path_sel.find('[value=' + save_path + ']').text();
             var video_allow = ['mp4', 'm3u8'];
             var $process_bar = $('#{{ id }}_progress');
-
             $('form').submit(function () {
                 if ($(this).hasClass('{{ name }}_disabled')) {
                     return false;
@@ -176,8 +175,6 @@
                     })
                 }, 500)
             });
-
-
             function update_processbar(value) {
                 var now = value * 100;
                 if (now === 100) {
@@ -202,6 +199,11 @@
                 $process_bar.find("span").html("上传中...");
             }
         });
+
+        function reset_processbar(bar){
+            bar.removeClass('progress-bar-success');
+            bar.find("span").html("上传中...");
+        }
 
     })(jQuery);
     {#    })(jQuery);#}
@@ -232,7 +234,6 @@
     {#    <progress id="{{ id }}_progress" value="0" max="1" style="width:500px"></progress>#}
     <div class="progress">
         <div id="{{ id }}_progress" class="progress-bar progress-bar-striped active" role="progressbar"
-             aria-valuenow="0"
              aria-valuemin="0" aria-valuemax="1">
             {#            <span class="sr-only"></span>#}
             <span id="{{ id }}_upload_icon"><i class='fa fa-circle-o-notch fa-spin'></i>上传中...</span>
