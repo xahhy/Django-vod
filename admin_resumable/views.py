@@ -190,13 +190,13 @@ def admin_resumable_set(request):
 
 
 def admin_resumable_delete(request):
-    global upload_to_global
     print('Enter delete file')
     file_names = request.GET.get('delete_file_names')
+    upload_to_ = request.GET.get('save_path')
     file_list = json.loads(file_names)
     number = len(file_list)
     count = 0
-    storage = get_storage(upload_to_global)
+    storage = get_storage(upload_to_)
     for file_name in file_list:
         file = Path(storage.base_location) / file_name
         if file.is_file():

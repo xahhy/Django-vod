@@ -164,7 +164,7 @@ DATABASES = {
         'NAME': 'tsrtmp',
         'USER': 'root',
         'PASSWORD': '123',
-        'HOST': '',
+        'HOST': '10.13.6.2',
         'PORT': '',
     }
 }
@@ -193,6 +193,7 @@ THUMBNAIL_ALIASES = {
         'avatar': {'size': (160, 90), 'crop': True},
     },
 }
+THUMBNAIL_BASEFOLDER = 'thumbs'
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
@@ -258,6 +259,7 @@ FILER_STORAGES = {
 }
 ADMIN_RESUMABLE_CHUNKSIZE = 1024 * 1024 * 10
 ADMIN_RESUMABLE_STORAGE = 'vodmanagement.my_storage.VodStorage'
+ADMIN_RESUMABLE_SHOW_THUMB = True
 
 # Memory Cache
 CACHES = {
