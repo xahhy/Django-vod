@@ -80,10 +80,10 @@
                     r.files.map(function (file) {
                         file_names += file.fileName + '<br/>';
                     });
-                    var msg = '<div class="text-center" style="color:green;font-weight:bold">Are you sure you want to upload:</div><b>'
+                    var msg = '<div class="text-center" style="color:green;font-weight:bold">确定要上传以下文件:</div><b>'
                         + file_names
                         + "</b>"
-                        + '<div class="text-center" style="color:green;font-weight:bold">to:</div>'
+                        + '<div class="text-center" style="color:green;font-weight:bold">到:</div>'
                         + '<span style="color: red;font-weight:bold">'
                         + cur_option
                         + '</span>';
@@ -92,12 +92,12 @@
                     jQuery.confirm({
                         columnClass: 'medium',
                         icon: 'fa fa-warning',
-                        title: 'Confirm',
+                        title: '确认',
                         content: msg,
                         type: 'green',
                         buttons: {
                             ok: {
-                                text: "Yes!",
+                                text: "是！",
                                 btnClass: 'btn-primary',
                                 keys: ['enter'],
                                 action: function () {
@@ -138,7 +138,7 @@
                                                 type: 'red',
                                                 buttons: {
                                                     ok: {
-                                                        text: "Yes!",
+                                                        text: "是！",
                                                         btnClass: 'btn-primary',
                                                         keys: ['enter'],
                                                         action: function () {
@@ -149,11 +149,14 @@
                                                             });
                                                         }
                                                     },
-                                                    cancel: function () {
-                                                        console.log('cancel delete file');
-                                                        r.cancel();
-                                                        file_names = '';
-                                                        console.log('Canncel upload because of file already exists.');
+                                                    cancel: {
+                                                        text: "否",
+                                                        action: function () {
+                                                            console.log('cancel delete file');
+                                                            r.cancel();
+                                                            file_names = '';
+                                                            console.log('Canncel upload because of file already exists.');
+                                                        }
                                                     }
                                                 }
                                             });
@@ -166,10 +169,13 @@
                                     });
                                 }
                             },
-                            cancel: function () {
-                                console.log("refuse upload");
-                                r.cancel();
-                                file_names = '';
+                            cancel: {
+                                text: "否",
+                                action: function () {
+                                    console.log("refuse upload");
+                                    r.cancel();
+                                    file_names = '';
+                                }
                             }
                         }
                     })
