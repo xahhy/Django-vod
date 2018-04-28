@@ -44,6 +44,39 @@ class VodListSerializer(ModelSerializer):
         return thumb_url
 
 
+class VodHomeListSerializer(ModelSerializer):
+    # category = serializers.SlugRelatedField(
+    #     read_only=True,
+    #     slug_field='name'
+    #  )
+    image = SerializerMethodField()
+    category = SerializerMethodField()
+    definition = SerializerMethodField()
+    class Meta:
+        model = Vod
+        fields = [
+            'id',
+            'title',
+            'image',
+            'category',
+            'definition',
+            'duration',
+            'slug',
+        ]
+
+    def get_definition(self, obj):
+        return obj.get_definition_display()
+
+    @try_or_error
+    def get_category(self, obj):
+        return obj.category.name
+
+    @try_or_error
+    def get_image(self, obj):
+        thumb_url = get_thumbnailer(obj.image)['big_avatar'].url
+        return thumb_url
+
+
 class VodDetailSubSetSerializer(ModelSerializer):
     class Meta:
         model = Vod

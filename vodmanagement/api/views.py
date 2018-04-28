@@ -178,7 +178,7 @@ class HomeListAPIView(APIView):
         preview_categories = {}
         videos = get_random_videos()
         preview_categories['count'] = len(videos)
-        preview_categories['videos'] = VodListSerializer(videos, many=True).data
+        preview_categories['videos'] = VodHomeListSerializer(videos, many=True).data
         return Response(preview_categories)
     # def get(self, request, format=None):
     #     preview_categories = []
