@@ -191,6 +191,7 @@ AUTH_PASSWORD_VALIDATORS = [
 THUMBNAIL_ALIASES = {
     '': {
         'avatar': {'size': (160, 90), 'crop': True},
+        'big_avatar': {'size': (900, 300), 'crop': True},
     },
 }
 THUMBNAIL_BASEFOLDER = 'thumbs'

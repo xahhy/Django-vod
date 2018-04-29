@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import fnmatch
 import os
+import re
 import zipfile
 from pathlib import Path
 from django.core.files.base import File
@@ -27,12 +28,8 @@ class ResumableFile(object):
     def chunk_names(self):
         """Iterates over all stored chunks.
         """
-        chunks = []
         files = sorted(self.storage.listdir('')[1])
-        for file in files:
-            if fnmatch.fnmatch(file, '%s%s*' % (self.filename,
-                                                self.chunk_suffix)):
-                chunks.append(file)
+        chunks = [file for file in files if str(file).startswith('%s%s' % (self.filename, self.chunk_suffix))]
         return chunks
 
     @property
