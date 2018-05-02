@@ -7,6 +7,7 @@
 <ul id="site-name" class="toolbar-item toolbar-item-navigation">
     <li>
         <a class="menu-item" href="">{{ site_header|default:_('Django Administration') }}</a>
+        <a class="menu-item" href="{% static 'help/视频点播系统操作说明.html' %}" target="_blank">{{ _('使用说明')|default:_('Help') }}</a>
         <ul class="submenu">
             {% if user.is_active and user.is_staff %}
                 {% url 'django-admindocs-docroot' as docsroot %}

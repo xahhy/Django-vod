@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>视频点播系统操作说明</title><link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}#write, body { height: auto; }
+#write, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write ol, #write p, #write ul { position: relative; }
+#write, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write, pre { white-space: pre-wrap; }
+.CodeMirror, .md-fences, table { text-align: left; }
+.md-reset, a:active, a:hover { outline: 0px; }
+.md-reset, .md-toc-item a { text-decoration: none; }
+.MathJax_SVG, .md-reset { float: none; direction: ltr; }
+:root { --bg-color:#ffffff; --text-color:#333333; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; }
+a.url { word-break: break-all; }
+.in-text-selection, ::selection { background: rgb(181, 214, 252); text-shadow: none; }
+#write { margin: 0px auto; word-break: normal; word-wrap: break-word; padding-bottom: 70px; overflow-x: visible; }
+.first-line-indent #write p .md-line { text-indent: 0px; }
+.first-line-indent #write li, .first-line-indent #write p, .first-line-indent #write p .md-line:first-child { text-indent: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write > blockquote:first-child, #write > div:first-child, #write > ol:first-child, #write > p:first-child, #write > pre:first-child, #write > table:first-child, #write > ul:first-child { margin-top: 30px; }
+#write li > table:first-child { margin-top: -20px; }
+img { max-width: 100%; vertical-align: middle; }
+button, input, select, textarea { color: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+p { -webkit-margin-before: 1rem; -webkit-margin-after: 1rem; -webkit-margin-start: 0px; -webkit-margin-end: 0px; }
+.mathjax-block { margin-top: 0px; margin-bottom: 0px; -webkit-margin-before: 0px; -webkit-margin-after: 0px; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+#write > figure:first-child { margin-top: 16px; }
+figure { overflow-x: auto; margin: -8px 0px 0px -8px; max-width: calc(100% + 16px); padding: 8px; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; }
+.CodeMirror-line, .md-fences { break-inside: avoid; }
+table.md-table td { min-width: 80px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; margin-right: 4px; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+.md-fences { font-size: 0.9rem; display: block; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+.md-fences .CodeMirror.CodeMirror-wrap { top: -1.6em; margin-bottom: -1.6em; }
+.md-fences.mock-cm { white-space: pre-wrap; }
+.show-fences-line-number .md-fences { padding-left: 0px; }
+.show-fences-line-number .md-fences.mock-cm { padding-left: 40px; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; vertical-align: top; background: 0px 0px; text-shadow: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; }
+.md-toc-inner, a img, img a { cursor: pointer; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; }
+  #write { margin-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  h1, h2, h3, h4, h5, h6 { break-after: avoid-page; orphans: 2; }
+  p { orphans: 4; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 1cm; padding-right: 1cm; padding-bottom: 0px; break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  @page { margin: 20mm 0px; }
+}
+.footnote-line { white-space: pre-wrap; margin-top: 0.714em; font-size: 0.7em; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > img:only-child { display: block; margin: auto; }
+.md-line > .md-image:only-child, p > .md-image:only-child { display: inline-block; width: 100%; text-align: center; }
+.mathjax-block:not(:empty)::after, .md-toc-content::after, .md-toc::after { display: none; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.mathjax-block { white-space: pre; overflow: hidden; width: 100%; }
+p + .mathjax-block { margin-top: -1.143rem; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.MathJax_SVG, .mathjax-block .MathJax_SVG_Display { text-indent: 0px; max-width: none; max-height: none; min-height: 0px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-inner:hover { }
+.md-toc-inner { display: inline-block; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, tt { font-family: var(--monospace); }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; }
+a.md-print-anchor { border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.mathjax-block .MathJax_SVG_Display { text-align: center; margin: 1em 0px; position: relative; min-width: 100%; width: auto; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: monospace; }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; min-width: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg, [lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+
+
+:root { --side-bar-bg-color: #fafafa; --control-text-color: #777; }
+@font-face { font-family: "Open Sans"; font-style: normal; font-weight: normal; src: local("Open Sans Regular"), url("./github/400.woff") format("woff"); }
+@font-face { font-family: "Open Sans"; font-style: italic; font-weight: normal; src: local("Open Sans Italic"), url("./github/400i.woff") format("woff"); }
+@font-face { font-family: "Open Sans"; font-style: normal; font-weight: bold; src: local("Open Sans Bold"), url("./github/700.woff") format("woff"); }
+@font-face { font-family: "Open Sans"; font-style: italic; font-weight: bold; src: local("Open Sans Bold Italic"), url("./github/700i.woff") format("woff"); }
+html { font-size: 16px; }
+body { font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(51, 51, 51); line-height: 1.6; }
+#write { max-width: 860px; margin: 0px auto; padding: 20px 30px 100px; }
+#write > ul:first-child, #write > ol:first-child { margin-top: 30px; }
+body > :first-child { margin-top: 0px !important; }
+body > :last-child { margin-bottom: 0px !important; }
+a { color: rgb(65, 131, 196); }
+h1, h2, h3, h4, h5, h6 { position: relative; margin-top: 1rem; margin-bottom: 1rem; font-weight: bold; line-height: 1.4; cursor: text; }
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor { text-decoration: none; }
+h1 tt, h1 code { font-size: inherit; }
+h2 tt, h2 code { font-size: inherit; }
+h3 tt, h3 code { font-size: inherit; }
+h4 tt, h4 code { font-size: inherit; }
+h5 tt, h5 code { font-size: inherit; }
+h6 tt, h6 code { font-size: inherit; }
+h1 { padding-bottom: 0.3em; font-size: 2.25em; line-height: 1.2; border-bottom: 1px solid rgb(238, 238, 238); }
+h2 { padding-bottom: 0.3em; font-size: 1.75em; line-height: 1.225; border-bottom: 1px solid rgb(238, 238, 238); }
+h3 { font-size: 1.5em; line-height: 1.43; }
+h4 { font-size: 1.25em; }
+h5 { font-size: 1em; }
+h6 { font-size: 1em; color: rgb(119, 119, 119); }
+p, blockquote, ul, ol, dl, table { margin: 0.8em 0px; }
+li > ol, li > ul { margin: 0px; }
+hr { height: 4px; padding: 0px; margin: 16px 0px; background-color: rgb(231, 231, 231); border-width: 0px 0px 1px; border-style: none none solid; border-top-color: initial; border-right-color: initial; border-left-color: initial; border-image: initial; overflow: hidden; box-sizing: content-box; border-bottom-color: rgb(221, 221, 221); }
+body > h2:first-child { margin-top: 0px; padding-top: 0px; }
+body > h1:first-child { margin-top: 0px; padding-top: 0px; }
+body > h1:first-child + h2 { margin-top: 0px; padding-top: 0px; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child { margin-top: 0px; padding-top: 0px; }
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 { margin-top: 0px; padding-top: 0px; }
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p { margin-top: 0px; }
+li p.first { display: inline-block; }
+ul, ol { padding-left: 30px; }
+ul:first-child, ol:first-child { margin-top: 0px; }
+ul:last-child, ol:last-child { margin-bottom: 0px; }
+blockquote { border-left: 4px solid rgb(221, 221, 221); padding: 0px 15px; color: rgb(119, 119, 119); }
+blockquote blockquote { padding-right: 0px; }
+table { padding: 0px; word-break: initial; }
+table tr { border-top: 1px solid rgb(204, 204, 204); margin: 0px; padding: 0px; }
+table tr:nth-child(2n) { background-color: rgb(248, 248, 248); }
+table tr th { font-weight: bold; border-width: 1px 1px 0px; border-top-style: solid; border-right-style: solid; border-left-style: solid; border-top-color: rgb(204, 204, 204); border-right-color: rgb(204, 204, 204); border-left-color: rgb(204, 204, 204); border-image: initial; border-bottom-style: initial; border-bottom-color: initial; text-align: left; margin: 0px; padding: 6px 13px; }
+table tr td { border: 1px solid rgb(204, 204, 204); text-align: left; margin: 0px; padding: 6px 13px; }
+table tr th:first-child, table tr td:first-child { margin-top: 0px; }
+table tr th:last-child, table tr td:last-child { margin-bottom: 0px; }
+.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); }
+.md-fences, code, tt { border: 1px solid rgb(221, 221, 221); background-color: rgb(248, 248, 248); border-radius: 3px; font-family: Consolas, "Liberation Mono", Courier, monospace; padding: 2px 4px 0px; font-size: 0.9em; }
+.md-fences { margin-bottom: 15px; margin-top: 15px; padding: 8px 1em 6px; }
+.md-task-list-item > input { margin-left: -1.3em; }
+@media screen and (min-width: 914px) {
+}
+@media print {
+  html { font-size: 13px; }
+  table, pre { break-inside: avoid; }
+  pre { word-wrap: break-word; }
+}
+.md-fences { background-color: rgb(248, 248, 248); }
+#write pre.md-meta-block { padding: 1rem; font-size: 85%; line-height: 1.45; background-color: rgb(247, 247, 247); border: 0px; border-radius: 3px; color: rgb(119, 119, 119); margin-top: 0px !important; }
+.mathjax-block > .code-tooltip { bottom: 0.375rem; }
+#write > h3.md-focus::before { left: -1.5625rem; top: 0.375rem; }
+#write > h4.md-focus::before { left: -1.5625rem; top: 0.285714rem; }
+#write > h5.md-focus::before { left: -1.5625rem; top: 0.285714rem; }
+#write > h6.md-focus::before { left: -1.5625rem; top: 0.285714rem; }
+.md-image > .md-meta { border-radius: 3px; font-family: Consolas, "Liberation Mono", Courier, monospace; padding: 2px 0px 0px 4px; font-size: 0.9em; color: inherit; }
+.md-tag { color: inherit; }
+.md-toc { margin-top: 20px; padding-bottom: 20px; }
+.sidebar-tabs { border-bottom: none; }
+#typora-quick-open { border: 1px solid rgb(221, 221, 221); background-color: rgb(248, 248, 248); }
+#typora-quick-open-item { background-color: rgb(250, 250, 250); border-color: rgb(254, 254, 254) rgb(229, 229, 229) rgb(229, 229, 229) rgb(238, 238, 238); border-style: solid; border-width: 1px; }
+#md-notification::before { top: 10px; }
+.on-focus-mode blockquote { border-left-color: rgba(85, 85, 85, 0.12); }
+header, .context-menu, .megamenu-content, footer { font-family: "Segoe UI", Arial, sans-serif; }
+.file-node-content:hover .file-node-icon, .file-node-content:hover .file-node-open-state { visibility: visible; }
+.mac-seamless-mode #typora-sidebar { background-color: var(--side-bar-bg-color); }
+.md-lang { color: rgb(180, 101, 77); }
+.html-for-mac .context-menu { --item-hover-bg-color: #E6F0FE; }
+
+
+
+
+
+ .typora-export p, .typora-export .footnote-line {white-space: normal;} 
+</style>
+</head>
+<body class='typora-export os-windows' >
+<div  id='write'  class = 'is-node'><ul><li><p><a href='#header-n63'>进入点播管理系统的网址</a></p></li><li><p><a href='#header-n75'>视频点播应用管理</a></p><ul><li><a href='#header-n80'>视频列表</a></li><li><a href='#header-n120'>视频地区</a></li><li><a href='#header-n125'>视频导入</a></li><li><a href='#header-n133'>视频分类管理</a></li><li><a href='#header-n147'>视频上传路径管理</a></li><li><a href='#header-n153'>批量上传管理</a></li></ul></li><li><p><a href='#header-n165'>视频录制应用管理</a></p><ul><li><a href='#header-n183'>节目管理</a></li><li><a href='#header-n188'>频道管理</a></li></ul></li><li><p><a href='#header-n193'>常见点播视频管理操作说明</a></p><ul><li><a href='#header-n196'>添加一个单独的点播节目</a></li><li><a href='#%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%B8%AA%E8%A7%86%E9%A2%91%E9%9B%86%E5%90%88%E7%94%B5%E8%A7%86%E5%89%A7'>添加一个视频集合（电视剧）</a></li><li><a href='#header-n356'>创建一个分类</a></li><li><a href='#header-n399'>批量上传视频文件和封面图片文件</a></li><li><a href='#header-n415'>对视频列表进行批量操作</a></li><li><a href='#header-n442'>点播节目数据备份及恢复</a></li><li><a href='#header-n476'>录播节目转点播</a></li></ul></li></ul><h1><a name='header-n63' class='md-header-anchor '></a>进入点播管理系统的网址</h1><p>网址为<code>http://&lt;ip&gt;/admin</code></p><p>有两种方式进入点播管理系统网页：</p><ul><li>在<code>http://&lt;ip&gt;/vod/index.html</code>中，点击右上角的<code>系统管理</code>按钮</li><li>直接输入网址<code>http://&lt;ip&gt;/admin</code></li></ul><h1><a name='header-n75' class='md-header-anchor '></a>视频点播应用管理</h1><p>如下图所示，红色框部分为所有视频点播应用部分的功能，点击<code>增加</code>可以直接进入添加页面，点击<code>修改</code>会进入列表页面，下面先大概介绍一下每个部分所代表的功能含义，然后再介绍常见管理员操作具体步骤。</p><p><img src='image/vod_main.png' alt='视频点播0' referrerPolicy='no-referrer' /></p><h2><a name='header-n80' class='md-header-anchor '></a>视频列表</h2><p>视频列表包含所有的点播节目的创建、修改、删除、查询功能，所有点播播放页面中显示的点播节目都来源于此。</p><p><img src='image/vod_list.png' alt='点播视频列表' referrerPolicy='no-referrer' /></p><p>进入视频列表界面后，如上图所示，图中红框标识了一些主要的组成部分：</p><ul><li><p>搜索框</p><blockquote><p>键入关键字，搜索点播节目</p></blockquote></li><li><p>执行动作列表</p><blockquote><p>选中需要进行批量操作的点播节目的最左端的复选框，然后选择想要进行的操作，然后点击执行。点播系统正式上线后可进行的批量操作有：激活节目、取消激活节目、删除视频及文件、备份节目、备份所有节目。</p></blockquote></li><li><p>一个点播节目信息</p><blockquote><p>没个点播节目都占有一行用于展示节目信息，包括标题、选集名称、图片、分类、时长、清晰度、年份、地区、观看次数、修改时间、是否激活，这些字段都属于该节目。这里只是在点播视频列表中快速展示这些信息，以及某些信息的快速修改，如果要对该节目的信息进行详细编辑，需要点击图片或者蓝色的链接进入详细信息编辑页面。</p></blockquote></li><li><p>点播节目过滤器</p><blockquote><p>提供快捷的视频过滤器功能，可以按照年份、分类进行视频列表过滤</p></blockquote></li><li><p>创建节目按钮</p><blockquote><p>如果要添加一个点播节目，点击此按钮进入点播视频添加页面。</p></blockquote></li></ul><p>&nbsp;</p><h2><a name='header-n120' class='md-header-anchor '></a>视频地区</h2><p>视频地区包含信息比较简单，列表中只显示该视频地区的名称</p><p><img src='image/vod_region.png' alt='视频地区' referrerPolicy='no-referrer' /></p><h2><a name='header-n125' class='md-header-anchor '></a>视频导入</h2><p>这里提供点播节目数据导入功能，在点击<code>增加视频导入</code>按钮后，进入视频导入页面，在<code>备份配置文件</code>处上传备份配置文件，然后点击<code>保存</code>即可完成备份配置文件的导入。</p><blockquote><p>这里的备份配置文件是由<code>视频列表</code>页面中，动作列表里的备份操作生成的json格式的文本文件。</p></blockquote><p><img src='image/vod_import.png' alt='视频导入' referrerPolicy='no-referrer' /></p><h2><a name='header-n133' class='md-header-anchor '></a>视频分类管理</h2><p>这里用于管理所有的视频分类信息，视频分类规定一共有两级分类：</p><ul><li>一级分类：视频分类的大分类，比如电影、电视剧、综艺等。</li><li>二级分类：某个一级分类下的小分类，比如电影下面可以包括动作片、科幻片、历史片等。</li></ul><p><img src='image/vod_category.png' alt='视频分类' referrerPolicy='no-referrer' /></p><p>如上图所示，分类的级别和分类关系显示在分类名称字段下。</p><h2><a name='header-n147' class='md-header-anchor '></a>视频上传路径管理</h2><p>这里用于管理视频上传到服务器中具体的文件夹路径，目前只稳定支持默认路径，为服务器中的<code>/home/share/vod/media</code>文件夹，其中<code>/home/share/vod</code>为点播应用程序的根路径。</p><blockquote><p>未来希望实现的效果为允许将视频文件上传到任意其他路径，比如想上传到<code>/var/www/media/</code>目录下，需要在<code>/home/share/vod/media/</code>文件夹下面创建一个软连接，链接到<code>/var/www/media/</code>目录，然后才可以正确上传到<code>/var/www/media/</code>文件夹中。目前该功能仍在测试中。</p></blockquote><h2><a name='header-n153' class='md-header-anchor '></a>批量上传管理</h2><p>用于批量上传视频、图片文件，并自动生成对应的点播节目。对于批量上传功能，规定：</p><ul><li>上传的视频文件格式必须是MP4，且视频编码格式为H.264，音频编码格式为AAC。图片文件格式为<code>.jpg</code>或<code>.png</code>。如果需要支持其他图片格式，可联系开发人员进行配置。</li><li>对某一个点播节目来说，这里上传的视频文件和图片文件的文件名必须相同，才能正确生成包含该视频和图片的一个节目，否则会生成两个不同的节目。比如想上传一部电影叫<code>星球大战</code>，那么视频文件名称必须为<code>星球大战.mp4</code>，图片文件名称必须为<code>星球大战.jpg</code>或<code>星球大战.png</code>。</li></ul><p><img src='image/vod_multiple_upload.png' alt='视频批量上传' referrerPolicy='no-referrer' /></p><h1><a name='header-n165' class='md-header-anchor '></a>视频录制应用管理</h1><p>视频点播系统包含的另一个功能是将电视直播录制下来的视频转换为点播节目，所以另一个应用为视频录制。这里包含两个数据表的管理：</p><ul><li><p>节目管理</p><blockquote><p>所有直播回看服务器中包含的节目数据</p></blockquote></li><li><p>频道管理</p><blockquote><p>所有直播回看服务器中包含的频道列表数据</p></blockquote></li></ul><p><img src='image/record_main.png' alt='视频录制' referrerPolicy='no-referrer' /></p><h2><a name='header-n183' class='md-header-anchor '></a>节目管理</h2><p>显示直播回看服务器中数据库存储的节目数据，与视频点播应用中介绍的视频列表界面相似，提供过滤器、搜索、执行动作等功能。该界面可以方便地显示每一条节目地信息。</p><p><img src='image/record_list.png' alt='录制节目' referrerPolicy='no-referrer' /></p><h2><a name='header-n188' class='md-header-anchor '></a>频道管理</h2><p>这里提供直播回看服务器中数据库存储地频道列表数据，也可以对该频道的直播地址等信息进行编辑，但是不建议在这里对频道进行修改操作。需要操作的话请进入电视直播回看管理页面进行编辑。</p><p><img src='image/record_channel.png' alt='录制频道' referrerPolicy='no-referrer' /></p><h1><a name='header-n193' class='md-header-anchor '></a>常见点播视频管理操作说明</h1><p>&nbsp;</p><h2><a name='header-n196' class='md-header-anchor '></a>添加一个单独的点播节目</h2><p>一共有两种途径进入创建点播节目页面：</p><ul><li>在管理员页面进入<code>视频点播</code>应用中的<code>视频列表</code>页面，然后点击右上角的<code>增加视频</code>按钮。</li><li>直接点击管理员页面中<code>视频点播</code>应用中的<code>视频列表</code>后面的<code>增加</code>按钮。</li></ul><p><img src='image/vod_add.png' alt='增加视频' referrerPolicy='no-referrer' /></p><p>进入创建点播节目页面后，可以编辑的字段如下图所示，由于比较长，分成两个图片显示：</p><p><img src='image/vod_add_detail1.png' alt='增加视频详情' referrerPolicy='no-referrer' /></p><p><img src='image/vod_add_detail2.png' alt='增加视频详情2' referrerPolicy='no-referrer' /></p><p>从上到下分别介绍每个字段的含义：</p><ul><li><p>分类</p><p>选择在<code>视频分类管理</code>中创建的分类信息，可以直接点击网页上的<code>+</code>按钮进行快捷创建分类信息。</p></li><li><p>保存路径</p><p>上传文件保存到点播服务器的具体路径，目前不用编辑，使用默认即可。</p></li><li><p>年份</p><p>该视频的年份，写入年份数字即可，如<code>2018</code>。默认为当前年份。</p></li><li><p>地区</p><p>选择在<code>视频地区</code>中创建的地区信息，可以直接点击网页上的<code>+</code>按钮进行快捷创建地区信息。</p></li><li><p>简介</p><p>视频的简介，使用富文本编辑器进行编辑，支持图片、超链接、文字颜色、排版等丰富的文本信息，该字段存储的格式为网页的HTML格式。如果在其他网页中找到了该视频的简介信息，可以直接复制粘贴过来，会保留原有网页的格式信息。</p></li><li><p>选集名称
+对于单独的视频来说，该字段不会展示到点播网页中。如果该视频在后来被其他点播节目当作子视频来播放，那么该字段会显示在点播网页播放页面中的选集按钮上。</p><p><img src='image/vod_select_name_button.png' alt='选集按钮' referrerPolicy='no-referrer' /></p></li><li><p>激活</p><p>是否将该视频发布到点播网页中，<code>No</code>则代表点播网页中不会显示该视频。</p></li><li><p>缩略图文件</p><p>上传该视频的封面图片，图片格式不限，建议使用常见的图片格式<code>.png</code> <code>.jpg</code> <code>.jpeg</code>。</p></li><li><p>视频文件</p><p>上传该视频的视频文件，格式必须为<code>.mp4</code>，且视频编码方式为<code>H.264</code>，音频编码方式为<code>AAC</code>。</p></li></ul><blockquote><p>在选择文件进行音视频文件上传时，首先会提示是否上传该文件，然后会检查点播服务器是否已经包含同名文件，如果包含同名文件，可以选择覆盖掉之前的文件继续上传，或者手动更改文件名重新上传。建议手动更改文件名，保证一致性。</p></blockquote><ul><li><p>标题</p><p>点播节目的标题，上传视频文件时，会自动生成为与视频文件名称相同的标题。</p></li><li><p>视频列表</p><p>用于选择该点播节目下包含的其他子视频，通过点击复选框进行选择，支持拖拽更改子视频列表顺序。对于一个独立的视频节目，不需要进行该字段的修改。</p></li></ul><p>在完成该点播视频的信息编辑后，点击<code>保存</code>按钮，即可完成该点播节目的编辑，如果该视频的<code>激活</code>字段为<code>Yes</code>，那么就会在点播网页中看到该节目。</p><h2><a name='header-n279' class='md-header-anchor '></a>添加一个视频集合（电视剧）</h2><p>如果想上传一整部电视连续剧，首先通过上面<code>添加一个单独的点播节目</code>将每一集的视频创建为一个单独的点播节目，因为每一集的点播节目不需要直接显示在点播网页视频列表中，所以每一集的点播节目不需要编辑所有字段的信息，需要编辑的字段信息有：</p><ul><li><p>视频文件</p></li><li><p>选集名称</p><blockquote><p>选集名称即点播播放页面中<code>选集</code>按钮中显示的该视频的按钮名称</p></blockquote></li><li><p>标题</p><blockquote><p>该标题不是必须的，但是不能为空，建议每一集的视频的标题设置为<code>xxx第x集</code>，这样可以在点播节目列表页面中清楚地看到。</p></blockquote></li><li><p>激活</p><blockquote><p>由于每一集的视频是属于某一个电视剧下面的子视频，所以不需要单独显示为一个点播节目，所以该字段需要设置为<code>No</code>。</p></blockquote></li></ul><p>额外的字段：</p><ul><li><p>视频列表</p><blockquote><p>该字段用于表明该集视频是属于哪一个电视剧节目的，当电视剧节目并未创建时，可以暂时不编辑该字段。当电视剧节目已经创建完成，可以勾选电视剧节目进行关联。不建议在上传每一集的视频时编辑该字段。</p></blockquote></li></ul><p>当上传完成每一集视频后，再创建一个包含每一集视频的点播节目，需要编辑的字段信息有：</p><ul><li><p>分类</p></li><li><p>年份</p></li><li><p>地区</p></li><li><p>简介</p><blockquote><p>允许为空。</p></blockquote></li><li><p>是否激活</p><blockquote><p>这里选择<code>Yes</code>即可激活该视频，会在点播页面中对应的位置看到。</p></blockquote></li><li><p>缩略图</p><blockquote><p>允许为空。</p></blockquote></li><li><p>标题</p></li><li><p>视频列表</p><blockquote><p>勾选之前创建的每一集的视频，并且按照正确的顺序拖拽。在视频列表过滤器中输入关键字，可以快速查找视频。</p></blockquote></li></ul><p><img src='image/vod_video_list.png' alt='子视频列表' referrerPolicy='no-referrer' /></p><p>&nbsp;</p><h2><a name='header-n356' class='md-header-anchor '></a>创建一个分类</h2><p>一共有两种途径进入创建点播节目页面：</p><ul><li>在管理员页面进入<code>视频点播</code>应用中的<code>视频分类管理</code>页面，然后点击右上角的<code>增加视频分类</code>按钮。</li><li>直接点击管理员页面中<code>视频点播</code>应用中的<code>视频分类管理</code>后面的<code>增加</code>按钮。</li></ul><p><img src='image/vod_category_entrance.png' alt='视频分类管理' referrerPolicy='no-referrer' /></p><p>进入创建分类页面：</p><p>如果需要创建一级分类，仅需要填写：</p><ul><li>分类名称</li><li>分类等级（一级分类）</li></ul><p>即可完成一级分类的创建。</p><p><img src='image/vod_category_create_level_1.png' alt='一级分类创建' referrerPolicy='no-referrer' /></p><p>如果需要某个一级分类下的二级分类，需要填写：</p><ul><li>分类名称</li><li>分类等级（二级分类）</li><li>分类关系（所属的一级分类）</li></ul><p>在分类关系选择页面中，在左边<code>可用分类关系</code>里找到一级分类，然后点击向右的箭头<code>&gt;</code>将该一级分类添加到<code>选中的分类关系</code>中即可完成与所属一级分类建立联系。</p><p><img src='image/vod_category_create_level_2.png' alt='二级分类创建' referrerPolicy='no-referrer' /></p><h2><a name='header-n399' class='md-header-anchor '></a>批量上传视频文件和封面图片文件</h2><p>用于批量上传视频、图片文件，并自动生成对应的点播节目。对于批量上传功能，规定：</p><ul><li>上传的视频文件格式必须是MP4，且视频编码格式为H.264，音频编码格式为AAC。图片文件格式为<code>.jpg</code>或<code>.png</code>。如果需要支持其他图片格式，可联系开发人员进行配置。</li><li>对某一个点播节目来说，这里上传的视频文件和图片文件的文件名必须相同，才能正确生成包含该视频和图片的一个节目，否则会生成两个不同的节目。比如想上传一部电影叫<code>星球大战</code>，那么视频文件名称必须为<code>星球大战.mp4</code>，图片文件名称必须为<code>星球大战.jpg</code>或<code>星球大战.png</code>。</li></ul><p><img src='image/vod_multiple_upload.png' alt='视频批量上传' referrerPolicy='no-referrer' /></p><p>在选择文件之前，可以选择分类字段，以指定这些文件都属于哪一个分类。不选择则不指定分类，需要在<code>视频列表</code>中对每个视频进行分类设定，并且需要手动开启每个点播节目的激活选项。</p><p>在选择文件时可以同时选择多个文件，也可以在添加完一次文件后继续选择添加的文件。</p><h2><a name='header-n415' class='md-header-anchor '></a>对视频列表进行批量操作</h2><p>在<code>视频列表</code>中，在需要进行批量操作的点播节目前勾选复选框，然后在<code>执行动作列表</code>中选择要进行的操作，最后点击<code>执行</code>即可完成对已勾选的点播节目进行对应的操作，目前支持的操作有：</p><ul><li><p>删除所选视频（仅在数据库中删除）</p></li><li><p>删除所选视频（同时删除数据库内信息以及视频、图片文件）</p></li><li><p>激活所选视频</p></li><li><p>取消激活所选视频</p></li><li><p>备份所选视频</p></li><li><p>备份所有点播应用数据</p><blockquote><p>这里是备份所有的数据，但是必须随便选择一个视频再执行该操作。备份的所有数据包括地区列表、视频列表、分类信息列表等所有视频点播应用中的数据。</p></blockquote></li></ul><p><img src='image/vod_multiple_action.png' alt='批量操作' referrerPolicy='no-referrer' /></p><h2><a name='header-n442' class='md-header-anchor '></a>点播节目数据备份及恢复</h2><ul><li>备份</li></ul><p>在<code>视频列表</code>中勾选需要备份的视频数据，然后在<code>执行动作列表</code>中选择<code>备份</code>，即可在浏览器中下载到生成的备份文件，文件格式为<code>json</code>的文本文件。</p><p><img src='image/vod_backup.png' alt='备份' referrerPolicy='no-referrer' /></p><p>如果需要备份所有点播视频节目及分类、地区等信息，则在勾选至少一个点播节目后，执行<code>备份所有</code>，即可在浏览器中下载到生成的备份文件，文件格式为<code>json</code>的文本文件。</p><ul><li>恢复</li></ul><p>进入<code>增加视频导入</code>页面，一共有两种途径：</p><ol start='' ><li>在管理员页面进入<code>视频点播</code>应用中的<code>视频导入</code>页面，然后点击右上角的<code>增加视频导入</code>按钮。</li><li>直接点击管理员页面中<code>视频点播</code>应用中的<code>视频导入</code>后面的<code>增加</code>按钮。</li></ol><p>在<code>备份配置文件</code>处添加之前备份好的<code>json</code>文本文件，然后点击<code>保存</code>，即可又点播服务程序自动根据备份文件生成点播节目数据。</p><p><img src='image/vod_import.png' alt='视频导入' referrerPolicy='no-referrer' /></p><ul><li>警告</li></ul><p>由上面这种方式备份、恢复的数据仅仅是数据库内的信息，而不包括图片、视频文件本身，所以在备份恢复数据时，需要考虑手动将点播服务器文件系统中的视频、图片文件进行迁移，迁移时图片、视频文件的路径一定要一一对应。</p><h2><a name='header-n476' class='md-header-anchor '></a>录播节目转点播</h2><p>在管理页面中的<code>视频录制</code>应用中，选择<code>节目管理</code>进入录制节目列表页面</p><p><img src='image/vod_record_program.jpg' alt='vod_record_program' referrerPolicy='no-referrer' /></p><p>选择需要转换的点播节目，然后在<code>执行动作列表</code>中选择<code>转为点播</code>，点击<code>执行</code>按钮，即可启动录播节目转点播。</p><p><img src='image/vod_record_to_vod.jpg' alt='vod_record_to_vod' referrerPolicy='no-referrer' /></p><p>转换过程需要一些时间，在启动录制节目转点播之后，服务器后台会去下载录制节目到点播服务器中，如果下载的地址不合法，或者网络出现问题无法获取到录制节目，会显示错误提示信息。如果出现错误信息，则需要检查网络连接，此时是不会创建点播节目的。
+<img src='image/vod_record_to_vod_status.jpg' alt='vod_record_to_vod_status' referrerPolicy='no-referrer' /></p><p>点击其中的蓝色超链接<code>录制节目</code>会跳转到<code>视频列表</code>页面。当正确完成下载过程后，生成的点播节目的<code>激活</code>状态会被自动设为<code>Yes</code>，否则代表该录播节目正在下载过程中，请耐心等待。</p></div>
+</body>
+</html>
