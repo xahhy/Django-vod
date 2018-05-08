@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import fnmatch
 import os
 import re
 import zipfile
@@ -46,8 +45,7 @@ class ResumableFile(object):
         chunks = []
         files = sorted(self.storage.listdir('')[1])
         for file in files:
-            if fnmatch.fnmatch(file, '%s%s*' % (self.filename,
-                                                self.chunk_suffix)):
+            if str(file).startswith('%s%s' % (self.filename, self.chunk_suffix)):
                 yield self.storage.open(file, 'rb').read()
 
     def delete_chunks(self):

@@ -1,3 +1,6 @@
+import multiprocessing
+import pathlib
+
 from django.contrib import admin
 # Register your models here.
 from django.http import HttpResponse
@@ -77,7 +80,8 @@ class VodModelAdmin(admin.ModelAdmin):
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
     search_fields = ['title', 'description', 'search_word']
-    actions = ['delete_hard', 'copy_objects', 'clear_view_count', 'activate_vod', 'deactivate_vod', 'backup', 'backup_all']
+    actions = ['delete_hard', 'copy_objects', 'clear_view_count', 'activate_vod', 'deactivate_vod', 'backup',
+               'backup_all', 'transcoding']
     form = VodForm
     fieldsets = [
         ('描述', {'fields': ['category', 'save_path', 'year', 'region', 'description', 'select_name', 'active']}),
@@ -181,9 +185,35 @@ class VodModelAdmin(admin.ModelAdmin):
             os.makedirs(directory)
         with open(full_file_name, 'w') as f:
             f.write('')
-        call_command('dumpdata', 'vodmanagement', '-o', full_file_name) #使用Django提供的命令行工具备份数据
+        call_command('dumpdata', 'vodmanagement', '-o', full_file_name)  # 使用Django提供的命令行工具备份数据
         response.write(open(full_file_name, 'rb').read())
         return response
+
+    def transcoding(self, request, queryset):
+        def ff(obj):
+            # TODO: 没有检测ffmpeg命令是否执行成功，如果失败会删除掉源文件
+            video_path = Path(obj.video.path)
+            ffmpeg_cmd = ''.join([
+                'ffmpeg -y -i \"',
+                str(video_path),
+                '\" -vcodec copy -acodec copy \"',
+                str(video_path.with_suffix('.mp4')),
+                '\"'
+            ])
+            os.system(ffmpeg_cmd)
+            os.remove(str(video_path))
+            video_name_new = Path(obj.video.name).with_suffix('.mp4')
+            obj.video.name = str(video_name_new)
+            obj.save()
+
+        for obj in queryset:
+            if os.path.splitext(str(obj.video))[1] != '.mp4':
+                pool = settings.POOL
+                pool.apply_async(ff(obj))
+        self.message_user(request, '视频已提交后台转码'
+                          , messages.SUCCESS)
+
+    transcoding.short_description = '转为mp4'
 
     class Media:
         pass

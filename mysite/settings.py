@@ -13,6 +13,7 @@ import datetime
 
 import os
 
+import multiprocessing
 from django.conf import settings
 
 
@@ -242,7 +243,7 @@ LOCAL_FOLDER_NAME = 'local_file'
 LOCAL_MEDIA_URL = LOCAL_FOLDER_NAME + '/'
 LOCAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT, LOCAL_FOLDER_NAME)
 DEFAULT_IMAGE_SRC = STATIC_URL + 'missing.jpg'
-
+POOL = multiprocessing.Pool()
 FILER_STORAGES = {
     'public': {
         'main': {
