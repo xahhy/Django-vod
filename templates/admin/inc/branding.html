@@ -37,3 +37,56 @@
         {% trans '打开' %} 点播页面
     </a>
 </div>
+<style>
+    .gotop-fixed {
+        position: fixed;
+        right: 10px;
+        bottom: 50px;
+        z-index: 1010;
+        opacity: 1;
+        width: 32px;
+        height: 32px;
+        overflow: hidden;
+        border-radius: 0;
+        text-align: center;
+    }
+    .gobottom-fixed {
+        position: fixed;
+        right: 10px;
+        bottom: 10px;
+        z-index: 1010;
+        opacity: 1;
+        width: 32px;
+        height: 32px;
+        overflow: hidden;
+        border-radius: 0;
+        text-align: center;
+    }
+    .gotop-icorn {
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+        color: #ddd;
+        display: inline-block;
+        font-style: normal;
+        background-color: #555;
+        background-size: 100% auto !important;
+    }
+    .gotop-fixed a {
+        display: block;
+    }
+    .selctor-up{
+        background: url({% static 'admin/img/selector-icons.gif' %}) 0 -48px no-repeat;
+    }
+    .selctor-down{
+        background: url({% static 'admin/img/selector-icons.gif' %}) 0 -130px no-repeat;
+    }
+</style>
+<div class="gotop-fixed">
+    <a href="#top" class="selctor-up gotop-icorn">
+    </a>
+</div>
+<div class="gobottom-fixed">
+    <a href="#footer" class="selctor-down gotop-icorn">
+    </a>
+</div>
