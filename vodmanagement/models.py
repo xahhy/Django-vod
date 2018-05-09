@@ -432,6 +432,17 @@ class Vod(models.Model):
 
     colored_active.short_description = '是否激活'
 
+    def video_format(self):
+        suffix = Path(self.video.name).suffix
+        color_code = 'green' if suffix in ['.mp4', '.m3u8'] else 'red'
+        return format_html(
+            '<span style="color:{};">{}</span>',
+            color_code,
+            suffix
+        )
+
+    video_format.short_description = '视频文件格式'
+    
 
 def create_slug(instance, new_slug=None, new_num=0):
     slug = slugify(instance.title)

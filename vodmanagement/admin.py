@@ -3,6 +3,7 @@ import pathlib
 
 from django.contrib import admin
 # Register your models here.
+from django.contrib.admin import SimpleListFilter
 from django.http import HttpResponse
 from django.core import serializers as django_serializers
 from rest_framework.renderers import JSONRenderer
@@ -69,13 +70,26 @@ class VodForm(forms.ModelForm):
         }
 
 
+class VideoFormatFilter(SimpleListFilter):
+    title = '视频格式' # or use _('country') for translated title
+    parameter_name = 'video'
+
+    def lookups(self, request, model_admin):
+        video_suffixs = set([Path(c.video.name).suffix for c in model_admin.model.objects.all()])
+        return [(c, c) for c in video_suffixs if c]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(video__endswith=self.value())
+
+
 @admin.register(Vod)
 class VodModelAdmin(admin.ModelAdmin):
-    list_display = ['title', 'select_name', 'image_tag', 'category', 'duration', 'definition', 'year', 'region',
-                    'view_count', 'timestamp', 'colored_active']  # image_tag
+    list_display = ['title', 'select_name', 'image_tag', 'category', 'definition', 'year', 'region',
+                    'view_count', 'timestamp', 'colored_active', 'video_format']  # image_tag
     list_display_links = ['image_tag', 'timestamp']  # image_tag
     list_editable = ['category', 'title', 'select_name', 'definition', 'year']
-    list_filter = ['year', 'category']
+    list_filter = ['year', 'category', VideoFormatFilter]
     # filter_horizontal = ['video_list']
     # fields = ('image_tag',)
     # readonly_fields = ('image_tag',)
