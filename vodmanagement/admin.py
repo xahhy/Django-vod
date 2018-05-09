@@ -1,5 +1,5 @@
-import multiprocessing
 import pathlib
+import threading
 
 from django.contrib import admin
 # Register your models here.
@@ -221,9 +221,10 @@ class VodModelAdmin(admin.ModelAdmin):
             obj.save()
 
         for obj in queryset:
-            if os.path.splitext(str(obj.video))[1] != '.mp4':
-                pool = settings.POOL
-                pool.apply_async(ff(obj))
+            if Path(obj.video.name).suffix != '.mp4':
+                p = threading.Thread(target=ff,
+                                     args=(obj,))
+                p.start()
         self.message_user(request, '视频已提交后台转码'
                           , messages.SUCCESS)
 
