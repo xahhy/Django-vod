@@ -1,14 +1,8 @@
 import random
-
+from wrapcache import wrapcache
 from django.db.models import Q
 from rest_framework.views import APIView
-
-from vodmanagement.views import get_years
 from rest_framework.response import Response
-from rest_framework.filters import (
-    SearchFilter,
-    OrderingFilter,
-)
 from rest_framework.generics import (
     CreateAPIView,
     DestroyAPIView,
@@ -17,8 +11,6 @@ from rest_framework.generics import (
     RetrieveAPIView,
     RetrieveUpdateAPIView
 )
-from rest_framework.pagination import PageNumberPagination
-
 from rest_framework.permissions import (
     AllowAny,
     IsAuthenticated,
@@ -26,14 +18,17 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
 )
 
-from .serializers import *
+from .serializers import (
+    VodListSerializer, VodDetailSerializer, CategoryListSerializer,
+    RegionListSerializer, VodHomeListSerializer
+)
+from vodmanagement.models import Vod, VideoCategory, VideoRegion
+from vodmanagement.views import get_years
+from .pagination import VodPageNumberPagination
+from .permissions import HasPermission
 
-from vodmanagement.models import *
-from .pagination import *
-from .permissions import *
 
-
-# @wrapcache(10 * 60)
+@wrapcache(60)
 def get_all_videos(main_category):
     query_set = Vod.objects.filter(active=1)
     if main_category:
@@ -43,15 +38,18 @@ def get_all_videos(main_category):
     return query_set
 
 
-@wrapcache(10 * 60)
+@wrapcache(60)
 def get_filter_videos(query_set, category=None, year=None, region=None):
-    if category:query_set = query_set.filter(category__name=category)
-    if year:query_set = query_set.filter(year=year)
-    if region:query_set = query_set.filter(region__name=region)
+    if category:
+        query_set = query_set.filter(category__name=category)
+    if year:
+        query_set = query_set.filter(year=year)
+    if region:
+        query_set = query_set.filter(region__name=region)
     return query_set
 
 
-def checked_query_param(param:str):
+def checked_query_param(param: str):
     return param if (param != '全部' and param != '') else None
 
 
@@ -64,28 +62,18 @@ class VodListAPIView(ListAPIView):
     pagination_class = VodPageNumberPagination  # PageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
-        # queryset_list = super(PostListAPIView, self).get_queryset(*args, **kwargs)
         main_category = self.request.query_params.get('main_category')
         queryset_list = get_all_videos(main_category)
         category = checked_query_param(self.request.query_params.get('category'))
         year = checked_query_param(self.request.query_params.get('year'))
         region = checked_query_param(self.request.query_params.get('region'))
         queryset_list = get_filter_videos(queryset_list, category=category, year=year, region=region)
-        # query = self.request.GET.get("q")
-        # if query:
-        #     queryset_list = queryset_list.filter(
-        #             Q(title__icontains=query)|
-        #             Q(content__icontains=query)|
-        #             Q(user__first_name__icontains=query) |
-        #             Q(user__last_name__icontains=query)
-        #             ).distinct()
         search = self.request.GET.get("search")
         if search is not None and search != '':
             queryset_list = queryset_list.filter(
                 Q(title__icontains=search) |
                 Q(description__icontains=search)
             )
-
         return queryset_list
 
 
@@ -94,19 +82,17 @@ class VodDetailAPIView(RetrieveAPIView):
     VodDetailAPIView doc
 
     """
-    # queryset = Vod.objects.all()
     lookup_field = 'id'
     serializer_class = VodDetailSerializer
     permission_classes = [HasPermission]
 
     def get_queryset(self, *args, **kwargs):
-        query_set =  Vod.objects.filter(active=1)
+        query_set = Vod.objects.filter(active=1)
         return query_set
 
 
-@wrapcache(1)
+@wrapcache(60)
 def gen_categories():
-    print('Gen Categories')
     categories = {}
     for level_1 in VideoCategory.objects.filter(level=1):
         children = level_1.subset.all()
@@ -126,18 +112,6 @@ class CategoryListAPIView(APIView):
         return Response(gen_categories())
 
 
-# class YearListAPIView(APIView):
-#     """
-#     YearListAPIView doc
-#     """
-#     permission_classes = [AllowAny]
-#     def get(self, request, format=None):
-#         """
-#         Return a list of all years associate with 'Category'.
-#         """
-#         category = request.query_params.get('category')
-#         years = get_years(category)
-#         return Response(years)
 class YearListAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -178,17 +152,7 @@ class HomeListAPIView(APIView):
         preview_categories['count'] = len(videos)
         preview_categories['videos'] = VodHomeListSerializer(videos, many=True).data
         return Response(preview_categories)
-    # def get(self, request, format=None):
-    #     preview_categories = []
-    #     for category in VideoCategory.objects.all():
-    #         videos = Vod.objects.filter(category__name=category.name)[:6]
-    #         preview_categories.append(
-    #             {
-    #                 'category': category.name,
-    #                 'videos': VodListSerializer(videos, many=True).data
-    #             }
-    #         )
-    #     return Response(preview_categories)
+
 
 class HomeOverViewAPIView(APIView):
     """
@@ -201,7 +165,7 @@ class HomeOverViewAPIView(APIView):
         length = self.request.query_params.get('length')
         try:
             if category is not None:
-                if length is None:length = 4
+                if length is None: length = 4
                 videos = get_all_videos(None).filter(
                     Q(category__subset__name=category) |
                     Q(category__name=category)

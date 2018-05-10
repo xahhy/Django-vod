@@ -119,7 +119,7 @@ def try_or_error(func):
         try:
             ret = func(*args, **kwargs)
         except Exception as e:
-            logging.exception('Field is not available')
+            logging.debug('%sField is not available'%func)
         return ret
 
     return result

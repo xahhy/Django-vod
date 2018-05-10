@@ -42,10 +42,10 @@ THUMBNAIL_PROCESSORS = (
 THUMBNAIL_ALIASES = {
     '': {
         'avatar': {'size': (160, 90), 'crop': True},
-        'big_avatar': {'size': (900, 300), 'crop': True},
+        'big_avatar': {'size': (800, 450), 'crop': True},
     },
 }
-THUMBNAIL_BASEFOLDER = 'thumbs'
+THUMBNAIL_BASEDIR = 'thumbs'
 
 # Application definition
 INSTALLED_APPS = [
