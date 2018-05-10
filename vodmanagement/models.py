@@ -1,13 +1,10 @@
-import json
-
 import six
+from pathlib import Path
 from django.db import models
-from django.utils import timezone
 from django.utils.html import format_html
-from filer.fields.image import FilerImageField
-from filer.fields.file import FilerFileField
+from django.utils.encoding import uri_to_iri
+from django.core.management import call_command
 from django.utils.safestring import mark_safe
-from django.contrib import admin
 from django.conf import settings
 import humanfriendly
 from django.contrib.auth.models import User
@@ -28,9 +25,6 @@ from filer.fields.image import FilerImageField
 from .my_storage import *
 from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField, \
     ModelAdminResumableMultiFileField, ModelAdminResumableRestoreFileField
-from django.utils.encoding import uri_to_iri
-from pathlib import Path
-from django.core.management import call_command
 
 # for pinyin search
 from xpinyin import Pinyin
@@ -93,21 +87,6 @@ def upload_location(instance, filename):
     """
     print('save image')
     return "%s/%s" % (new_id, filename)
-
-
-def upload_video_location(instance, filename):
-    VodModel = instance.__class__
-    if VodModel.objects.count() is not 0:
-        new_id = VodModel.objects.order_by("id").last().id + 1
-    else:
-        new_id = 0
-    folder = instance.save_path
-    if folder == "default":
-        category = instance.category.name
-    else:
-        category = instance.category.name + '_' + folder
-    print("video path:", category)
-    return "%s/videos/%s/%s" % (category, new_id, filename)
 
 
 def upload_image_location(instance, filename):
@@ -196,11 +175,8 @@ class VideoCategory(models.Model):
                                 verbose_name='分类等级')
     subset = models.ManyToManyField('self', blank=True, verbose_name='分类关系')
 
-    # directory = models.ForeignKey(FileDirectory)  # ,default=FileDirectory.objects.first())
-
     class Meta:
         verbose_name = '视频分类'
-        # Edit Default Model Name for Human read
         verbose_name_plural = '视频分类管理'
 
     def __str__(self):
@@ -211,20 +187,6 @@ class VideoCategory(models.Model):
             return base_name
 
     def save(self, *args, **kwargs):
-        # print(self.directory)
-        # make a folder self.name in the self.directory
-        # src = self.directory.path+'/'+self.name
-        # dst = settings.MEDIA_ROOT+'/'+str(self.name)
-        # try:
-        #     os.makedirs(src)
-        # except:
-        #     pass    
-        # try:
-        #     os.symlink(src,dst)
-        # except:
-        #     pass
-
-        create_category_path(name=self.name)
         super(VideoCategory, self).save(*args, **kwargs)
 
     def colored_level(self):
@@ -300,12 +262,11 @@ class Restore(models.Model):
         call_command('loaddata', file_path)
         return result
 
-# ---------------------------------------------------------------------
 
 class Vod(models.Model):
     title = models.CharField(max_length=120, verbose_name='标题')
     # image = models.ImageField(upload_to=upload_image_location, null=True, blank=True)
-    # video = models.FileField(upload_to=upload_video_location, null=True,blank=True,storage=VodStorage())
+    # video = models.FileField(null=True,blank=True,storage=VodStorage())
     image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), max_length=1000, verbose_name='缩略图')
     video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000,
                                          verbose_name='视频')
@@ -349,12 +310,12 @@ class Vod(models.Model):
         ordering = ["-timestamp", "-updated"]
 
     def save(self, without_valid=False, *args, **kwargs):
-        print("------- save vod -------")
+        logging.debug('==== 保存点播节目 %s ====' % self.title)
         p = Pinyin()
         full_pinyin = p.get_pinyin(smart_str(self.title), '')
         first_pinyin = p.get_initials(smart_str(self.title), '').lower()
         self.search_word = " ".join([full_pinyin, first_pinyin])
-        print("video path:", self.video)
+        logging.debug("video path:", self.video)
 
         if self.description is None or self.description == "":
             self.description = default_description(self)
@@ -362,7 +323,7 @@ class Vod(models.Model):
         if self.local_video != '' and self.local_video is not None:
             basename = Path(self.local_video).relative_to(Path(settings.LOCAL_MEDIA_ROOT))
             self.video.name = str(Path(settings.LOCAL_MEDIA_URL) / basename)
-            print("save local_video to filefield done")
+            logging.debug("save local_video to filefield done")
 
         if without_valid:
             ret = super(Vod, self).save(*args, **kwargs)
@@ -377,9 +338,9 @@ class Vod(models.Model):
                 if not self.video.name.startswith(settings.LOCAL_FOLDER_NAME) and \
                         not self.video.name.startswith(settings.RECORD_MEDIA_FOLDER):
                     self.video.name = str(rel_name)
-                print("save_path:", self.save_path)
-                print('video.name:', self.video.name)
-                print('size:', self.video.file.size)
+                logging.debug('save_path:', self.save_path)
+                logging.debug('video.name:', self.video.name)
+                logging.debug('size:', self.video.file.size)
                 self.file_size = humanfriendly.format_size(self.video.file.size)
                 # duration = VideoFileClip(self.video.path).duration
                 # self.duration = time_formate(duration)
@@ -442,44 +403,17 @@ class Vod(models.Model):
         )
 
     video_format.short_description = '视频文件格式'
-    
-
-def create_slug(instance, new_slug=None, new_num=0):
-    slug = slugify(instance.title)
-    default_slug = slug
-    if new_slug is not None:
-        slug = new_slug
-    qs = Vod.objects.filter(slug=slug).order_by("-id")
-    exists = qs.exists()
-    if exists:
-        new_num += 1
-        new_slug = "%s-%s" % (default_slug, new_num)
-        return create_slug(instance, new_slug=new_slug, new_num=new_num)
-    return slug
-
-
-def slug_exists(slug):
-    qs = Vod.objects.filter(slug=slug).order_by("-id")
-    exists = qs.exists()
-    return exists
 
 
 def pre_save_post_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = uuslug(instance.title, instance=instance)
-        # instance.slug = create_slug(instance)
 
 
 def post_init_receiver(sender, instance, *args, **kwargs):
-    # print("post_init!")
     pass
 
 
 pre_save.connect(pre_save_post_receiver, sender=Vod)
 post_init.connect(post_init_receiver, sender=Vod)
-"""
-from vodmanagement.models import *
-objs = Vod.objects.all()
-obj = objs.first()
 
-"""

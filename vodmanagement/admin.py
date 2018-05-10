@@ -1,77 +1,28 @@
-import pathlib
+import datetime
 import threading
-
+from pathlib import Path
 from django.contrib import admin
-# Register your models here.
 from django.contrib.admin import SimpleListFilter
-from django.http import HttpResponse
-from django.core import serializers as django_serializers
-from rest_framework.renderers import JSONRenderer
 from django.core.management import call_command
-from vodmanagement.api.serializers import *
-from vodmanagement.custom_widget import KindEditor
-from django import forms
+from django.core import serializers as django_serializers
+from django.http import HttpResponse
 from django.contrib import messages
 from uuslug import uuslug
-import re
 
-from django.conf import settings
-from .models import *
-from .utils import *
-from django.utils.translation import ugettext_lazy
-
-
-class VodForm(forms.ModelForm):
-    '''docstring for VodForm'''
-
-    def __init__(self, *args, **kwargs):
-        super(VodForm, self).__init__(*args, **kwargs)
-        if (self.instance.image.name is '' or self.instance.image.name is None) \
-                and (self.instance.video.name is '' or self.instance.video.name is None):
-            print('save path is empty')
-            self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
-        else:
-            print('save path is:', self.instance.save_path)
-            self.fields['save_path'] = forms.ChoiceField(choices=get_save_path_choice(self.instance.save_path))
-            # self.fields['save_path'].widget.attrs['disabled='disabled''] = True
-        for instance in self.fields['category'].queryset:
-            create_category_path(name=instance.name)
-
-    def clean_title(self):
-        print('vod form clean')
-        data = self.cleaned_data['title']
-        return data
-
-    def clean(self):
-        print('vod form clean all')
-        return super(VodForm, self).clean()
-
-    # def save(self, commit=True):
-    #     instance = super(VodForm, self).save(commit=False)
-    #     instance.save()
-    #     self.save_m2m()
-    #     return instance
-
-    class Meta:
-        model = Vod
-        fields = (
-            'category',
-            'save_path',
-            'video',
-            'title',
-            'image',
-            'year',
-            'description',
-            'slug',
-            'search_word',
-        )
-        widgets = {
-            'description': KindEditor(),
-        }
+from vodmanagement.forms import RestoreForm, CategoryAdminForm, VodForm, MultipleUploadForm
+from vodmanagement.models import (
+    Vod,
+    VideoCategory,
+    MultipleUpload,
+    Restore,
+    FileDirectory,
+    VideoRegion
+)
+from vodmanagement.utils import *
 
 
 class VideoFormatFilter(SimpleListFilter):
-    title = '视频格式' # or use _('country') for translated title
+    title = '视频格式'  # or use _('country') for translated title
     parameter_name = 'video'
 
     def lookups(self, request, model_admin):
@@ -103,14 +54,8 @@ class VodModelAdmin(admin.ModelAdmin):
         ('视频列表', {'fields': ['video_list']}),
         ('高级', {'fields': ['slug', 'search_word'], 'classes': ['collapse']})
     ]
-
     change_form_template = 'vodmanagement/change_form.html'
     add_form_template = 'vodmanagement/change_form.html'
-
-    # def get_form(self, request, *args, **kwargs):
-    #     form = super(VodModelAdmin, self).get_form(request, *args, **kwargs)
-    #     form.base_fields['creator'].initial = request.user
-    #     return form
 
     def save_model(self, request, obj, form, change):
         # obj.creator = request.user
@@ -222,28 +167,12 @@ class VodModelAdmin(admin.ModelAdmin):
 
         for obj in queryset:
             if Path(obj.video.name).suffix != '.mp4':
-                p = threading.Thread(target=ff,
-                                     args=(obj,))
+                p = threading.Thread(target=ff, args=(obj,))
                 p.start()
         self.message_user(request, '视频已提交后台转码'
                           , messages.SUCCESS)
 
     transcoding.short_description = '转为mp4'
-
-    class Media:
-        pass
-        # js = ('http://code.jquery.com/jquery.min.js',)
-        # class Meta:
-        # model = Vod
-
-
-class MyAdminForm(forms.ModelForm):
-    class Meta:
-        model = VideoCategory
-        widgets = {
-            'type': forms.RadioSelect,
-        }
-        fields = '__all__'
 
 
 @admin.register(VideoCategory)
@@ -253,7 +182,7 @@ class VideoCategoryModelAdmin(admin.ModelAdmin):
     search_fields = ['name']
     filter_horizontal = ['subset']
     ordering = ['level']
-    form = MyAdminForm
+    form = CategoryAdminForm
     fieldsets = [
         ('描述', {'fields': ['name', 'level', 'subset']}),
         ('高级', {'fields': ['isSecret', 'type'], 'classes': ['collapse']})
@@ -268,30 +197,6 @@ class VideoCategoryModelAdmin(admin.ModelAdmin):
 class LinkModelAdmin(admin.ModelAdmin):
     list_display = ['name', 'category']
     list_editable = ['category']
-
-
-class MultipleUploadForm(forms.ModelForm):
-    '''docstring for VodForm'''
-
-    def __init__(self, *args, **kwargs):
-        super(MultipleUploadForm, self).__init__(*args, **kwargs)
-        self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
-
-    class Meta:
-        model = MultipleUpload
-        fields = '__all__'
-
-
-class RestoreForm(forms.ModelForm):
-    '''docstring for VodForm'''
-
-    def __init__(self, *args, **kwargs):
-        super(RestoreForm, self).__init__(*args, **kwargs)
-        self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
-
-    class Meta:
-        model = Restore
-        fields = '__all__'
 
 
 @admin.register(MultipleUpload)

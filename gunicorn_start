@@ -28,6 +28,7 @@ RUNDIR=$(dirname $PID_FILE)
 test -d $RUNDIR || mkdir -p $RUNDIR
 LOGDIR=$(dirname $ERROR_LOG)
 test -d $LOGDIR||mkdir -p $LOGDIR
+test -d media || mkdir media
 
 # Start your Django Unicorn
 # Programs meant to be run under supervisor should not daemonize themselves (do not use --daemon)

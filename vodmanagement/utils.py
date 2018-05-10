@@ -1,14 +1,12 @@
 import logging
 import os
 import re
-
 import time
-from django.conf import settings
-import humanfriendly
-# from vodmanagement.models import Vod
-import platform
+from pathlib import Path
 
-sys_media_root = '/media/hhy'
+import humanfriendly
+import platform
+from django.conf import settings
 
 
 # generate choices depending on the folders in '/media/xjtu'
@@ -22,8 +20,8 @@ def save_path_choices():
     for folder in get_media_folder():
         media_size = get_free_size(folder)
         choices = choices + ((os.path.basename(folder), folder + '(' + media_size + ')'),)
-
     return choices
+
 
 def get_save_path_choice(key):
     choices = save_path_choices()
@@ -31,6 +29,7 @@ def get_save_path_choice(key):
         if choice[0] == key:
             return (choice,)
     return 'default'
+
 
 # get free size of the path in human readable
 def get_free_size(path):
@@ -40,36 +39,26 @@ def get_free_size(path):
     return size
 
 
-# get folders in sys_media_root
-# return a list
+# 返回所有 sys_media_root 目录下的所有文件夹的列表
 def get_media_folder():
     folders = []
     try:
-        for item in os.listdir(sys_media_root):
-            real_path = sys_media_root + '/' + item
-            if os.path.isdir(real_path):
-                folders.append(real_path)
-    except:
-        pass
+        folders = [str(item) for item in Path(settings.SYSTEM_MEDIA_ROOT).iterdir() if item.is_dir()]
+    except Exception as e:
+        logging.error("无法列出 SYSTEM_MEDIA_ROOT:%s 目录下的所有文件夹,请检查该目录是否存在" % settings.SYSTEM_MEDIA_ROOT)
     return folders
 
 
-# if name="Action", a folder named "USB" in the sys_media_root ,
-# it will create a real folder named "Action_USB" in the USB folder
-def create_category_path(name):
+# 在Django的MEDIA文件夹下创建软链接，链接到SYSTEM_MEDIA_ROOT文件下的所有文件夹
+def create_storage_paths():
     if 'Windows' in platform.system():
         return
 
     for folder in get_media_folder():
-        print("get media folders:", folder, name)
-        new_name = name + '_' + os.path.basename(folder)
         create_symlink(folder, os.path.join(settings.MEDIA_ROOT, os.path.basename(folder)))
 
 
-def create_symlink(src, dst, name=None):
-    if name is not None:
-        src += '/' + name
-        dst += '/' + name
+def create_symlink(src, dst):
     try:
         os.makedirs(src)
     except:
@@ -81,7 +70,7 @@ def create_symlink(src, dst, name=None):
 
 
 # format time in seconds to xx:xx:xx
-def time_formate(seconds):
+def time_format(seconds):
     hour = int(seconds / 3600)
     minute = int((seconds - 60 * hour) / 60)
     second = int(seconds % 60)
@@ -98,9 +87,8 @@ def get_vod_field_list(model, field, category):
         queryset = model.objects.filter(category__subset__name=category).values_list(field).distinct().order_by(field)
     else:
         queryset = model.objects.values_list(field).distinct().order_by(field)
-    # for item in queryset:
-    # print(item[0])
     return queryset
+
 
 # delete all files related to the file
 def delete_hard(file_path):
@@ -109,17 +97,19 @@ def delete_hard(file_path):
     print("base name=", basename)
     for (dir, dirnames, files) in os.walk(dir):
         for file in files:
-            if re.match(re.escape(basename)+ '*', file):
+            if re.match(re.escape(basename) + '*', file):
                 print("matched file:", file)
                 os.remove(os.path.join(dir, file))
 
+
 def func_time(func):
     def run_time(*args, **kwargs):
-        start=time.clock()#time.clock()第一次调用的时候返回的是程序运行的实际时间
+        start = time.clock()  # time.clock()第一次调用的时候返回的是程序运行的实际时间
         ret = func(*args, **kwargs)
-        stop=time.clock()#time.clock()第二次调用的时候返回的是第一次调用后，到这次调用的时间间隔
-        print(func, 'run_time:',(stop-start))
+        stop = time.clock()  # time.clock()第二次调用的时候返回的是第一次调用后，到这次调用的时间间隔
+        print(func, 'run_time:', (stop - start))
         return ret
+
     return run_time
 
 
@@ -131,4 +121,5 @@ def try_or_error(func):
         except Exception as e:
             logging.exception('Field is not available')
         return ret
+
     return result

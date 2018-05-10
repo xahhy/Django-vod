@@ -7,4 +7,3 @@ class ChannelListAPIView(ListAPIView):
     queryset = Channel.objects.all()
     permission_classes = [AllowAny]
     serializer_class = ChannelListSerializer
-

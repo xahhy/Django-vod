@@ -1,9 +1,7 @@
 import random
 
 from django.db.models import Q
-import itertools
 from rest_framework.views import APIView
-from wrapcache import wrapcache
 
 from vodmanagement.views import get_years
 from rest_framework.response import Response

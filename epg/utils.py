@@ -1,10 +1,10 @@
 import logging
+import m3u8
 from pathlib import Path
 from time import sleep
-
-import m3u8
 from urllib.parse import urlparse, urljoin
 from urllib.request import urlretrieve, pathname2url
+
 from mysite import settings
 from vodmanagement.models import Vod
 

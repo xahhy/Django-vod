@@ -14,7 +14,6 @@ import os
 
 from django.conf import settings
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from mysite.router import DatabaseAppsRouter
 
@@ -28,13 +27,10 @@ SECRET_KEY = '%ur^wgur*+1c$kxk_(bkqonaebu3&f#a7v+g7j)65k=6%z*itz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# import corsheaders.middleware
-
 ALLOWED_HOSTS = ['*']
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_CREDENTIALS = False
 
 # my settings
+# easy_thumbnails settings
 THUMBNAIL_HIGH_RESOLUTION = True
 THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.colorspace',
@@ -43,35 +39,32 @@ THUMBNAIL_PROCESSORS = (
     'filer.thumbnail_processors.scale_and_crop_with_subject_location',
     'easy_thumbnails.processors.filters',
 )
-# filer cononical url set
-# FILER_CANONICAL_URL = 'sharing/'
+THUMBNAIL_ALIASES = {
+    '': {
+        'avatar': {'size': (160, 90), 'crop': True},
+        'big_avatar': {'size': (900, 300), 'crop': True},
+    },
+}
+THUMBNAIL_BASEFOLDER = 'thumbs'
 
 # Application definition
 INSTALLED_APPS = [
     'easy_thumbnails',
-    # 'filer',
-    # 'mptt',
-    # 'progressbarupload',
     'admin_resumable',
-
     "djangocms_admin_style",
     'django.contrib.admin',
     'django.contrib.auth',
-
     # 'django.contrib.sites',
-
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # user apps
     'corsheaders',
     'vodmanagement.apps.VodConfig',
     'epg.apps.EpgConfig',
     'rest_framework',
-
-    # Scheduler App
-    # 'django_celery_beat',
 
     # Sorted Many to Many Field
     'sortedm2m',
@@ -79,16 +72,8 @@ INSTALLED_APPS = [
     # 'drf_autodocs'
     # 'rest_framework_swagger',
 
-
-    # The following apps are required:
-
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # # ... include the providers you want to enable:
-    # 'allauth.socialaccount.providers.github',
-    # 'allauth.socialaccount.providers.weixin',
-
+    # Scheduler App
+    # 'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -102,7 +87,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 ROOT_URLCONF = 'mysite.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -118,25 +102,7 @@ TEMPLATES = [
         },
     },
 ]
-JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
-}
-# AUTHENTICATION_BACKENDS = (
-#
-#     # Needed to login by username in Django admin, regardless of `allauth`
-#     'django.contrib.auth.backends.ModelBackend',
-#
-#     # `allauth` specific authentication methods, such as login by e-mail
-#     'allauth.account.auth_backends.AuthenticationBackend',
-#
-# )
-# SOCIALACCOUNT_PROVIDERS = {
-#     'weixin': {
-#         'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
-#     }
-# }
 
-# SITE_ID = 1
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
@@ -145,12 +111,10 @@ DATABASE_ROUTERS = ['mysite.router.DatabaseAppsRouter']
 DATABASE_APPS_MAPPING = {
     'epg': 'tsrtmp'
 }
-
 DATABASES = {
     'default': {
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-
         'ENGINE': 'django.db.backends.mysql',
         'NAME' : 'vod',
         'USER' : 'root',
@@ -168,10 +132,8 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -187,85 +149,57 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-THUMBNAIL_ALIASES = {
-    '': {
-        'avatar': {'size': (160, 90), 'crop': True},
-        'big_avatar': {'size': (900, 300), 'crop': True},
-    },
-}
-THUMBNAIL_BASEFOLDER = 'thumbs'
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
-    # 'DEFAULT_PARSER_CLASSES': (
-    #     'rest_framework.parsers.JSONParser',
-    # )
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication'
-
     ),
     "DEFAULT_PERMISSION_CLASSES": (
         'rest_framework.permissions.IsAuthenticated',
-        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     )
 }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 LANGUAGE_CODE = 'zh-Hans'
-# LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+# Django Admin 和 Django其他应用中的静态文件默认存储位置
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# Django中第三方文件存储文件位置，Django能且只能访问该目录下的文件
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# 电视回看节目.m3u8和.ts文件的转储文件夹
 RECORD_MEDIA_FOLDER = 'record'
 RECORD_MEDIA_ROOT = os.path.join(MEDIA_ROOT, RECORD_MEDIA_FOLDER)
+
+# 本地上传文件存储位置，支持直接通过文件系统拷贝到该目录下，然后在管理页面上直接选择该目录下的文件
 LOCAL_FOLDER_NAME = 'local_file'
 LOCAL_MEDIA_URL = LOCAL_FOLDER_NAME + '/'
 LOCAL_MEDIA_ROOT = os.path.join(MEDIA_ROOT, LOCAL_FOLDER_NAME)
-DEFAULT_IMAGE_SRC = STATIC_URL + 'missing.jpg'
 
-FILER_STORAGES = {
-    'public': {
-        'main': {
-            'ENGINE': 'filer.storage.PublicFileSystemStorage',
-            'OPTIONS': {
-                'location': MEDIA_ROOT,
-                'base_url': '/media/filer/',
-            },
-            'UPLOAD_TO': 'filer.utils.generate_filename.by_date',
-            # 'UPLOAD_TO': 'filer.utils.generate_filename.upload_video_location',
-            # 'UPLOAD_TO' : 'vodmanagement.models.upload_video_location',
-            'UPLOAD_TO_PREFIX': 'filer_public',
-        },
-    },
-}
+# admin_resumable 配置
 ADMIN_RESUMABLE_CHUNKSIZE = 1024 * 1024 * 10
 ADMIN_RESUMABLE_STORAGE = 'vodmanagement.my_storage.VodStorage'
 ADMIN_RESUMABLE_SHOW_THUMB = True
 
+SYSTEM_MEDIA_ROOT = '/media/hhy'
+DEFAULT_IMAGE_SRC = STATIC_URL + 'missing.jpg'
+
 # Memory Cache
 CACHES = {
     'default':{
-        # 'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        # 'LOCATION': '127.0.0.1:11211',
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
     }
@@ -273,10 +207,3 @@ CACHES = {
 
 # Scheduler App
 CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
-
-# FILE_UPLOAD_HANDLERS = (
-#     "progressbarupload.uploadhandler.ProgressBarUploadHandler",
-#     "django.core.files.uploadhandler.MemoryFileUploadHandler",
-#     "django.core.files.uploadhandler.TemporaryFileUploadHandler",
-# )
-# PROGRESSBARUPLOAD_INCLUDE_JQUERY = False
