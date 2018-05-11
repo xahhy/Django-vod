@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 import os
 import re
 import zipfile
@@ -13,8 +14,8 @@ class ResumableFile(object):
         self.storage = storage
         self.kwargs = kwargs
         self.chunk_suffix = "_part_"
-        self.video_allow = getattr(settings, 'ADMIN_RESUMABLE_VIDEO_ALLOW', ['.mp4'])
-        self.image_allow = getattr(settings, 'ADMIN_RESUMABLE_IMAGE_ALLOW', ['.jpg', '.png'])
+        self.video_allow = getattr(settings, 'ADMIN_RESUMABLE_VIDEO_ALLOW', ['.mp4', '.mkv' '.avi', '.rmvb', 'mpeg', '.mov'])
+        self.image_allow = getattr(settings, 'ADMIN_RESUMABLE_IMAGE_ALLOW', ['.jpg', '.jpeg', '.png', '.bmp', '.gif'])
 
     @property
     def chunk_exists(self):
@@ -94,41 +95,41 @@ class ResumableFile(object):
 
     def resotre_file(self):
         zip_file = Path(self.storage.location)/Path(self.base_filename)
-        print('开始解压文件',zip_file)
+        logging.debug('开始解压文件',zip_file)
         file_zip = zipfile.ZipFile(zip_file, 'r')
         for file in file_zip.namelist():
             file_zip.extract(file, self.storage.location)
         file_zip.close()
-        print('解压文件完成',self.storage.location)
+        logging.debug('解压文件完成',self.storage.location)
         os.remove(file_zip.filename)
 
     def save_model(self, model, save_path, request):
         category_id = request.POST['category']
         if category_id is '':
             category_id = models.VideoCategory.objects.first().id
-        print("multiple category is ", category_id)
+        logging.debug("multiple category is ", category_id)
         (short_name, extension) = os.path.splitext(os.path.basename(self.base_filename))
         file_url = Path(self.storage.base_url).relative_to(settings.MEDIA_URL) / self.base_filename
         obj = model.objects.filter(title=short_name)
-        if extension in self.video_allow:
+        if extension.lower() in self.video_allow:
             if obj:
                 obj.update(video=file_url)
-                print("obj exists , update video")
+                logging.debug("obj exists , update video")
             else:
                 obj = model(title=short_name, save_path=save_path, category=models.VideoCategory.objects.get(id=category_id))
                 obj.video.name = file_url
                 obj.save()
-                print("model video name=", obj.video.name)
-                print("video save model done:", self.filename)
+                logging.debug("model video name=", obj.video.name)
+                logging.debug("video save model done:", self.filename)
 
-        if extension in self.image_allow:
+        if extension.lower() in self.image_allow:
             if obj:
                 obj.update(image=file_url)
-                print("obj exists , update image")
+                logging.debug("obj exists , update image")
             else:
                 obj = model(title=short_name, save_path=save_path, category=models.VideoCategory.objects.get(id=category_id))
                 obj.image.name = file_url
                 obj.save()
-                print("model image name=", obj.image.name)
-                print("image save model done:", self.filename)
+                logging.debug("model image name=", obj.image.name)
+                logging.debug("image save model done:", self.filename)
 

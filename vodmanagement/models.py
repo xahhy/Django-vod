@@ -1,4 +1,8 @@
+import logging
+import os
+import datetime
 import six
+import humanfriendly
 from pathlib import Path
 from django.db import models
 from django.utils.html import format_html
@@ -6,28 +10,20 @@ from django.utils.encoding import uri_to_iri
 from django.core.management import call_command
 from django.utils.safestring import mark_safe
 from django.conf import settings
-import humanfriendly
 from django.contrib.auth.models import User
 from django.db.models.signals import pre_save, post_init, post_save
 from django.dispatch import receiver
-
-from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 from django.core.files import File
 from sortedm2m.fields import SortedManyToManyField
 from uuslug import uuslug
-import os
-from .utils import *
-import datetime
 # from moviepy.editor import VideoFileClip # get video duration
-from filer.fields.file import FilerFileField
-from filer.fields.image import FilerImageField
-from .my_storage import *
-from admin_resumable.fields import ModelAdminResumableFileField, ModelAdminResumableImageField, \
+from .my_storage import VodStorage
+from admin_resumable.fields import (
+    ModelAdminResumableFileField, ModelAdminResumableImageField,
     ModelAdminResumableMultiFileField, ModelAdminResumableRestoreFileField
-
-# for pinyin search
-from xpinyin import Pinyin
+)
+from xpinyin import Pinyin  # for pinyin search
 
 if six.PY3:
     from django.utils.encoding import smart_str
@@ -65,7 +61,6 @@ class UserPermission(models.Model):
 
 class VodManager(models.Manager):
     def active(self, *args, **kwargs):
-        # Post.objects.all() = super(PostManager, self).all()
         return super(VodManager, self)  # .filter(draft=False).filter(publish__lte=timezone.now())
 
 
@@ -165,11 +160,7 @@ class VideoRegion(models.Model):
 
 class VideoCategory(models.Model):
     name = models.CharField(max_length=128, verbose_name='分类名称')
-    type = models.CharField(max_length=128,
-                            choices=TYPES,
-                            default='common',
-                            verbose_name='类型'
-                            )
+    type = models.CharField(max_length=128, choices=TYPES, default='common', verbose_name='类型')
     isSecret = models.BooleanField(default=False, verbose_name='是否加密')
     level = models.IntegerField(null=False, blank=False, default=1, choices=((1, '一级分类'), (2, '二级分类')),
                                 verbose_name='分类等级')
@@ -202,9 +193,9 @@ class VideoCategory(models.Model):
 
 # ---------------------------------------------------------------------
 class MultipleUpload(models.Model):
-    files = ModelAdminResumableMultiFileField(null=True, blank=True, storage=VodStorage())
-    save_path = models.CharField(max_length=128, blank=False, null=True)
-    category = models.ForeignKey(VideoCategory, null=True)
+    files = ModelAdminResumableMultiFileField(null=True, blank=True, storage=VodStorage(), verbose_name='文件')
+    save_path = models.CharField(max_length=128, blank=False, null=True, verbose_name='保存路径')
+    category = models.ForeignKey(VideoCategory, null=True, verbose_name='分类')
 
     class Meta:
         verbose_name = '批量上传'
@@ -219,29 +210,7 @@ class MultipleUpload(models.Model):
 #     def __str__(self):
 #         return self.name
 
-# ---------------------------------------------------------------------
-# TODO(hhy):Remove VodList Model. No Longer Used.
-# class VodList(models.Model):
-#     title = models.CharField(max_length=120)
-#     image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), verbose_name='缩略图')
-#     description = models.TextField(blank=True)
-#     category = models.ForeignKey(VideoCategory, null=True)
-#     vod_list = models.ManyToManyField('Vod')
-#     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
-#     tags = models.ManyToManyField(VideoTag, blank=True)
-#
-#     def colored_active(self):
-#         color_code = 'red' if self.active == 0 else 'green'
-#         return format_html(
-#             '<span style="color:{};">{}</span>',
-#             color_code,
-#             self.get_active_display()
-#         )
-#     colored_active.short_description = '是否激活'
-#
-#     def __str__(self):
-#         return self.title
-# ---------------------------------------------------------------------
+
 class Restore(models.Model):
     txt_file = models.FileField(blank=True, null=True, verbose_name='备份配置文件')
     zip_file = ModelAdminResumableRestoreFileField(null=True, blank=True, storage=VodStorage(), verbose_name='压缩包')
@@ -250,10 +219,6 @@ class Restore(models.Model):
     class Meta:
         verbose_name = '视频导入'
         verbose_name_plural = '视频导入'
-
-    # @staticmethod
-    # def parse_json(text):
-
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -267,29 +232,21 @@ class Vod(models.Model):
     title = models.CharField(max_length=120, verbose_name='标题')
     # image = models.ImageField(upload_to=upload_image_location, null=True, blank=True)
     # video = models.FileField(null=True,blank=True,storage=VodStorage())
-    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), max_length=1000, verbose_name='缩略图')
+    image = ModelAdminResumableImageField(null=True, blank=True, storage=VodStorage(), max_length=1000,
+                                          verbose_name='缩略图')
     video = ModelAdminResumableFileField(null=True, blank=True, storage=VodStorage(), max_length=1000,
                                          verbose_name='视频')
     duration = models.CharField(max_length=50, blank=True, null=True, verbose_name='时长')
     local_video = models.FilePathField(path=settings.LOCAL_MEDIA_ROOT, blank=True, recursive=True)
     definition = models.CharField(max_length=10, choices=VIDEO_QUALITY, blank=False, default='H', verbose_name='清晰度')
-    # image = FilerImageField(null=True, blank=True,
-    #                         related_name="image_name")
-    # video = FilerFileField(null=True, blank=True, related_name="video_name")
-    # height_field = models.IntegerField(default=0)
-    # width_field = models.IntegerField(default=0)
     category = models.ForeignKey(VideoCategory, null=True, blank=True, verbose_name='分类')
-    save_path = models.CharField(max_length=128, blank=False, null=True,
-                                 default='default')  # ,default=FileDirectory.objects.first())
-    year = models.CharField(max_length=10, blank=False, null=True,
-                            default=datetime.datetime.now().year, verbose_name='年份')
-    region = models.ForeignKey(VideoRegion, to_field='name', null=True, blank=True, on_delete=models.SET_NULL,
-                               verbose_name='地区')
+    save_path = models.CharField(max_length=128, blank=False, null=True, default='default', verbose_name='保存路径')  # ,default=FileDirectory.objects.first())
+    year = models.CharField(max_length=10, blank=False, null=True, default=datetime.datetime.now().year, verbose_name='年份')
+    region = models.ForeignKey(VideoRegion, to_field='name', null=True, blank=True, on_delete=models.SET_NULL, verbose_name='地区')
     file_size = models.CharField(max_length=128, default='0B', editable=False, verbose_name='文件大小')
     view_count = models.IntegerField(default=0, verbose_name='观看次数')
     view_count_temp = 0
     creator = models.ForeignKey(User, null=True, blank=False, editable=False)
-
     description = models.TextField(blank=True, verbose_name='简介')
     select_name = models.CharField(max_length=100, blank=False, verbose_name='选集名称', default='1')
     updated = models.DateTimeField(auto_now=True, auto_now_add=False)
@@ -297,7 +254,6 @@ class Vod(models.Model):
     slug = models.SlugField(unique=True, blank=True)
     search_word = models.CharField(max_length=10000, null=True, blank=True)
     # tags = models.ManyToManyField(VideoTag, blank=True)
-
     video_list = SortedManyToManyField('self', blank=True)
     # video_list = models.ManyToManyField('self', blank=True, symmetrical=False)
     active = models.IntegerField(null=True, blank=False, default=0, choices=((1, 'Yes'), (0, 'No')))
@@ -344,7 +300,6 @@ class Vod(models.Model):
                 self.file_size = humanfriendly.format_size(self.video.file.size)
                 # duration = VideoFileClip(self.video.path).duration
                 # self.duration = time_formate(duration)
-                # print(self.duration)
             else:
                 print("video file is None")
         except:
@@ -352,7 +307,6 @@ class Vod(models.Model):
 
         try:
             if self.image:
-                # self.image.name = os.path.join(self.save_path, os.path.basename(uri_to_iri(self.image.name)))
                 self.image.name = str(uri_to_iri(Path(self.image.name).relative_to(settings.MEDIA_URL)))
         except:
             pass
@@ -366,7 +320,6 @@ class Vod(models.Model):
 
     def image_tag(self):
         if self.image is not None and str(self.image) != "":
-            # print("image tage:"+str(self.image))
             if os.path.exists(self.image.path):
                 return mark_safe('<img src="%s" width="160" height="90" />' % (self.image.url))
             else:
@@ -416,4 +369,3 @@ def post_init_receiver(sender, instance, *args, **kwargs):
 
 pre_save.connect(pre_save_post_receiver, sender=Vod)
 post_init.connect(post_init_receiver, sender=Vod)
-

@@ -1,5 +1,14 @@
 {% extends 'vodmanagement/change_form.html' %}
 
+{% block content_info %}
+    <h1 style="color: red;">
+        这里可以多次上传视频、图片文件，并根据文件名称创建或更新点播节目。<br/>
+        支持上传的图片文件后缀包括：<b>.jpg, .jpeg, .png, .bmp, .gif</b> <br/>
+        支持上传的视频文件后缀包括：<b>.mp4, .mkv .avi, .rmvb, mpeg, .mov</b>
+    </h1>
+    <h1 style="color:red"><b>请勿上传其他文件格式！！！</b></h1>
+{% endblock %}
+
 {% block submit_buttons_bottom %}
     <a href="{% url 'admin:vodmanagement_vod_changelist' %}" class="btn btn-default">返回视频列表</a>
 {% endblock %}

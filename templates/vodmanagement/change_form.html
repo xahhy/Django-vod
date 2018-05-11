@@ -4,37 +4,21 @@
 {% block extrahead %}
     {{ block.super }}
     <script src="{% static 'plugins/jQuery/jquery-3.1.1.min.js' %}"></script>
-{#    <script type="text/javascript" src="{% static 'js/jquery.confirm.min.js' %}"></script>#}
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'font-awesome-4.7/css/font-awesome.min.css' %}">
     <script type="text/javascript" src="{% static 'plugins/jquery-confirm/jquery-confirm.min.js' %}"></script>
     <link rel="stylesheet" href="{% static 'plugins/jquery-confirm/jquery-confirm.min.css' %}">
     <script type="text/javascript" src="{% static 'plugins/isLoading.min.js' %}"></script>
-
-
 {% endblock %}
 
 {% block content %}
-    <div class="modal fade" tabindex="-1" role="dialog" id="confirm_upload" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">Modal title</h4>
-                </div>
-                <div class="modal-body">
-                    <p>One fine body&hellip;</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    {% block content_info %}
+        <h1 style="color: red;">
+            为保证点播节目播放的兼容性，视频文件尽量上传<b>视频编码为H.264</b>,<b>音频编码为AAC</b>的<b>.mp4</b>格式<br/>
+            如果视频文件不是<b>.mp4</b>格式，请在点播节目列表处进行手动格式转换。
+        </h1>
+    {% endblock %}
     {{ block.super }}
 {% endblock %}
 

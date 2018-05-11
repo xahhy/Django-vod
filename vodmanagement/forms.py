@@ -8,7 +8,7 @@ from vodmanagement.utils import save_path_choices, get_save_path_choice, create_
 class MultipleUploadForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(MultipleUploadForm, self).__init__(*args, **kwargs)
-        self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
+        self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices(), label=self.fields['save_path'].label)
 
     class Meta:
         model = MultipleUpload
@@ -18,7 +18,7 @@ class MultipleUploadForm(forms.ModelForm):
 class RestoreForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RestoreForm, self).__init__(*args, **kwargs)
-        self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
+        self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices(), label=self.fields['save_path'].label)
 
     class Meta:
         model = Restore
@@ -38,20 +38,17 @@ class VodForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(VodForm, self).__init__(*args, **kwargs)
         if self.instance.image.name and self.instance.video.name:
-            self.fields['save_path'] = forms.ChoiceField(choices=get_save_path_choice(self.instance.save_path))
+            self.fields['save_path'] = forms.ChoiceField(choices=get_save_path_choice(self.instance.save_path), label=self.fields['save_path'].label)
         else:
-            print('save path is empty')
-            self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices())
+            self.fields['save_path'] = forms.ChoiceField(choices=save_path_choices(), label=self.fields['save_path'].label)
             # self.fields['save_path'].widget.attrs['disabled='disabled''] = True
         create_storage_paths()
 
     def clean_title(self):
-        print('vod form clean')
         data = self.cleaned_data['title']
         return data
 
     def clean(self):
-        print('vod form clean all')
         return super(VodForm, self).clean()
 
     class Meta:
