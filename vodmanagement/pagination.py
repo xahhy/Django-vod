@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class CustomPaginator(Paginator):
-    def __init__(self, current_page, per_pager_num, *args, **kwargs):
+    def __init__(self, current_page=0, per_pager_num=5, *args, **kwargs):
         # 当前页
         self.current_page = int(current_page)
         # 最多显示的页码数量

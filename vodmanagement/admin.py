@@ -134,6 +134,8 @@ class VodModelAdmin(admin.ModelAdmin):
         response.write(open(full_file_name, 'rb').read())
         return response
 
+    backup.short_description = '备份选中节目'
+
     def backup_all(self, request, queryset):
         response = HttpResponse(content_type='text/plain')
         file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.json'
@@ -147,6 +149,8 @@ class VodModelAdmin(admin.ModelAdmin):
         call_command('dumpdata', 'vodmanagement', '-o', full_file_name)  # 使用Django提供的命令行工具备份数据
         response.write(open(full_file_name, 'rb').read())
         return response
+
+    backup_all.short_description = '备份所有节目'
 
     def transcoding(self, request, queryset):
         def ff(obj):
