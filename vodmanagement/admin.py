@@ -122,32 +122,28 @@ class VodModelAdmin(admin.ModelAdmin):
 
     def backup(self, request, queryset):
         response = HttpResponse(content_type='text/plain')
-        file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.json'
+        file_name = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '-backup.json'
         response['Content-Disposition'] = 'attachment; filename=%s' % file_name
-        directory = './backup'
-        full_file_name = os.path.join(directory, file_name)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        with open(full_file_name, 'w') as f:
-            data = django_serializers.serialize('json', queryset)
-            f.write(data)
-        response.write(open(full_file_name, 'rb').read())
+        directory = Path(settings.MEDIA_ROOT) / 'backup'
+        full_file_name = directory / file_name
+        directory.mkdir(parents=True, exist_ok=True)
+        data = django_serializers.serialize('json', queryset)
+        full_file_name.open('w').write(data)
+        response.write(full_file_name.open('rb').read())
         return response
 
     backup.short_description = '备份选中节目'
 
     def backup_all(self, request, queryset):
         response = HttpResponse(content_type='text/plain')
-        file_name = datetime.datetime.now().strftime('%Y-%m-%d') + '-backup.json'
+        file_name = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S') + '-backup.json'
         response['Content-Disposition'] = 'attachment; filename=%s' % file_name
-        directory = './backup'
-        full_file_name = os.path.join(directory, file_name)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        with open(full_file_name, 'w') as f:
-            f.write('')
-        call_command('dumpdata', 'vodmanagement', '-o', full_file_name)  # 使用Django提供的命令行工具备份数据
-        response.write(open(full_file_name, 'rb').read())
+        directory = Path(settings.MEDIA_ROOT) / 'backup'
+        full_file_name = directory / file_name
+        directory.mkdir(parents=True, exist_ok=True)
+        full_file_name.open('w').write('')
+        call_command('dumpdata', 'vodmanagement', '-o', str(full_file_name))  # 使用Django提供的命令行工具备份数据
+        response.write(full_file_name.open('rb').read())
         return response
 
     backup_all.short_description = '备份所有节目'
