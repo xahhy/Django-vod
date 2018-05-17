@@ -126,7 +126,7 @@ DATABASES = {
         'NAME': 'tsrtmp',
         'USER': 'root',
         'PASSWORD': '123',
-        'HOST': os.getenv('TSRTMP_DB_HOST', '10.13.6.2'),
+        'HOST': os.getenv('TSRTMP_DB_HOST', os.getenv('DJANGO_DB_HOST', '')),
         'PORT': '',
     }
 }
