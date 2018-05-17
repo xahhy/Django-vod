@@ -36,7 +36,6 @@ THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.colorspace',
     'easy_thumbnails.processors.autocrop',
     'easy_thumbnails.processors.scale_and_crop',
-    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
     'easy_thumbnails.processors.filters',
 )
 THUMBNAIL_ALIASES = {
@@ -119,7 +118,7 @@ DATABASES = {
         'NAME' : 'vod',
         'USER' : 'root',
         'PASSWORD': '123',
-        'HOST': '',
+        'HOST': os.getenv('DJANGO_DB_HOST', ''),
         'PORT': '',#'3306',
     },
     'tsrtmp': {
@@ -127,7 +126,7 @@ DATABASES = {
         'NAME': 'tsrtmp',
         'USER': 'root',
         'PASSWORD': '123',
-        'HOST': '10.13.6.2',
+        'HOST': os.getenv('TSRTMP_DB_HOST', '10.13.6.2'),
         'PORT': '',
     }
 }
@@ -194,7 +193,7 @@ ADMIN_RESUMABLE_CHUNKSIZE = 1024 * 1024 * 10
 ADMIN_RESUMABLE_STORAGE = 'vodmanagement.my_storage.VodStorage'
 ADMIN_RESUMABLE_SHOW_THUMB = True
 
-SYSTEM_MEDIA_ROOT = '/media/hhy'
+SYSTEM_MEDIA_ROOT = '/media/tongshi'
 DEFAULT_IMAGE_SRC = STATIC_URL + 'missing.jpg'
 
 # Memory Cache

@@ -20,6 +20,5 @@ logs
 .*
 
 !.gitignore
-!.dockerignore
 !__init__.py
 !vodmanagement/static/*
