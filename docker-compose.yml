@@ -1,8 +1,12 @@
-version: '3.3'
+version: '3'
 
 services:
   vod_db:
     image: mysql:5.7
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
     volumes:
       - "/home/share/vod_db:/var/lib/mysql"
     environment:
@@ -10,11 +14,17 @@ services:
     restart: always
     ports:
       - 3306:3306
+    networks:
+      - webnet
 
   vod:
     depends_on:
       - vod_db
     image: vod:latest
+    deploy:
+      replicas: 5
+      restart_policy:
+        condition: on-failure
     volumes:
       - /home/share/vod/media:/app/media
       - /home/share/vod/static:/app/static
@@ -23,3 +33,8 @@ services:
     restart: always
     ports:
       - 8000:8000
+    networks:
+      - webnet
+
+networks:
+  webnet:
