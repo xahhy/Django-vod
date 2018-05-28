@@ -1,14 +1,14 @@
 pipeline {
   agent {
-    dockerfile {
-      filename 'Dockerfile'
+    docker {
+      image 'ubuntu'
     }
 
   }
   stages {
     stage('test') {
       steps {
-        sh 'pwd && ls -al'
+        sh 'pwd && ls -al&&whoami'
       }
     }
   }
