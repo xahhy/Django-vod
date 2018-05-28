@@ -12,6 +12,11 @@ services:
       - "/home/share/docker/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d"
     environment:
       MYSQL_ROOT_PASSWORD: 123
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1G"
+        max-file: "3"
     restart: always
     ports:
       - 3306:3306
@@ -29,11 +34,15 @@ services:
     volumes:
       - /home/share/vod/media:/app/media
       - /home/share/vod/static:/app/static
-      - /home/share/vod/logs:/app/logs
       - /media/tongshi:/media/tongshi
     environment:
-      DJANGO_DB_HOST: vod_db 
-      TSRTMP_DB_HOST: 10.13.6.2
+      DJANGO_DB_HOST: vod_db
+      TSRTMP_DB_HOST: vod_db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1G"
+        max-file: "3"
     restart: always
     ports:
       - 8000:8000

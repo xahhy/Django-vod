@@ -2,6 +2,36 @@
 # Django-Vod
 该项目是一个在线视频点播网站的服务器后端实现。使用Django作为后端框架，主要通过定制Django提供的Admin页面进行后台数据管理。使用Django REST framework开发Web APIs。
 
+# 安装步骤
+使用Docker安装本服务
+
+- docker pull [Repository URL]
+- docker pull mysql:5.7
+- 复制docker-compose.yml到/home/share/vod目录中
+- 复制MySQL配置文件[mysqld.cnf](https://github.com/xjtutongshi/video_servers/blob/docker/vod_server/mysql/mysql.conf.d/mysqld.cnf)到/home/share/docker/mysql/mysql.conf.d目录中
+- 修改mysqld.cnf中的必要配置
+
+初次部署服务需要执行以下步骤：
+> 初始化docker swarm 集群 `docker swarm init --advertise-addr <ip>`
+> 
+> 收集静态资源文件`docker run --rm -it -e DJANGO_DB_HOST=<ip> -e TSRTMP_DB_HOST=<ip> python manage.py collectstatic`
+>
+> 创建管理员帐号 `docker run --rm -it -e DJANGO_DB_HOST=<ip> -e TSRTMP_DB_HOST=<ip> python manage.py createsuperuser`
+>
+> 创建数据表 `docker run --rm -it -e DJANGO_DB_HOST=<ip> -e TSRTMP_DB_HOST=<ip> python init_database.py`
+> 
+> 创建运行需要挂载的目录 `mkdir -p /home/share/vod/media && mkdir -p /home/share/vod/static`
+
+更新和运行服务程序需要执行以下步骤：
+> 更新docker service信息： `cd /home/share/vod && docker stack deploy -c docker-compose.yml vod`
+
+执行`docker service ls`观察运行情况,下面是运行成功后的状态:
+```bash
+ID                  NAME                MODE                REPLICAS            IMAGE               PORTS
+c4jn3qg471bf        vod_vod             replicated          3/3                 vod:latest          *:8000->8000/tcp
+4fkup123mpzb        vod_vod_db          replicated          1/1                 mysql:5.7           *:3306->3306/tcp
+
+```
 # 网站后端主要功能
 
 ## 1. 点播（vodmanagement)
