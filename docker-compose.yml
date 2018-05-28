@@ -8,7 +8,8 @@ services:
       restart_policy:
         condition: on-failure
     volumes:
-      - "/home/share/vod_db:/var/lib/mysql"
+      - "/home/share/docker/mysql/mysql:/var/lib/mysql"
+      - "/home/share/docker/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d"
     environment:
       MYSQL_ROOT_PASSWORD: 123
     restart: always
