@@ -11,5 +11,10 @@ pipeline {
         sh 'pwd'
       }
     }
+    stage('staging') {
+      steps {
+        echo 'testing in develop environment'
+      }
+    }
   }
 }
