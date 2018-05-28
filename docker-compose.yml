@@ -22,7 +22,7 @@ services:
       - vod_db
     image: vod:latest
     deploy:
-      replicas: 5
+      replicas: 3
       restart_policy:
         condition: on-failure
     volumes:
@@ -30,6 +30,9 @@ services:
       - /home/share/vod/static:/app/static
       - /home/share/vod/logs:/app/logs
       - /media/tongshi:/media/tongshi
+    environment:
+      DJANGO_DB_HOST: vod_db 
+      TSRTMP_DB_HOST: 10.13.6.2
     restart: always
     ports:
       - 8000:8000
