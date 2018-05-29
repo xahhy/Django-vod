@@ -39,7 +39,7 @@ class VodModelAdmin(admin.ModelAdmin):
     list_display = ['title', 'select_name', 'image_tag', 'category', 'definition', 'year', 'region',
                     'view_count', 'timestamp', 'colored_active', 'video_format']  # image_tag
     list_display_links = ['title', 'image_tag', 'timestamp']  # image_tag
-    list_editable = ['category', 'select_name', 'definition', 'year']
+    list_editable = ['category', 'select_name', 'definition']
     list_filter = ['year', 'category', VideoFormatFilter]
     # filter_horizontal = ['video_list']
     # fields = ('image_tag',)
