@@ -23,7 +23,7 @@ python-memcached==1.58
 python-slugify==1.2.4
 requests==2.18.4
 simplejson==3.11.1
-urllib3==1.22
+urllib3==1.26.5
 wrapcache==1.0.8
 xpinyin==0.5.5
 zope.interface==4.4.2
