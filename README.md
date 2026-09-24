@@ -1,4 +1,5 @@
 
+
 # Django-Vod
 该项目是一个在线视频点播网站的服务器后端实现。使用Django作为后端框架，主要通过定制Django提供的Admin页面进行后台数据管理。使用Django REST framework开发Web APIs。
 
@@ -64,7 +65,7 @@ c4jn3qg471bf        vod_vod             replicated          3/3                 
 
 - FileDirectory（文件存储路径）
   - **path**（上传文件存储路径，包含一个缺省值）
-- VideoRegin（视频所属地区）
+- VideoRegion（视频所属地区）
   - **name**（视频所属地区名字）
 - VideoCategory（视频所属分类）
   - **name**（视频分类名称）
